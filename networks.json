@@ -1,8 +1,62 @@
 {
   "goerli": {
-    "HatsModuleFactory": {
-      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
-      "startBlock": 9713194
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 9319512
+    },
+    "HatsSignerGateFactory": {
+      "address": "0xA1fB14B5F322651e20F06eE2f2681B8f380bbB0E",
+      "startBlock": 9398767
+    }
+  },
+  "mainnet": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 17671864
+    },
+    "HatsSignerGateFactory": {
+      "address": "0x0F22eFC6EA47b1EFF42D1A2a6E69440929400F86",
+      "startBlock": 18372178
+    }
+  },
+  "matic": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 44952020
+    },
+    "HatsSignerGateFactory": {
+      "address": "0x0F22eFC6EA47b1EFF42D1A2a6E69440929400F86",
+      "startBlock": 48836679
+    }
+  },
+  "gnosis": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 28899000
+    },
+    "HatsSignerGateFactory": {
+      "address": "0x0F22eFC6EA47b1EFF42D1A2a6E69440929400F86",
+      "startBlock": 30507049
+    }
+  },
+  "arbitrum-one": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 110187292
+    },
+    "HatsSignerGateFactory": {
+      "address": "0x6FE52b46Af16F960E0eB1E15D2b27422ab158733",
+      "startBlock": 120146471
+    }
+  },
+  "optimism": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 106747286
+    },
+    "HatsSignerGateFactory": {
+      "address": "0x39Ae0B5e81A69F7092EC4394b111b6a6411377e8",
+      "startBlock": 110986323
     }
   }
 }

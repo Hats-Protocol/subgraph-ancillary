@@ -1,11 +1,21 @@
-type HatsModuleFactory_ModuleDeployed @entity(immutable: true) {
-  id: Bytes!
-  implementation: Bytes! # address
-  instance: Bytes! # address
-  hatId: BigInt! # uint256
-  otherImmutableArgs: Bytes! # bytes
-  initData: Bytes! # bytes
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum HatsSignerGateType {
+  Single
+  Multi
+}
+
+type HatAuthorities @entity {
+  id: ID!
+  hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
+  hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
+}
+
+type HatsSignerGate @entity {
+  id: ID!
+  type: HatsSignerGateType!
+  ownerHat: HatAuthorities
+  signerHats: [HatAuthorities!]!
+  safe: String!
+  minThreshold: BigInt!
+  targetThreshold: BigInt!
+  maxSigners: BigInt!
 }

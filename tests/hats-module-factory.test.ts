@@ -9,7 +9,7 @@ import {
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
 import { HatsModuleFactory_ModuleDeployed } from "../generated/schema"
 import { HatsModuleFactory_ModuleDeployed as HatsModuleFactory_ModuleDeployedEvent } from "../generated/HatsModuleFactory/HatsModuleFactory"
-import { handleHatsModuleFactory_ModuleDeployed } from "../src/hats-module-factory"
+import { handleHatsModuleFactory_ModuleDeployed } from "../src/hatsSignerGateFactory"
 import { createHatsModuleFactory_ModuleDeployedEvent } from "./hats-module-factory-utils"
 
 // Tests structure (matchstick-as >=0.5.0)

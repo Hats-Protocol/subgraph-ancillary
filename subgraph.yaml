@@ -3,22 +3,67 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: HatsModuleFactory
+    name: HatsSignerGateFactory
     network: goerli
     source:
-      address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
-      abi: HatsModuleFactory
-      startBlock: 9713194
+      abi: HatsSignerGateFactory
+      address: "0xA1fB14B5F322651e20F06eE2f2681B8f380bbB0E"
+      startBlock: 9398767
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - HatsModuleFactory_ModuleDeployed
+        - HatsSignerGate
       abis:
-        - name: HatsModuleFactory
-          file: ./abis/HatsModuleFactory.json
+        - name: HatsSignerGateFactory
+          file: ./abis/HatsSignerGateFactory.json
       eventHandlers:
-        - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
-          handler: handleHatsModuleFactory_ModuleDeployed
-      file: ./src/hats-module-factory.ts
+        - event: HatsSignerGateSetup(address,uint256,uint256,address,uint256,uint256,uint256)
+          handler: handleHatsSignerGateSetup
+        - event: MultiHatsSignerGateSetup(address,uint256,uint256[],address,uint256,uint256,uint256)
+          handler: handleMultiHatsSignerGateSetup
+      file: ./src/hatsSignerGateFactory.ts
+templates:
+  - name: HatsSignerGate
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: HatsSignerGate
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/hatsSignerGate.ts
+      entities:
+        - HatsSignerGate
+      abis:
+        - name: HatsSignerGate
+          file: ./abis/HatsSignerGate.json
+      eventHandlers:
+        - event: TargetThresholdSet(uint256)
+          handler: handleTargetThresholdSet
+        - event: MinThresholdSet(uint256)
+          handler: handleMinThresholdSet
+  - name: MultiHatsSignerGate
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: MultiHatsSignerGate
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/hatsSignerGate.ts
+      entities:
+        - HatsSignerGate
+      abis:
+        - name: MultiHatsSignerGate
+          file: ./abis/MultiHatsSignerGate.json
+      eventHandlers:
+        - event: TargetThresholdSet(uint256)
+          handler: handleTargetThresholdSet
+        - event: MinThresholdSet(uint256)
+          handler: handleMinThresholdSet
+        - event: SignerHatsAdded(uint256[])
+          handler: handleSignerHatsAdded
