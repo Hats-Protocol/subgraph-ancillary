@@ -1,0 +1,11 @@
+type HatsModuleFactory_ModuleDeployed @entity(immutable: true) {
+  id: Bytes!
+  implementation: Bytes! # address
+  instance: Bytes! # address
+  hatId: BigInt! # uint256
+  otherImmutableArgs: Bytes! # bytes
+  initData: Bytes! # bytes
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

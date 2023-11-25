@@ -1,0 +1,8 @@
+{
+  "goerli": {
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 9713194
+    }
+  }
+}

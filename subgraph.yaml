@@ -1,0 +1,24 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: HatsModuleFactory
+    network: goerli
+    source:
+      address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
+      abi: HatsModuleFactory
+      startBlock: 9713194
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - HatsModuleFactory_ModuleDeployed
+      abis:
+        - name: HatsModuleFactory
+          file: ./abis/HatsModuleFactory.json
+      eventHandlers:
+        - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
+          handler: handleHatsModuleFactory_ModuleDeployed
+      file: ./src/hats-module-factory.ts
