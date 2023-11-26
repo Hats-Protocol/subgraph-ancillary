@@ -3,7 +3,6 @@ import {
   describe,
   test,
   clearStore,
-  beforeAll,
   afterAll,
   beforeEach,
 } from "matchstick-as/assembly/index";
@@ -21,18 +20,9 @@ import {
   handleMultiHatsSignerGateSetup,
 } from "../src/hatsSignerGateFactory";
 import {
-  HatsSignerGateSetup,
-  MultiHatsSignerGateSetup,
-} from "../generated/HatsSignerGateFactory/HatsSignerGateFactory";
-import {
-  TargetThresholdSet,
-  MinThresholdSet,
-  SignerHatsAdded,
-} from "../generated/templates/HatsSignerGate/HatsSignerGate";
-import { HatAuthorities, HatsSignerGate } from "../generated/schema";
-import {
   handleTargetThresholdSet,
   handleMinThresholdSet,
+  handleSignerHatsAdded,
 } from "../src/hatsSignerGate";
 
 const hatsSignerGateInstance = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -43,6 +33,8 @@ const ownerHatId =
   "26959946667150639794667015087019630673637144422540572481103610249216";
 const signerHatId =
   "26960358043289970096177553829315270011263390106506980876069447401472";
+const newSignerHatId =
+  "26960358049567071831564234593151059434471056522609336320533481914368";
 
 describe("Hats Signer Gate Tests", () => {
   afterAll(() => {
@@ -249,6 +241,46 @@ describe("Hats Signer Gate Tests", () => {
             multiHatsSignerGateInstance,
             "minThreshold",
             "3"
+          );
+        });
+      });
+
+      describe("And signers are added", () => {
+        beforeEach(() => {
+          const signerHatsAddedEvent = mockSignerHatsAddedEvent(
+            Address.fromString(multiHatsSignerGateInstance),
+            [BigInt.fromString(newSignerHatId)]
+          );
+
+          handleSignerHatsAdded(signerHatsAddedEvent);
+        });
+
+        test("Test signer added", () => {
+          assert.entityCount("HatsSignerGate", 2);
+          assert.fieldEquals(
+            "HatsSignerGate",
+            multiHatsSignerGateInstance,
+            "type",
+            "Multi"
+          );
+
+          assert.fieldEquals(
+            "HatsSignerGate",
+            multiHatsSignerGateInstance,
+            "ownerHat",
+            hatIdToHex(BigInt.fromString(ownerHatId))
+          );
+          assert.fieldEquals(
+            "HatsSignerGate",
+            multiHatsSignerGateInstance,
+            "signerHats",
+            "[0x0000000100000000000000000000000000000000000000000000000000000000, 0x0000000100010000000000000000000000000000000000000000000000000000, 0x0000000100010001000000000000000000000000000000000000000000000000]"
+          );
+          assert.fieldEquals(
+            "HatsSignerGate",
+            multiHatsSignerGateInstance,
+            "safe",
+            safe
           );
         });
       });

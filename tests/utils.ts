@@ -199,11 +199,12 @@ export function mockMinThresholdSetEvent(
 }
 
 export function mockSignerHatsAddedEvent(
+  hsg: Address,
   newSignerHats: BigInt[]
 ): SignerHatsAdded {
   // prepare event parameters array
   const newSignerHatsParam = new ethereum.EventParam(
-    "threshold",
+    "newSignerHats",
     ethereum.Value.fromUnsignedBigIntArray(newSignerHats)
   );
 
@@ -213,7 +214,7 @@ export function mockSignerHatsAddedEvent(
   // create mocked event
   let mockEvent = newMockEvent();
   let signerHatsAddedEvent = new SignerHatsAdded(
-    mockEvent.address,
+    hsg,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
     mockEvent.logType,
