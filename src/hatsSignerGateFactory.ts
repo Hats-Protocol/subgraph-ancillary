@@ -3,9 +3,11 @@ import {
   MultiHatsSignerGateSetup,
 } from "../generated/HatsSignerGateFactory/HatsSignerGateFactory";
 import { HatAuthorities, HatsSignerGate } from "../generated/schema";
+import { HatsSignerGate as HatsSignerGateTemplate } from "../generated/templates";
 import { hatIdToHex } from "./utils";
 
 export function handleHatsSignerGateSetup(event: HatsSignerGateSetup): void {
+  HatsSignerGateTemplate.create(event.params._hatsSignerGate);
   let hsg = new HatsSignerGate(event.params._hatsSignerGate.toHexString());
 
   // check if owner hat exists, create new object if not
@@ -36,6 +38,7 @@ export function handleHatsSignerGateSetup(event: HatsSignerGateSetup): void {
 export function handleMultiHatsSignerGateSetup(
   event: MultiHatsSignerGateSetup
 ): void {
+  HatsSignerGateTemplate.create(event.params._hatsSignerGate);
   const hsg = new HatsSignerGate(event.params._hatsSignerGate.toHexString());
 
   // check if owner hat exists, create new object if not

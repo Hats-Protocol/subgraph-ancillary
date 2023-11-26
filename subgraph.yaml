@@ -24,6 +24,26 @@ dataSources:
         - event: MultiHatsSignerGateSetup(address,uint256,uint256[],address,uint256,uint256,uint256)
           handler: handleMultiHatsSignerGateSetup
       file: ./src/hatsSignerGateFactory.ts
+  - kind: ethereum
+    name: HatsModuleFactory
+    network: goerli
+    source:
+      abi: HatsModuleFactory
+      address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
+      startBlock: 9713194
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - JokeRaceEligibility
+      abis:
+        - name: HatsModuleFactory
+          file: ./abis/HatsModuleFactory.json
+      eventHandlers:
+        - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
+          handler: handleModuleDeployed
+      file: ./src/hatsModuleFactory.ts
 templates:
   - name: HatsSignerGate
     kind: ethereum/contract
@@ -67,3 +87,21 @@ templates:
           handler: handleMinThresholdSet
         - event: SignerHatsAdded(uint256[])
           handler: handleSignerHatsAdded
+  - name: JokeRaceEligibility
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: JokeRaceEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/jokeRaceEligibility.ts
+      entities:
+        - JokeRaceEligibility
+      abis:
+        - name: JokeRaceEligibility
+          file: ./abis/JokeRaceEligibility.json
+      eventHandlers:
+        - event: NewTerm(address,uint256,uint256)
+          handler: handleNewTerm

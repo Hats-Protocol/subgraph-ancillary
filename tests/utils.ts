@@ -10,12 +10,12 @@ import {
   HatsSignerGateSetup,
   MultiHatsSignerGateSetup,
 } from "../generated/HatsSignerGateFactory/HatsSignerGateFactory";
+import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import {
   TargetThresholdSet,
   MinThresholdSet,
   SignerHatsAdded,
 } from "../generated/templates/HatsSignerGate/HatsSignerGate";
-import { HatAuthorities, HatsSignerGate } from "../generated/schema";
 import { newMockEvent, createMockedFunction } from "matchstick-as";
 
 export function mockHatsSignerGateSetupEvent(
@@ -230,4 +230,63 @@ export function mockSignerHatsAddedEvent(
   );
 
   return signerHatsAddedEvent;
+}
+
+export function mockHatsModuleFactory_ModuleDeployedEvent(
+  implementation: Address,
+  instance: Address,
+  hatId: BigInt,
+  otherImmutableArgs: Bytes,
+  initData: Bytes
+): HatsModuleFactory_ModuleDeployed {
+  // prepare event parameters array
+  const implementationParam = new ethereum.EventParam(
+    "implementation",
+    ethereum.Value.fromAddress(implementation)
+  );
+  const instanceParam = new ethereum.EventParam(
+    "instance",
+    ethereum.Value.fromAddress(instance)
+  );
+  const hatIdParam = new ethereum.EventParam(
+    "hatId",
+    ethereum.Value.fromUnsignedBigInt(hatId)
+  );
+  const otherImmutableArgsParam = new ethereum.EventParam(
+    "otherImmutableArgs",
+    ethereum.Value.fromBytes(otherImmutableArgs)
+  );
+  const initDataParam = new ethereum.EventParam(
+    "initData",
+    ethereum.Value.fromBytes(initData)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(implementationParam);
+  parameters.push(instanceParam);
+  parameters.push(hatIdParam);
+  parameters.push(otherImmutableArgsParam);
+  parameters.push(initDataParam);
+
+  // create mocked event
+  const mockEvent = newMockEvent();
+  const moduleDeployedEvent = new HatsModuleFactory_ModuleDeployed(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  moduleDeployedEvent.parameters = new Array<ethereum.EventParam>();
+  moduleDeployedEvent.parameters.push(implementationParam);
+  moduleDeployedEvent.parameters.push(instanceParam);
+  moduleDeployedEvent.parameters.push(hatIdParam);
+  moduleDeployedEvent.parameters.push(otherImmutableArgsParam);
+  moduleDeployedEvent.parameters.push(initDataParam);
+
+  return moduleDeployedEvent;
 }

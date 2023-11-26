@@ -1,0 +1,2 @@
+export const JOKERACE_ELIGIBILITY_IMPLEMENTATION =
+  "0xae0e56a0c509da713722c1affcf4b5f1c6cdc73a";

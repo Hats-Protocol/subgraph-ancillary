@@ -12,10 +12,18 @@ type HatAuthorities @entity {
 type HatsSignerGate @entity {
   id: ID!
   type: HatsSignerGateType!
-  ownerHat: HatAuthorities
+  ownerHat: HatAuthorities!
   signerHats: [HatAuthorities!]!
   safe: String!
   minThreshold: BigInt!
   targetThreshold: BigInt!
   maxSigners: BigInt!
+}
+
+type JokeRaceEligibility @entity {
+  id: ID!
+  adminHat: HatAuthorities!
+  currentContest: String!
+  currentTermEnd: BigInt!
+  currentTopK: BigInt!
 }
