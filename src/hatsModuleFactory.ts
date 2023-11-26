@@ -1,4 +1,4 @@
-import { Address, BigInt, ethereum, log } from "@graphprotocol/graph-ts";
+import { ethereum } from "@graphprotocol/graph-ts";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import { JokeRaceEligibility as JokeRaceEligibilityObject } from "../generated/schema";
 import { JokeRaceEligibility as JokeRaceEligibilityTemplate } from "../generated/templates";

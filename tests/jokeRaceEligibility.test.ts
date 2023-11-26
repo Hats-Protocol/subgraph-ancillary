@@ -7,10 +7,13 @@ import {
   beforeEach,
 } from "matchstick-as/assembly/index";
 import { Address, BigInt, ethereum, Bytes, log } from "@graphprotocol/graph-ts";
-import { mockHatsModuleFactory_ModuleDeployedEvent } from "./utils";
-import { hatIdToHex } from "../src/utils";
+import {
+  mockHatsModuleFactory_ModuleDeployedEvent,
+  mockNewTermEvent,
+} from "./utils";
 import { handleModuleDeployed } from "../src/hatsModuleFactory";
 import { JOKERACE_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
+import { handleNewTerm } from "../src/jokeRaceEligibility";
 
 const contest1 = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const contest2 = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
@@ -20,6 +23,7 @@ const hatId =
   "26959946667150639794667015087019630673637144422540572481103610249216";
 const jokeRaceInstance = "0xcccccccccccccccccccccccccccccccccccccccc";
 const termEnd = 1701007342;
+const newTermEnd = 1701020079;
 
 describe("JokeRace Eligibility Tests", () => {
   afterAll(() => {
@@ -77,6 +81,46 @@ describe("JokeRace Eligibility Tests", () => {
         "adminHat",
         "0x0000000100000000000000000000000000000000000000000000000000000000"
       );
+    });
+
+    describe("And a new term is set", () => {
+      beforeEach(() => {
+        const newTermEvent = mockNewTermEvent(
+          Address.fromString(jokeRaceInstance),
+          Address.fromString(contest2),
+          BigInt.fromI32(newTermEnd),
+          BigInt.fromI32(5)
+        );
+
+        handleNewTerm(newTermEvent);
+      });
+
+      test("Test new term set", () => {
+        assert.fieldEquals(
+          "JokeRaceEligibility",
+          jokeRaceInstance,
+          "currentContest",
+          contest2
+        );
+        assert.fieldEquals(
+          "JokeRaceEligibility",
+          jokeRaceInstance,
+          "currentTermEnd",
+          newTermEnd.toString()
+        );
+        assert.fieldEquals(
+          "JokeRaceEligibility",
+          jokeRaceInstance,
+          "currentTopK",
+          "5"
+        );
+        assert.fieldEquals(
+          "JokeRaceEligibility",
+          jokeRaceInstance,
+          "adminHat",
+          "0x0000000100000000000000000000000000000000000000000000000000000000"
+        );
+      });
     });
   });
 });

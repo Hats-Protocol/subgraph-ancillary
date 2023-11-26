@@ -1,22 +1,16 @@
-import {
-  Address,
-  BigInt,
-  ethereum,
-  Bytes,
-  ByteArray,
-  log,
-} from "@graphprotocol/graph-ts";
+import { Address, BigInt, ethereum, Bytes } from "@graphprotocol/graph-ts";
 import {
   HatsSignerGateSetup,
   MultiHatsSignerGateSetup,
 } from "../generated/HatsSignerGateFactory/HatsSignerGateFactory";
+import { NewTerm } from "../generated/templates/JokeRaceEligibility/JokeRaceEligibility";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import {
   TargetThresholdSet,
   MinThresholdSet,
   SignerHatsAdded,
 } from "../generated/templates/HatsSignerGate/HatsSignerGate";
-import { newMockEvent, createMockedFunction } from "matchstick-as";
+import { newMockEvent } from "matchstick-as";
 
 export function mockHatsSignerGateSetupEvent(
   _hatsSignerGate: Address,
@@ -289,4 +283,45 @@ export function mockHatsModuleFactory_ModuleDeployedEvent(
   moduleDeployedEvent.parameters.push(initDataParam);
 
   return moduleDeployedEvent;
+}
+
+export function mockNewTermEvent(
+  jokeraceEligibility: Address,
+  NewContest: Address,
+  newTermEnd: BigInt,
+  newTopK: BigInt
+): NewTerm {
+  // prepare event parameters array
+  const newContestParam = new ethereum.EventParam(
+    "NewContest",
+    ethereum.Value.fromAddress(NewContest)
+  );
+  const newTermEndParam = new ethereum.EventParam(
+    "newTermEnd",
+    ethereum.Value.fromUnsignedBigInt(newTermEnd)
+  );
+  const newTopKParam = new ethereum.EventParam(
+    "newTopK",
+    ethereum.Value.fromUnsignedBigInt(newTopK)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(newContestParam);
+  parameters.push(newTopKParam);
+  parameters.push(newTermEndParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newTermEvent = new NewTerm(
+    jokeraceEligibility,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newTermEvent;
 }

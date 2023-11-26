@@ -1,7 +1,13 @@
-import { BigInt, Address, ethereum } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 
 export function hatIdToHex(hatId: BigInt): string {
-  return "0x" + hatId.toHexString().slice(2).padStart(64, "0");
+  return (
+    "0x" +
+    hatId
+      .toHexString()
+      .slice(2)
+      .padStart(64, "0")
+  );
 }
 
 export function topHatDomainToHatId(domain: BigInt): string {
@@ -48,7 +54,13 @@ export function hexTopHatDomain(hatId: string): string {
 }
 
 export function topHatDomainToHex(domain: BigInt): string {
-  return "0x" + domain.toHexString().slice(2).padStart(8, "0");
+  return (
+    "0x" +
+    domain
+      .toHexString()
+      .slice(2)
+      .padStart(8, "0")
+  );
 }
 
 export function changeEndianness(s: string): string {
