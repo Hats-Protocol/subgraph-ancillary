@@ -7,6 +7,8 @@ type HatAuthorities @entity {
   id: ID!
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
+  jokeraceAuthorities: [JokeRaceEligibility!]!
+    @derivedFrom(field: "hatAuthorities")
 }
 
 type HatsSignerGate @entity {
@@ -22,7 +24,8 @@ type HatsSignerGate @entity {
 
 type JokeRaceEligibility @entity {
   id: ID!
-  adminHat: HatAuthorities!
+  hatAuthorities: [HatAuthorities!]!
+  adminHat: bigint!
   currentContest: String!
   currentTermEnd: BigInt!
   currentTopK: BigInt!
