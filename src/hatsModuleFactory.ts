@@ -1,8 +1,17 @@
-import { ethereum } from "@graphprotocol/graph-ts";
+import { ethereum, log } from "@graphprotocol/graph-ts";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
-import { JokeRaceEligibility as JokeRaceEligibilityObject } from "../generated/schema";
-import { JokeRaceEligibility as JokeRaceEligibilityTemplate } from "../generated/templates";
-import { JOKERACE_ELIGIBILITY_IMPLEMENTATION } from "./constants";
+import {
+  JokeRaceEligibility as JokeRaceEligibilityObject,
+  AllowListEligibility as AllowListEligibilityObject,
+} from "../generated/schema";
+import {
+  JokeRaceEligibility as JokeRaceEligibilityTemplate,
+  AllowListEligibility as AllowListEligibilityTemplate,
+} from "../generated/templates";
+import {
+  JOKERACE_ELIGIBILITY_IMPLEMENTATION,
+  ALLOWLIST_ELIGIBILITY_IMPLEMENTATION,
+} from "./constants";
 import { hatIdToHex } from "./utils";
 
 export function handleModuleDeployed(
@@ -16,19 +25,23 @@ export function handleModuleDeployed(
       event.params.instance.toHexString()
     );
 
-    let decodedInitArgs = (ethereum.decode(
-      "(address,uint256,uint256)",
-      event.params.initData
-    ) as ethereum.Value).toTuple();
+    let decodedInitArgs = (
+      ethereum.decode(
+        "(address,uint256,uint256)",
+        event.params.initData
+      ) as ethereum.Value
+    ).toTuple();
 
     const contestAddress = decodedInitArgs[0].toAddress().toHexString();
     const termEnd = decodedInitArgs[1].toBigInt();
     const topK = decodedInitArgs[2].toBigInt();
 
-    let decodedImmutableArgs = (ethereum.decode(
-      "(uint256)",
-      event.params.otherImmutableArgs
-    ) as ethereum.Value).toTuple();
+    let decodedImmutableArgs = (
+      ethereum.decode(
+        "(uint256)",
+        event.params.otherImmutableArgs
+      ) as ethereum.Value
+    ).toTuple();
 
     const adminHat = decodedImmutableArgs[0].toBigInt();
 
@@ -37,5 +50,24 @@ export function handleModuleDeployed(
     jokeRaceEligibility.currentTopK = topK;
     jokeRaceEligibility.adminHat = hatIdToHex(adminHat);
     jokeRaceEligibility.save();
+  } else if (implemenatationAddrss == ALLOWLIST_ELIGIBILITY_IMPLEMENTATION) {
+    AllowListEligibilityTemplate.create(event.params.instance);
+    const allowListEligibility = new AllowListEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    let decodedImmutableArgs = (
+      ethereum.decode(
+        "(uint256, uint256)",
+        event.params.otherImmutableArgs
+      ) as ethereum.Value
+    ).toTuple();
+
+    const ownerHat = decodedImmutableArgs[0].toBigInt();
+    const arbitratorHat = decodedImmutableArgs[1].toBigInt();
+
+    allowListEligibility.ownerHat = hatIdToHex(ownerHat);
+    allowListEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
+    allowListEligibility.save();
   }
 }

@@ -7,6 +7,10 @@ type HatAuthorities @entity {
   id: ID!
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
+  jokeraceAdmin: [JokeRaceEligibility]! @derivedFrom(field: "adminHat")
+  allowListOwner: [AllowListEligibility]! @derivedFrom(field: "ownerHat")
+  allowListArbitrator: [AllowListEligibility]!
+    @derivedFrom(field: "arbitratorHat")
 }
 
 type HatsSignerGate @entity {
@@ -26,4 +30,10 @@ type JokeRaceEligibility @entity {
   currentContest: String!
   currentTermEnd: BigInt!
   currentTopK: BigInt!
+}
+
+type AllowListEligibility @entity {
+  id: ID!
+  ownerHat: HatAuthorities!
+  arbitratorHat: HatAuthorities!
 }
