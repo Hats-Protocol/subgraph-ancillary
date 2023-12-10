@@ -3,14 +3,17 @@ import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory
 import {
   JokeRaceEligibility as JokeRaceEligibilityObject,
   AllowListEligibility as AllowListEligibilityObject,
+  HatsElectionEligibility as HatsElectionEligbilityObject,
 } from "../generated/schema";
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
   AllowListEligibility as AllowListEligibilityTemplate,
+  HatsElectionEligibility as HatsElectionEligibilityTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
   ALLOWLIST_ELIGIBILITY_IMPLEMENTATION,
+  HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
 } from "./constants";
 import { hatIdToHex } from "./utils";
 
@@ -69,5 +72,26 @@ export function handleModuleDeployed(
     allowListEligibility.ownerHat = hatIdToHex(ownerHat);
     allowListEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     allowListEligibility.save();
+  } else if (
+    implemenatationAddrss == HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION
+  ) {
+    HatsElectionEligibilityTemplate.create(event.params.instance);
+    const hatsElectionEligibility = new HatsElectionEligbilityObject(
+      event.params.instance.toHexString()
+    );
+
+    let decodedImmutableArgs = (
+      ethereum.decode(
+        "(uint256, uint256)",
+        event.params.otherImmutableArgs
+      ) as ethereum.Value
+    ).toTuple();
+
+    const ballotBoxHat = decodedImmutableArgs[0].toBigInt();
+    const adminHat = decodedImmutableArgs[1].toBigInt();
+
+    hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
+    hatsElectionEligibility.adminHat = hatIdToHex(adminHat);
+    hatsElectionEligibility.save();
   }
 }

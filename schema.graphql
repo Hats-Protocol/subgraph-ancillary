@@ -7,10 +7,13 @@ type HatAuthorities @entity {
   id: ID!
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
-  jokeraceAdmin: [JokeRaceEligibility]! @derivedFrom(field: "adminHat")
-  allowListOwner: [AllowListEligibility]! @derivedFrom(field: "ownerHat")
-  allowListArbitrator: [AllowListEligibility]!
+  jokeraceAdmin: [JokeRaceEligibility!]! @derivedFrom(field: "adminHat")
+  allowListOwner: [AllowListEligibility!]! @derivedFrom(field: "ownerHat")
+  allowListArbitrator: [AllowListEligibility!]!
     @derivedFrom(field: "arbitratorHat")
+  electionsBallotBox: [HatsElectionEligibility!]!
+    @derivedFrom(field: "ballotBoxHat")
+  electionsAdmin: [HatsElectionEligibility!]! @derivedFrom(field: "adminHat")
 }
 
 type HatsSignerGate @entity {
@@ -36,4 +39,10 @@ type AllowListEligibility @entity {
   id: ID!
   ownerHat: HatAuthorities!
   arbitratorHat: HatAuthorities!
+}
+
+type HatsElectionEligibility @entity {
+  id: ID!
+  ballotBoxHat: HatAuthorities!
+  adminHat: HatAuthorities!
 }

@@ -120,3 +120,18 @@ templates:
       abis:
         - name: AllowlistEligibility
           file: ./abis/AllowlistEligibility.json
+  - name: HatsElectionEligibility
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: HatsElectionEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/hatsElectionEligibility.ts
+      entities:
+        - HatsElectionEligibility
+      abis:
+        - name: HatsElectionEligibility
+          file: ./abis/HatsElectionEligibility.json
