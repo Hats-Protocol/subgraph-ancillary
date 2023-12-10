@@ -135,3 +135,18 @@ templates:
       abis:
         - name: HatsElectionEligibility
           file: ./abis/HatsElectionEligibility.json
+  - name: PassthroughModule
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: PassthroughModule
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/passthroughModule.ts
+      entities:
+        - PassthroughModule
+      abis:
+        - name: PassthroughModule
+          file: ./abis/PassthroughModule.json

@@ -4,16 +4,19 @@ import {
   JokeRaceEligibility as JokeRaceEligibilityObject,
   AllowListEligibility as AllowListEligibilityObject,
   HatsElectionEligibility as HatsElectionEligbilityObject,
+  PassthroughModule as PassthroughModuleObject,
 } from "../generated/schema";
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
   AllowListEligibility as AllowListEligibilityTemplate,
   HatsElectionEligibility as HatsElectionEligibilityTemplate,
+  PassthroughModule as PassthroughModuleTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
   ALLOWLIST_ELIGIBILITY_IMPLEMENTATION,
   HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
+  PASSTHROUGH_MODULE_IMPLEMENTATION,
 } from "./constants";
 import { hatIdToHex } from "./utils";
 
@@ -93,5 +96,22 @@ export function handleModuleDeployed(
     hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
     hatsElectionEligibility.adminHat = hatIdToHex(adminHat);
     hatsElectionEligibility.save();
+  } else if (implemenatationAddrss == PASSTHROUGH_MODULE_IMPLEMENTATION) {
+    PassthroughModuleTemplate.create(event.params.instance);
+    const passthroughModule = new PassthroughModuleObject(
+      event.params.instance.toHexString()
+    );
+
+    let decodedImmutableArgs = (
+      ethereum.decode(
+        "(uint256)",
+        event.params.otherImmutableArgs
+      ) as ethereum.Value
+    ).toTuple();
+
+    const passthroughHat = decodedImmutableArgs[0].toBigInt();
+
+    passthroughModule.passthroughHat = hatIdToHex(passthroughHat);
+    passthroughModule.save();
   }
 }
