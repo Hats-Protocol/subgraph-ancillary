@@ -16,6 +16,8 @@ type HatAuthorities @entity {
   electionsAdmin: [HatsElectionEligibility!]! @derivedFrom(field: "adminHat")
   eligibilityTogglePassthrough: [PassthroughModule!]!
     @derivedFrom(field: "passthroughHat")
+  stakingJudge: [StakingEligibility!]! @derivedFrom(field: "judgeHat")
+  stakingRecipient: [StakingEligibility!]! @derivedFrom(field: "recipientHat")
 }
 
 type HatsSignerGate @entity {
@@ -52,4 +54,10 @@ type HatsElectionEligibility @entity {
 type PassthroughModule @entity {
   id: ID!
   passthroughHat: HatAuthorities!
+}
+
+type StakingEligibility @entity {
+  id: ID!
+  judgeHat: HatAuthorities!
+  recipientHat: HatAuthorities!
 }

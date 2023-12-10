@@ -5,18 +5,21 @@ import {
   AllowListEligibility as AllowListEligibilityObject,
   HatsElectionEligibility as HatsElectionEligbilityObject,
   PassthroughModule as PassthroughModuleObject,
+  StakingEligibility as StakingEligibilityObject,
 } from "../generated/schema";
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
   AllowListEligibility as AllowListEligibilityTemplate,
   HatsElectionEligibility as HatsElectionEligibilityTemplate,
   PassthroughModule as PassthroughModuleTemplate,
+  StakingEligibility as StakingEligibilityTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
   ALLOWLIST_ELIGIBILITY_IMPLEMENTATION,
   HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
   PASSTHROUGH_MODULE_IMPLEMENTATION,
+  STAKING_ELIGIBILITY_IMPLEMENTATION,
 } from "./constants";
 import { hatIdToHex } from "./utils";
 
@@ -113,5 +116,31 @@ export function handleModuleDeployed(
 
     passthroughModule.passthroughHat = hatIdToHex(passthroughHat);
     passthroughModule.save();
+  } else if (implemenatationAddrss == STAKING_ELIGIBILITY_IMPLEMENTATION) {
+    StakingEligibilityTemplate.create(event.params.instance);
+    const stakingEligibility = new StakingEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    let decodedInitArgs = (
+      ethereum.decode(
+        "(uint248,uint256,uint256,uint256)",
+        event.params.initData
+      ) as ethereum.Value
+    ).toTuple();
+
+    //let decodedImmutableArgs = (
+    //  ethereum.decode(
+    //    "(address)",
+    //    event.params.otherImmutableArgs
+    //  ) as ethereum.Value
+    //).toTuple();
+
+    const judgeHat = decodedInitArgs[1].toBigInt();
+    const recipientHat = decodedInitArgs[2].toBigInt();
+
+    stakingEligibility.judgeHat = hatIdToHex(judgeHat);
+    stakingEligibility.recipientHat = hatIdToHex(recipientHat);
+    stakingEligibility.save();
   }
 }

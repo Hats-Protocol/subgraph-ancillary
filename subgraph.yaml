@@ -150,3 +150,23 @@ templates:
       abis:
         - name: PassthroughModule
           file: ./abis/PassthroughModule.json
+  - name: StakingEligibility
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: StakingEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/stakingEligibility.ts
+      entities:
+        - StakingEligibility
+      abis:
+        - name: StakingEligibility
+          file: ./abis/StakingEligibility.json
+      eventHandlers:
+        - event: StakingEligibility_JudgeHatChanged(uint256)
+          handler: handleJudgeHatChanged
+        - event: StakingEligibility_RecipientHatChanged(uint256)
+          handler: handleRecipientHatChanged
