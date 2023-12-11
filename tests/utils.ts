@@ -11,6 +11,10 @@ import {
   MinThresholdSet,
   SignerHatsAdded,
 } from "../generated/templates/HatsSignerGate/HatsSignerGate";
+import {
+  StakingEligibility_JudgeHatChanged,
+  StakingEligibility_RecipientHatChanged,
+} from "../generated/templates/StakingEligibility/StakingEligibility";
 import { newMockEvent } from "matchstick-as";
 
 export function mockHatsSignerGateSetupEvent(
@@ -367,4 +371,62 @@ export function mockNewTermDeprecatedEvent(
   );
 
   return newTermEvent;
+}
+
+export function mockStakingEligibility_JudgeHatChangedEvent(
+  instance: Address,
+  newJudgeHat: BigInt
+): StakingEligibility_JudgeHatChanged {
+  // prepare event parameters array
+  const newJudgeHatParam = new ethereum.EventParam(
+    "newJudgeHat",
+    ethereum.Value.fromUnsignedBigInt(newJudgeHat)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(newJudgeHatParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newJudgeHatEvent = new StakingEligibility_JudgeHatChanged(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newJudgeHatEvent;
+}
+
+export function mockStakingEligibility_RecipientHatChangedEvent(
+  instance: Address,
+  newRecipientHat: BigInt
+): StakingEligibility_RecipientHatChanged {
+  // prepare event parameters array
+  const newRecipientHatParam = new ethereum.EventParam(
+    "newRecipientHat",
+    ethereum.Value.fromUnsignedBigInt(newRecipientHat)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(newRecipientHatParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newRecipientHatEvent = new StakingEligibility_RecipientHatChanged(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newRecipientHatEvent;
 }
