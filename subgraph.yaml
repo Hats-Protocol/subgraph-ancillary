@@ -105,6 +105,24 @@ templates:
       eventHandlers:
         - event: NewTerm(address,uint256,uint256)
           handler: handleNewTerm
+  - name: JokeRaceEligibilityDeprecated
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: JokeRaceEligibilityDeprecated
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/jokeRaceEligibilityDeprecated.ts
+      entities:
+        - JokeRaceEligibility
+      abis:
+        - name: JokeRaceEligibilityDeprecated
+          file: ./abis/JokeRaceEligibilityDeprecated.json
+      eventHandlers:
+        - event: NewTerm(address,uint256,uint256)
+          handler: handleNewTerm
   - name: AllowListEligibility
     kind: ethereum/contract
     network: goerli

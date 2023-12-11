@@ -9,6 +9,7 @@ import {
 } from "../generated/schema";
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
+  JokeRaceEligibilityDeprecated as JokeRaceEligibilityDeprecatedTemplate,
   AllowListEligibility as AllowListEligibilityTemplate,
   HatsElectionEligibility as HatsElectionEligibilityTemplate,
   PassthroughModule as PassthroughModuleTemplate,
@@ -16,6 +17,7 @@ import {
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
+  JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED,
   ALLOWLIST_ELIGIBILITY_IMPLEMENTATION,
   HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
   PASSTHROUGH_MODULE_IMPLEMENTATION,
@@ -30,6 +32,39 @@ export function handleModuleDeployed(
 
   if (implemenatationAddrss == JOKERACE_ELIGIBILITY_IMPLEMENTATION) {
     JokeRaceEligibilityTemplate.create(event.params.instance);
+    const jokeRaceEligibility = new JokeRaceEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    let decodedInitArgs = (
+      ethereum.decode(
+        "(address,uint256,uint256)",
+        event.params.initData
+      ) as ethereum.Value
+    ).toTuple();
+
+    const contestAddress = decodedInitArgs[0].toAddress().toHexString();
+    const termEnd = decodedInitArgs[1].toBigInt();
+    const topK = decodedInitArgs[2].toBigInt();
+
+    let decodedImmutableArgs = (
+      ethereum.decode(
+        "(uint256)",
+        event.params.otherImmutableArgs
+      ) as ethereum.Value
+    ).toTuple();
+
+    const adminHat = decodedImmutableArgs[0].toBigInt();
+
+    jokeRaceEligibility.currentContest = contestAddress;
+    jokeRaceEligibility.currentTermEnd = termEnd;
+    jokeRaceEligibility.currentTopK = topK;
+    jokeRaceEligibility.adminHat = hatIdToHex(adminHat);
+    jokeRaceEligibility.save();
+  } else if (
+    implemenatationAddrss == JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
+  ) {
+    JokeRaceEligibilityDeprecatedTemplate.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
       event.params.instance.toHexString()
     );

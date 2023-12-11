@@ -4,6 +4,7 @@ import {
   MultiHatsSignerGateSetup,
 } from "../generated/HatsSignerGateFactory/HatsSignerGateFactory";
 import { NewTerm } from "../generated/templates/JokeRaceEligibility/JokeRaceEligibility";
+import { NewTerm as NewTermDeprecated } from "../generated/templates/JokeRaceEligibilityDeprecated/JokeRaceEligibilityDeprecated";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import {
   TargetThresholdSet,
@@ -314,6 +315,47 @@ export function mockNewTermEvent(
   // create mocked event
   let mockEvent = newMockEvent();
   let newTermEvent = new NewTerm(
+    jokeraceEligibility,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newTermEvent;
+}
+
+export function mockNewTermDeprecatedEvent(
+  jokeraceEligibility: Address,
+  NewContest: Address,
+  newTermEnd: BigInt,
+  newTopK: BigInt
+): NewTermDeprecated {
+  // prepare event parameters array
+  const newContestParam = new ethereum.EventParam(
+    "NewContest",
+    ethereum.Value.fromAddress(NewContest)
+  );
+  const newTermEndParam = new ethereum.EventParam(
+    "newTermEnd",
+    ethereum.Value.fromUnsignedBigInt(newTermEnd)
+  );
+  const newTopKParam = new ethereum.EventParam(
+    "newTopK",
+    ethereum.Value.fromUnsignedBigInt(newTopK)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(newContestParam);
+  parameters.push(newTopKParam);
+  parameters.push(newTermEndParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newTermEvent = new NewTermDeprecated(
     jokeraceEligibility,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
