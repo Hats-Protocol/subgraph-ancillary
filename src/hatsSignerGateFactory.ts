@@ -2,7 +2,7 @@ import {
   HatsSignerGateSetup,
   MultiHatsSignerGateSetup,
 } from "../generated/HatsSignerGateFactory/HatsSignerGateFactory";
-import { HatAuthorities, HatsSignerGate } from "../generated/schema";
+import { HatAuthority, HatsSignerGate } from "../generated/schema";
 import { HatsSignerGate as HatsSignerGateTemplate } from "../generated/templates";
 import { hatIdToHex } from "./utils";
 
@@ -11,15 +11,15 @@ export function handleHatsSignerGateSetup(event: HatsSignerGateSetup): void {
   let hsg = new HatsSignerGate(event.params._hatsSignerGate.toHexString());
 
   // check if owner hat exists, create new object if not
-  let ownerHat = HatAuthorities.load(hatIdToHex(event.params._ownerHatId));
+  let ownerHat = HatAuthority.load(hatIdToHex(event.params._ownerHatId));
   if (ownerHat == null) {
-    ownerHat = new HatAuthorities(hatIdToHex(event.params._ownerHatId));
+    ownerHat = new HatAuthority(hatIdToHex(event.params._ownerHatId));
   }
 
   // check if signer hat exists, create new object if not
-  let signerHat = HatAuthorities.load(hatIdToHex(event.params._signersHatId));
+  let signerHat = HatAuthority.load(hatIdToHex(event.params._signersHatId));
   if (signerHat == null) {
-    signerHat = new HatAuthorities(hatIdToHex(event.params._signersHatId));
+    signerHat = new HatAuthority(hatIdToHex(event.params._signersHatId));
   }
 
   hsg.type = "Single";
@@ -42,21 +42,19 @@ export function handleMultiHatsSignerGateSetup(
   const hsg = new HatsSignerGate(event.params._hatsSignerGate.toHexString());
 
   // check if owner hat exists, create new object if not
-  let ownerHat = HatAuthorities.load(hatIdToHex(event.params._ownerHatId));
+  let ownerHat = HatAuthority.load(hatIdToHex(event.params._ownerHatId));
   if (ownerHat == null) {
-    ownerHat = new HatAuthorities(hatIdToHex(event.params._ownerHatId));
+    ownerHat = new HatAuthority(hatIdToHex(event.params._ownerHatId));
   }
 
   // check if signer hats exist, create the ones that does not
   const signerHatsIds: string[] = [];
   for (let i = 0; i < event.params._signersHatIds.length; i++) {
-    let signerHat = HatAuthorities.load(
+    let signerHat = HatAuthority.load(
       hatIdToHex(event.params._signersHatIds[i])
     );
     if (signerHat == null) {
-      signerHat = new HatAuthorities(
-        hatIdToHex(event.params._signersHatIds[i])
-      );
+      signerHat = new HatAuthority(hatIdToHex(event.params._signersHatIds[i]));
     }
     signerHatsIds.push(signerHat.id);
     signerHat.save();

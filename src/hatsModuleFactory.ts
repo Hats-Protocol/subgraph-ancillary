@@ -6,6 +6,7 @@ import {
   HatsElectionEligibility as HatsElectionEligbilityObject,
   PassthroughModule as PassthroughModuleObject,
   StakingEligibility as StakingEligibilityObject,
+  HatAuthority,
 } from "../generated/schema";
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
@@ -55,12 +56,18 @@ export function handleModuleDeployed(
     ).toTuple();
 
     const adminHat = decodedImmutableArgs[0].toBigInt();
+    // check if hat exists, create new object if not
+    let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHat));
+    if (adminHatAuthority == null) {
+      adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
+    }
 
     jokeRaceEligibility.currentContest = contestAddress;
     jokeRaceEligibility.currentTermEnd = termEnd;
     jokeRaceEligibility.currentTopK = topK;
     jokeRaceEligibility.adminHat = hatIdToHex(adminHat);
     jokeRaceEligibility.save();
+    adminHatAuthority.save();
   } else if (
     implemenatationAddrss == JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
   ) {
@@ -88,12 +95,18 @@ export function handleModuleDeployed(
     ).toTuple();
 
     const adminHat = decodedImmutableArgs[0].toBigInt();
+    // check if hat exists, create new object if not
+    let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHat));
+    if (adminHatAuthority == null) {
+      adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
+    }
 
     jokeRaceEligibility.currentContest = contestAddress;
     jokeRaceEligibility.currentTermEnd = termEnd;
     jokeRaceEligibility.currentTopK = topK;
     jokeRaceEligibility.adminHat = hatIdToHex(adminHat);
     jokeRaceEligibility.save();
+    adminHatAuthority.save();
   } else if (implemenatationAddrss == ALLOWLIST_ELIGIBILITY_IMPLEMENTATION) {
     AllowListEligibilityTemplate.create(event.params.instance);
     const allowListEligibility = new AllowListEligibilityObject(
@@ -108,11 +121,24 @@ export function handleModuleDeployed(
     ).toTuple();
 
     const ownerHat = decodedImmutableArgs[0].toBigInt();
+    // check if hat exists, create new object if not
+    let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
+    if (ownerHatAuthority == null) {
+      ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
+    }
+
     const arbitratorHat = decodedImmutableArgs[1].toBigInt();
+    // check if hat exists, create new object if not
+    let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
+    if (arbitratorHatAuthority == null) {
+      arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat));
+    }
 
     allowListEligibility.ownerHat = hatIdToHex(ownerHat);
     allowListEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     allowListEligibility.save();
+    ownerHatAuthority.save();
+    arbitratorHatAuthority.save();
   } else if (
     implemenatationAddrss == HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION
   ) {
@@ -129,11 +155,24 @@ export function handleModuleDeployed(
     ).toTuple();
 
     const ballotBoxHat = decodedImmutableArgs[0].toBigInt();
+    // check if hat exists, create new object if not
+    let ballotBoxHatAuthority = HatAuthority.load(hatIdToHex(ballotBoxHat));
+    if (ballotBoxHatAuthority == null) {
+      ballotBoxHatAuthority = new HatAuthority(hatIdToHex(ballotBoxHat));
+    }
+
     const adminHat = decodedImmutableArgs[1].toBigInt();
+    // check if hat exists, create new object if not
+    let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHat));
+    if (adminHatAuthority == null) {
+      adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
+    }
 
     hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
     hatsElectionEligibility.adminHat = hatIdToHex(adminHat);
     hatsElectionEligibility.save();
+    ballotBoxHatAuthority.save();
+    adminHatAuthority.save();
   } else if (implemenatationAddrss == PASSTHROUGH_MODULE_IMPLEMENTATION) {
     PassthroughModuleTemplate.create(event.params.instance);
     const passthroughModule = new PassthroughModuleObject(
@@ -148,9 +187,15 @@ export function handleModuleDeployed(
     ).toTuple();
 
     const passthroughHat = decodedImmutableArgs[0].toBigInt();
+    // check if hat exists, create new object if not
+    let passthroughHatAuthority = HatAuthority.load(hatIdToHex(passthroughHat));
+    if (passthroughHatAuthority == null) {
+      passthroughHatAuthority = new HatAuthority(hatIdToHex(passthroughHat));
+    }
 
     passthroughModule.passthroughHat = hatIdToHex(passthroughHat);
     passthroughModule.save();
+    passthroughHatAuthority.save();
   } else if (implemenatationAddrss == STAKING_ELIGIBILITY_IMPLEMENTATION) {
     StakingEligibilityTemplate.create(event.params.instance);
     const stakingEligibility = new StakingEligibilityObject(
@@ -172,10 +217,23 @@ export function handleModuleDeployed(
     //).toTuple();
 
     const judgeHat = decodedInitArgs[1].toBigInt();
+    // check if hat exists, create new object if not
+    let judgeHatAuthority = HatAuthority.load(hatIdToHex(judgeHat));
+    if (judgeHatAuthority == null) {
+      judgeHatAuthority = new HatAuthority(hatIdToHex(judgeHat));
+    }
+
     const recipientHat = decodedInitArgs[2].toBigInt();
+    // check if hat exists, create new object if not
+    let recipientHatAuthority = HatAuthority.load(hatIdToHex(recipientHat));
+    if (recipientHatAuthority == null) {
+      recipientHatAuthority = new HatAuthority(hatIdToHex(recipientHat));
+    }
 
     stakingEligibility.judgeHat = hatIdToHex(judgeHat);
     stakingEligibility.recipientHat = hatIdToHex(recipientHat);
     stakingEligibility.save();
+    judgeHatAuthority.save();
+    recipientHatAuthority.save();
   }
 }

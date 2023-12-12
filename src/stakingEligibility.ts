@@ -2,7 +2,7 @@ import {
   StakingEligibility_JudgeHatChanged,
   StakingEligibility_RecipientHatChanged,
 } from "../generated/templates/StakingEligibility/StakingEligibility";
-import { StakingEligibility } from "../generated/schema";
+import { StakingEligibility, HatAuthority } from "../generated/schema";
 import { hatIdToHex } from "./utils";
 
 export function handleJudgeHatChanged(
@@ -12,8 +12,17 @@ export function handleJudgeHatChanged(
     event.address.toHexString()
   ) as StakingEligibility;
 
+  // check if hat exists, create new object if not
+  let judgeHatAuthority = HatAuthority.load(
+    hatIdToHex(event.params.newJudgeHat)
+  );
+  if (judgeHatAuthority == null) {
+    judgeHatAuthority = new HatAuthority(hatIdToHex(event.params.newJudgeHat));
+  }
+
   stakingEligibility.judgeHat = hatIdToHex(event.params.newJudgeHat);
   stakingEligibility.save();
+  judgeHatAuthority.save();
 }
 
 export function handleRecipientHatChanged(
@@ -23,6 +32,17 @@ export function handleRecipientHatChanged(
     event.address.toHexString()
   ) as StakingEligibility;
 
+  // check if hat exists, create new object if not
+  let recipientHatAuthority = HatAuthority.load(
+    hatIdToHex(event.params.newRecipientHat)
+  );
+  if (recipientHatAuthority == null) {
+    recipientHatAuthority = new HatAuthority(
+      hatIdToHex(event.params.newRecipientHat)
+    );
+  }
+
   stakingEligibility.recipientHat = hatIdToHex(event.params.newRecipientHat);
   stakingEligibility.save();
+  recipientHatAuthority.save();
 }

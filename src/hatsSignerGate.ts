@@ -3,7 +3,7 @@ import {
   MinThresholdSet,
   SignerHatsAdded,
 } from "../generated/templates/HatsSignerGate/HatsSignerGate";
-import { HatAuthorities, HatsSignerGate } from "../generated/schema";
+import { HatAuthority, HatsSignerGate } from "../generated/schema";
 import { hatIdToHex } from "./utils";
 
 export function handleTargetThresholdSet(event: TargetThresholdSet): void {
@@ -25,9 +25,9 @@ export function handleSignerHatsAdded(event: SignerHatsAdded): void {
   const currentSigners = hsg.signerHats;
   for (let i = 0; i < event.params.newSignerHats.length; i++) {
     const newSignerId = hatIdToHex(event.params.newSignerHats[i]);
-    let hat = HatAuthorities.load(newSignerId);
+    let hat = HatAuthority.load(newSignerId);
     if (hat == null) {
-      hat = new HatAuthorities(newSignerId);
+      hat = new HatAuthority(newSignerId);
       hat.save();
     }
     currentSigners.push(hat.id);

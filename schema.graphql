@@ -3,7 +3,7 @@ enum HatsSignerGateType {
   Multi
 }
 
-type HatAuthorities @entity {
+type HatAuthority @entity {
   id: ID!
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
@@ -23,8 +23,8 @@ type HatAuthorities @entity {
 type HatsSignerGate @entity {
   id: ID!
   type: HatsSignerGateType!
-  ownerHat: HatAuthorities!
-  signerHats: [HatAuthorities!]!
+  ownerHat: HatAuthority!
+  signerHats: [HatAuthority!]!
   safe: String!
   minThreshold: BigInt!
   targetThreshold: BigInt!
@@ -33,7 +33,7 @@ type HatsSignerGate @entity {
 
 type JokeRaceEligibility @entity {
   id: ID!
-  adminHat: HatAuthorities!
+  adminHat: HatAuthority!
   currentContest: String!
   currentTermEnd: BigInt!
   currentTopK: BigInt!
@@ -41,23 +41,23 @@ type JokeRaceEligibility @entity {
 
 type AllowListEligibility @entity {
   id: ID!
-  ownerHat: HatAuthorities!
-  arbitratorHat: HatAuthorities!
+  ownerHat: HatAuthority!
+  arbitratorHat: HatAuthority!
 }
 
 type HatsElectionEligibility @entity {
   id: ID!
-  ballotBoxHat: HatAuthorities!
-  adminHat: HatAuthorities!
+  ballotBoxHat: HatAuthority!
+  adminHat: HatAuthority!
 }
 
 type PassthroughModule @entity {
   id: ID!
-  passthroughHat: HatAuthorities!
+  passthroughHat: HatAuthority!
 }
 
 type StakingEligibility @entity {
   id: ID!
-  judgeHat: HatAuthorities!
-  recipientHat: HatAuthorities!
+  judgeHat: HatAuthority!
+  recipientHat: HatAuthority!
 }
