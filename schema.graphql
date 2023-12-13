@@ -33,6 +33,7 @@ type HatsSignerGate @entity {
 
 type JokeRaceEligibility @entity {
   id: ID!
+  hatId: String!
   adminHat: HatAuthority!
   currentContest: String!
   currentTermEnd: BigInt!
@@ -41,23 +42,27 @@ type JokeRaceEligibility @entity {
 
 type AllowListEligibility @entity {
   id: ID!
+  hatId: String!
   ownerHat: HatAuthority!
   arbitratorHat: HatAuthority!
 }
 
 type HatsElectionEligibility @entity {
   id: ID!
+  hatId: String!
   ballotBoxHat: HatAuthority!
   adminHat: HatAuthority!
 }
 
 type PassthroughModule @entity {
   id: ID!
+  hatId: String!
   passthroughHat: HatAuthority!
 }
 
 type StakingEligibility @entity {
   id: ID!
+  hatId: String!
   judgeHat: HatAuthority!
   recipientHat: HatAuthority!
 }

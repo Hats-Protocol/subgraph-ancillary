@@ -122,6 +122,12 @@ describe("Staking Eligibility Tests", () => {
         "recipientHat",
         "0x0000000200010000000000000000000000000000000000000000000000000000"
       );
+      assert.fieldEquals(
+        "StakingEligibility",
+        stakingInstance,
+        "hatId",
+        "0x0000000100010001000000000000000000000000000000000000000000000000"
+      );
     });
   });
 });

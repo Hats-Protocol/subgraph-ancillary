@@ -65,6 +65,12 @@ describe("Hats Election Eligibility Tests", () => {
         "adminHat",
         adminHatId
       );
+      assert.fieldEquals(
+        "HatsElectionEligibility",
+        hatsElectionInstance,
+        "hatId",
+        "0x0000000100010001000000000000000000000000000000000000000000000000"
+      );
     });
   });
 });

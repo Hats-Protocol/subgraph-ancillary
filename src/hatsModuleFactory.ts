@@ -62,6 +62,7 @@ export function handleModuleDeployed(
       adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
     }
 
+    jokeRaceEligibility.hatId = hatIdToHex(event.params.hatId);
     jokeRaceEligibility.currentContest = contestAddress;
     jokeRaceEligibility.currentTermEnd = termEnd;
     jokeRaceEligibility.currentTopK = topK;
@@ -101,6 +102,7 @@ export function handleModuleDeployed(
       adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
     }
 
+    jokeRaceEligibility.hatId = hatIdToHex(event.params.hatId);
     jokeRaceEligibility.currentContest = contestAddress;
     jokeRaceEligibility.currentTermEnd = termEnd;
     jokeRaceEligibility.currentTopK = topK;
@@ -134,6 +136,7 @@ export function handleModuleDeployed(
       arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat));
     }
 
+    allowListEligibility.hatId = hatIdToHex(event.params.hatId);
     allowListEligibility.ownerHat = hatIdToHex(ownerHat);
     allowListEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     allowListEligibility.save();
@@ -168,6 +171,7 @@ export function handleModuleDeployed(
       adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
     }
 
+    hatsElectionEligibility.hatId = hatIdToHex(event.params.hatId);
     hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
     hatsElectionEligibility.adminHat = hatIdToHex(adminHat);
     hatsElectionEligibility.save();
@@ -193,6 +197,7 @@ export function handleModuleDeployed(
       passthroughHatAuthority = new HatAuthority(hatIdToHex(passthroughHat));
     }
 
+    passthroughModule.hatId = hatIdToHex(event.params.hatId);
     passthroughModule.passthroughHat = hatIdToHex(passthroughHat);
     passthroughModule.save();
     passthroughHatAuthority.save();
@@ -230,6 +235,7 @@ export function handleModuleDeployed(
       recipientHatAuthority = new HatAuthority(hatIdToHex(recipientHat));
     }
 
+    stakingEligibility.hatId = hatIdToHex(event.params.hatId);
     stakingEligibility.judgeHat = hatIdToHex(judgeHat);
     stakingEligibility.recipientHat = hatIdToHex(recipientHat);
     stakingEligibility.save();
