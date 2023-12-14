@@ -24,7 +24,7 @@ import {
   PASSTHROUGH_MODULE_IMPLEMENTATION,
   STAKING_ELIGIBILITY_IMPLEMENTATION,
 } from "./constants";
-import { hatIdToHex } from "./utils";
+import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
   event: HatsModuleFactory_ModuleDeployed
@@ -235,11 +235,68 @@ export function handleModuleDeployed(
       recipientHatAuthority = new HatAuthority(hatIdToHex(recipientHat));
     }
 
-    stakingEligibility.hatId = hatIdToHex(event.params.hatId);
+    const hatId = hatIdToHex(event.params.hatId);
+    const hatAdmins = getAllAdmins(hatId);
+
+    stakingEligibility.hatAdmins = hatAdmins;
+    stakingEligibility.hatId = hatId;
     stakingEligibility.judgeHat = hatIdToHex(judgeHat);
     stakingEligibility.recipientHat = hatIdToHex(recipientHat);
     stakingEligibility.save();
     judgeHatAuthority.save();
     recipientHatAuthority.save();
   }
+}
+
+function getAllAdmins(hatId: string): string[] {
+  let admins: string[] = [];
+
+  let reachedTippyTop = false;
+  let getAdminsOfHat = hatId;
+  while (!reachedTippyTop) {
+    const localTopHat = getAdminsOfHat.substring(0, 10).padEnd(66, "0");
+    const isLocalTopHat = getAdminsOfHat == localTopHat ? true : false;
+    const linkedAdminHat = getLinkedTreeAdmin(localTopHat);
+
+    if (!isLocalTopHat) {
+      const localAdmins = getLocalHatAdmins(getAdminsOfHat);
+      admins = admins.concat(localAdmins);
+    }
+
+    getAdminsOfHat = linkedAdminHat;
+
+    if (
+      linkedAdminHat ==
+      "0x0000000000000000000000000000000000000000000000000000000000000000"
+    ) {
+      reachedTippyTop = true;
+    }
+  }
+
+  return admins;
+}
+
+function getLocalHatAdmins(hatId: string): string[] {
+  const admins: string[] = [];
+  for (let i = 10; i < hatId.length; i += 4) {
+    let currentHatId = hatId.substring(0, i).padEnd(66, "0");
+    if (currentHatId == hatId) {
+      break;
+    }
+    admins.push(currentHatId);
+
+    // check if HatAuthority entity exists, create if not
+    let hatAuthority = HatAuthority.load(currentHatId);
+    if (hatAuthority == null) {
+      hatAuthority = new HatAuthority(currentHatId);
+      hatAuthority.save();
+    }
+
+    //let domainAtNextLevel = hatId.substring(i, i + 4);
+    //if (domainAtNextLevel == "0000") {
+    //  break;
+    //}
+  }
+
+  return admins;
 }
