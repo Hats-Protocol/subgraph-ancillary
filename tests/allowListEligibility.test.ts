@@ -68,6 +68,12 @@ describe("Allow List Eligibility Tests", () => {
         "arbitratorHat",
         arbitratorHatId
       );
+      assert.fieldEquals(
+        "AllowListEligibility",
+        allowListInstance,
+        "hatId",
+        "0x0000000100010001000000000000000000000000000000000000000000000000"
+      );
     });
   });
 });

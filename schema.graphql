@@ -18,6 +18,10 @@ type HatAuthority @entity {
     @derivedFrom(field: "passthroughHat")
   stakingJudge: [StakingEligibility!]! @derivedFrom(field: "judgeHat")
   stakingRecipient: [StakingEligibility!]! @derivedFrom(field: "recipientHat")
+  stakingHatAdmins: [StakingEligibility!]! @derivedFrom(field: "hatAdmins")
+  seasonHatAdmins: [SeasonToggle!]! @derivedFrom(field: "hatAdmins")
+  characterSheetsLevelHatAdmins: [CharacterSheetsLevelEligibility!]!
+    @derivedFrom(field: "hatAdmins")
 }
 
 type HatsSignerGate @entity {
@@ -33,7 +37,8 @@ type HatsSignerGate @entity {
 
 type JokeRaceEligibility @entity {
   id: ID!
-  adminHat: HatAuthority!
+  hatId: String!
+  adminHat: [HatAuthority!]!
   currentContest: String!
   currentTermEnd: BigInt!
   currentTopK: BigInt!
@@ -41,23 +46,40 @@ type JokeRaceEligibility @entity {
 
 type AllowListEligibility @entity {
   id: ID!
+  hatId: String!
   ownerHat: HatAuthority!
   arbitratorHat: HatAuthority!
 }
 
 type HatsElectionEligibility @entity {
   id: ID!
+  hatId: String!
   ballotBoxHat: HatAuthority!
-  adminHat: HatAuthority!
+  adminHat: [HatAuthority!]!
 }
 
 type PassthroughModule @entity {
   id: ID!
+  hatId: String!
   passthroughHat: HatAuthority!
 }
 
 type StakingEligibility @entity {
   id: ID!
+  hatId: String!
   judgeHat: HatAuthority!
   recipientHat: HatAuthority!
+  hatAdmins: [HatAuthority!]!
+}
+
+type SeasonToggle @entity {
+  id: ID!
+  hatId: String!
+  hatAdmins: [HatAuthority!]!
+}
+
+type CharacterSheetsLevelEligibility @entity {
+  id: ID!
+  hatId: String!
+  hatAdmins: [HatAuthority!]!
 }

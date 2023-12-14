@@ -45,6 +45,21 @@ dataSources:
           handler: handleModuleDeployed
       file: ./src/hatsModuleFactory.ts
 templates:
+  - kind: ethereum
+    name: Hats
+    network: goerli
+    source:
+      abi: Hats
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - HatAuthority
+      abis:
+        - name: Hats
+          file: ./abis/Hats.json
+      file: ./src/hats.ts
   - name: HatsSignerGate
     kind: ethereum/contract
     network: goerli
@@ -188,3 +203,33 @@ templates:
           handler: handleJudgeHatChanged
         - event: StakingEligibility_RecipientHatChanged(uint256)
           handler: handleRecipientHatChanged
+  - name: SeasonToggle
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: SeasonToggle
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/seasonToggle.ts
+      entities:
+        - SeasonToggle
+      abis:
+        - name: SeasonToggle
+          file: ./abis/SeasonToggle.json
+  - name: CharacterSheetsLevelEligibility
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: CharacterSheetsLevelEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/characterSheetsLevelEligibility.ts
+      entities:
+        - CharacterSheetsLevelEligibility
+      abis:
+        - name: CharacterSheetsLevelEligibility
+          file: ./abis/CharacterSheetsLevelEligibility.json

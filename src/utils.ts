@@ -1,13 +1,8 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts";
+import { Hats } from "../generated/templates/Hats/Hats";
 
 export function hatIdToHex(hatId: BigInt): string {
-  return (
-    "0x" +
-    hatId
-      .toHexString()
-      .slice(2)
-      .padStart(64, "0")
-  );
+  return "0x" + hatId.toHexString().slice(2).padStart(64, "0");
 }
 
 export function topHatDomainToHatId(domain: BigInt): string {
@@ -54,13 +49,7 @@ export function hexTopHatDomain(hatId: string): string {
 }
 
 export function topHatDomainToHex(domain: BigInt): string {
-  return (
-    "0x" +
-    domain
-      .toHexString()
-      .slice(2)
-      .padStart(8, "0")
-  );
+  return "0x" + domain.toHexString().slice(2).padStart(8, "0");
 }
 
 export function changeEndianness(s: string): string {
@@ -72,4 +61,18 @@ export function changeEndianness(s: string): string {
     pos -= 2;
   }
   return res.join("");
+}
+
+export function getLinkedTreeAdmin(topHat: string): string {
+  const hatsConstact = Hats.bind(
+    Address.fromString(
+      "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137".toLowerCase()
+    )
+  );
+  const topHatBigInt = BigInt.fromUnsignedBytes(
+    Bytes.fromHexString(changeEndianness(topHat))
+  );
+  const topHatDomain = hatsConstact.getTopHatDomain(topHatBigInt);
+  const linkedTreeAdmin = hatsConstact.linkedTreeAdmins(topHatDomain);
+  return hatIdToHex(linkedTreeAdmin);
 }

@@ -79,7 +79,7 @@ describe("Deprecated JokeRace Eligibility Tests", () => {
         "JokeRaceEligibility",
         jokeRaceInstance,
         "adminHat",
-        "0x0000000100000000000000000000000000000000000000000000000000000000"
+        "[0x0000000100000000000000000000000000000000000000000000000000000000]"
       );
     });
 
@@ -118,6 +118,12 @@ describe("Deprecated JokeRace Eligibility Tests", () => {
           "JokeRaceEligibility",
           jokeRaceInstance,
           "adminHat",
+          "[0x0000000100000000000000000000000000000000000000000000000000000000]"
+        );
+        assert.fieldEquals(
+          "JokeRaceEligibility",
+          jokeRaceInstance,
+          "hatId",
           "0x0000000100000000000000000000000000000000000000000000000000000000"
         );
       });

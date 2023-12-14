@@ -50,6 +50,12 @@ describe("Passthrough Module Tests", () => {
         "passthroughHat",
         passthroughHatId
       );
+      assert.fieldEquals(
+        "PassthroughModule",
+        passthroughInstance,
+        "hatId",
+        "0x0000000100010001000000000000000000000000000000000000000000000000"
+      );
     });
   });
 });
