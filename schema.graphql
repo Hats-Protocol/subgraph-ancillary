@@ -53,7 +53,7 @@ type HatsElectionEligibility @entity {
   id: ID!
   hatId: String!
   ballotBoxHat: HatAuthority!
-  adminHat: HatAuthority!
+  adminHat: [HatAuthority!]!
 }
 
 type PassthroughModule @entity {

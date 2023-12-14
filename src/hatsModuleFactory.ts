@@ -190,19 +190,29 @@ export function handleModuleDeployed(
       ballotBoxHatAuthority = new HatAuthority(hatIdToHex(ballotBoxHat));
     }
 
-    const adminHat = decodedImmutableArgs[1].toBigInt();
-    // check if hat exists, create new object if not
-    let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHat));
-    if (adminHatAuthority == null) {
-      adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
+    const adminHatInput = decodedImmutableArgs[1].toBigInt();
+    const hatId = hatIdToHex(event.params.hatId);
+
+    let adminHat: string[] = [];
+
+    if (adminHatInput != BigInt.fromI32(0)) {
+      adminHat.push(hatIdToHex(adminHatInput));
+      // check if hat exists, create new object if not
+      let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHatInput));
+      if (adminHatAuthority == null) {
+        adminHatAuthority = new HatAuthority(hatIdToHex(adminHatInput));
+        adminHatAuthority.save();
+      }
+    } else {
+      // admin hats fallback
+      adminHat = getAllAdmins(hatId);
     }
 
-    hatsElectionEligibility.hatId = hatIdToHex(event.params.hatId);
+    hatsElectionEligibility.hatId = hatId;
     hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
-    hatsElectionEligibility.adminHat = hatIdToHex(adminHat);
+    hatsElectionEligibility.adminHat = adminHat;
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
-    adminHatAuthority.save();
   } else if (implemenatationAddress == PASSTHROUGH_MODULE_IMPLEMENTATION) {
     PassthroughModuleTemplate.create(event.params.instance);
     const passthroughModule = new PassthroughModuleObject(
