@@ -7,6 +7,7 @@ import {
   PassthroughModule as PassthroughModuleObject,
   StakingEligibility as StakingEligibilityObject,
   SeasonToggle as SeasonToggleObject,
+  CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityObject,
   HatAuthority,
 } from "../generated/schema";
 import {
@@ -17,6 +18,7 @@ import {
   PassthroughModule as PassthroughModuleTemplate,
   StakingEligibility as StakingEligibilityTemplate,
   SeasonToggle as SeasonToggleTemplate,
+  CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
@@ -26,6 +28,7 @@ import {
   PASSTHROUGH_MODULE_IMPLEMENTATION,
   STAKING_ELIGIBILITY_IMPLEMENTATION,
   SEASON_TOGGLE_IMPLEMENTATION,
+  CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION,
 } from "./constants";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
@@ -260,6 +263,21 @@ export function handleModuleDeployed(
     seasonToggle.hatAdmins = hatAdmins;
     seasonToggle.hatId = hatId;
     seasonToggle.save();
+  } else if (
+    implemenatationAddress == CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION
+  ) {
+    CharacterSheetsLevelEligibilityTemplate.create(event.params.instance);
+    const characterSheetsLevelEligibility =
+      new CharacterSheetsLevelEligibilityObject(
+        event.params.instance.toHexString()
+      );
+
+    const hatId = hatIdToHex(event.params.hatId);
+    const hatAdmins = getAllAdmins(hatId);
+
+    characterSheetsLevelEligibility.hatAdmins = hatAdmins;
+    characterSheetsLevelEligibility.hatId = hatId;
+    characterSheetsLevelEligibility.save();
   }
 }
 

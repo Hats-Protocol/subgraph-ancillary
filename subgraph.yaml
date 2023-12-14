@@ -218,3 +218,18 @@ templates:
       abis:
         - name: SeasonToggle
           file: ./abis/SeasonToggle.json
+  - name: CharacterSheetsLevelEligibility
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: CharacterSheetsLevelEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/characterSheetsLevelEligibility.ts
+      entities:
+        - CharacterSheetsLevelEligibility
+      abis:
+        - name: CharacterSheetsLevelEligibility
+          file: ./abis/CharacterSheetsLevelEligibility.json
