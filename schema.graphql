@@ -20,6 +20,8 @@ type HatAuthority @entity {
   stakingRecipient: [StakingEligibility!]! @derivedFrom(field: "recipientHat")
   stakingHatAdmins: [StakingEligibility!]! @derivedFrom(field: "hatAdmins")
   seasonHatAdmins: [SeasonToggle!]! @derivedFrom(field: "hatAdmins")
+  characterSheetsLevelHatAdmins: [CharacterSheetsLevelEligibility!]!
+    @derivedFrom(field: "hatAdmins")
 }
 
 type HatsSignerGate @entity {
