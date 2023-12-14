@@ -6,6 +6,7 @@ import {
   HatsElectionEligibility as HatsElectionEligbilityObject,
   PassthroughModule as PassthroughModuleObject,
   StakingEligibility as StakingEligibilityObject,
+  SeasonToggle as SeasonToggleObject,
   HatAuthority,
 } from "../generated/schema";
 import {
@@ -15,6 +16,7 @@ import {
   HatsElectionEligibility as HatsElectionEligibilityTemplate,
   PassthroughModule as PassthroughModuleTemplate,
   StakingEligibility as StakingEligibilityTemplate,
+  SeasonToggle as SeasonToggleTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
@@ -23,15 +25,16 @@ import {
   HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
   PASSTHROUGH_MODULE_IMPLEMENTATION,
   STAKING_ELIGIBILITY_IMPLEMENTATION,
+  SEASON_TOGGLE_IMPLEMENTATION,
 } from "./constants";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
   event: HatsModuleFactory_ModuleDeployed
 ): void {
-  const implemenatationAddrss = event.params.implementation.toHexString();
+  const implemenatationAddress = event.params.implementation.toHexString();
 
-  if (implemenatationAddrss == JOKERACE_ELIGIBILITY_IMPLEMENTATION) {
+  if (implemenatationAddress == JOKERACE_ELIGIBILITY_IMPLEMENTATION) {
     JokeRaceEligibilityTemplate.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
       event.params.instance.toHexString()
@@ -70,7 +73,7 @@ export function handleModuleDeployed(
     jokeRaceEligibility.save();
     adminHatAuthority.save();
   } else if (
-    implemenatationAddrss == JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
+    implemenatationAddress == JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
   ) {
     JokeRaceEligibilityDeprecatedTemplate.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
@@ -109,7 +112,7 @@ export function handleModuleDeployed(
     jokeRaceEligibility.adminHat = hatIdToHex(adminHat);
     jokeRaceEligibility.save();
     adminHatAuthority.save();
-  } else if (implemenatationAddrss == ALLOWLIST_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implemenatationAddress == ALLOWLIST_ELIGIBILITY_IMPLEMENTATION) {
     AllowListEligibilityTemplate.create(event.params.instance);
     const allowListEligibility = new AllowListEligibilityObject(
       event.params.instance.toHexString()
@@ -143,7 +146,7 @@ export function handleModuleDeployed(
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
   } else if (
-    implemenatationAddrss == HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION
+    implemenatationAddress == HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION
   ) {
     HatsElectionEligibilityTemplate.create(event.params.instance);
     const hatsElectionEligibility = new HatsElectionEligbilityObject(
@@ -177,7 +180,7 @@ export function handleModuleDeployed(
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
     adminHatAuthority.save();
-  } else if (implemenatationAddrss == PASSTHROUGH_MODULE_IMPLEMENTATION) {
+  } else if (implemenatationAddress == PASSTHROUGH_MODULE_IMPLEMENTATION) {
     PassthroughModuleTemplate.create(event.params.instance);
     const passthroughModule = new PassthroughModuleObject(
       event.params.instance.toHexString()
@@ -201,7 +204,7 @@ export function handleModuleDeployed(
     passthroughModule.passthroughHat = hatIdToHex(passthroughHat);
     passthroughModule.save();
     passthroughHatAuthority.save();
-  } else if (implemenatationAddrss == STAKING_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implemenatationAddress == STAKING_ELIGIBILITY_IMPLEMENTATION) {
     StakingEligibilityTemplate.create(event.params.instance);
     const stakingEligibility = new StakingEligibilityObject(
       event.params.instance.toHexString()
@@ -245,6 +248,18 @@ export function handleModuleDeployed(
     stakingEligibility.save();
     judgeHatAuthority.save();
     recipientHatAuthority.save();
+  } else if (implemenatationAddress == SEASON_TOGGLE_IMPLEMENTATION) {
+    SeasonToggleTemplate.create(event.params.instance);
+    const seasonToggle = new SeasonToggleObject(
+      event.params.instance.toHexString()
+    );
+
+    const hatId = hatIdToHex(event.params.hatId);
+    const hatAdmins = getAllAdmins(hatId);
+
+    seasonToggle.hatAdmins = hatAdmins;
+    seasonToggle.hatId = hatId;
+    seasonToggle.save();
   }
 }
 

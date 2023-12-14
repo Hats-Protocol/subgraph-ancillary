@@ -19,6 +19,7 @@ type HatAuthority @entity {
   stakingJudge: [StakingEligibility!]! @derivedFrom(field: "judgeHat")
   stakingRecipient: [StakingEligibility!]! @derivedFrom(field: "recipientHat")
   stakingHatAdmins: [StakingEligibility!]! @derivedFrom(field: "hatAdmins")
+  seasonHatAdmins: [SeasonToggle!]! @derivedFrom(field: "hatAdmins")
 }
 
 type HatsSignerGate @entity {
@@ -66,5 +67,11 @@ type StakingEligibility @entity {
   hatId: String!
   judgeHat: HatAuthority!
   recipientHat: HatAuthority!
+  hatAdmins: [HatAuthority!]!
+}
+
+type SeasonToggle @entity {
+  id: ID!
+  hatId: String!
   hatAdmins: [HatAuthority!]!
 }
