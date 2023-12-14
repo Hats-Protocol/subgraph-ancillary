@@ -1,4 +1,4 @@
-import { ethereum, log } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum, log } from "@graphprotocol/graph-ts";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import {
   JokeRaceEligibility as JokeRaceEligibilityObject,
@@ -61,20 +61,30 @@ export function handleModuleDeployed(
       ) as ethereum.Value
     ).toTuple();
 
-    const adminHat = decodedImmutableArgs[0].toBigInt();
-    // check if hat exists, create new object if not
-    let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHat));
-    if (adminHatAuthority == null) {
-      adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
+    const adminHatInput = decodedImmutableArgs[0].toBigInt();
+    const hatId = hatIdToHex(event.params.hatId);
+
+    let adminHat: string[] = [];
+
+    if (adminHatInput != BigInt.fromI32(0)) {
+      adminHat.push(hatIdToHex(adminHatInput));
+      // check if hat exists, create new object if not
+      let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHatInput));
+      if (adminHatAuthority == null) {
+        adminHatAuthority = new HatAuthority(hatIdToHex(adminHatInput));
+        adminHatAuthority.save();
+      }
+    } else {
+      // admin hats fallback
+      adminHat = getAllAdmins(hatId);
     }
 
-    jokeRaceEligibility.hatId = hatIdToHex(event.params.hatId);
+    jokeRaceEligibility.hatId = hatId;
     jokeRaceEligibility.currentContest = contestAddress;
     jokeRaceEligibility.currentTermEnd = termEnd;
     jokeRaceEligibility.currentTopK = topK;
-    jokeRaceEligibility.adminHat = hatIdToHex(adminHat);
+    jokeRaceEligibility.adminHat = adminHat;
     jokeRaceEligibility.save();
-    adminHatAuthority.save();
   } else if (
     implemenatationAddress == JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
   ) {
@@ -101,20 +111,30 @@ export function handleModuleDeployed(
       ) as ethereum.Value
     ).toTuple();
 
-    const adminHat = decodedImmutableArgs[0].toBigInt();
-    // check if hat exists, create new object if not
-    let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHat));
-    if (adminHatAuthority == null) {
-      adminHatAuthority = new HatAuthority(hatIdToHex(adminHat));
+    const adminHatInput = decodedImmutableArgs[0].toBigInt();
+    const hatId = hatIdToHex(event.params.hatId);
+
+    let adminHat: string[] = [];
+
+    if (adminHatInput != BigInt.fromI32(0)) {
+      adminHat.push(hatIdToHex(adminHatInput));
+      // check if hat exists, create new object if not
+      let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHatInput));
+      if (adminHatAuthority == null) {
+        adminHatAuthority = new HatAuthority(hatIdToHex(adminHatInput));
+        adminHatAuthority.save();
+      }
+    } else {
+      // admin hats fallback
+      adminHat = getAllAdmins(hatId);
     }
 
-    jokeRaceEligibility.hatId = hatIdToHex(event.params.hatId);
+    jokeRaceEligibility.hatId = hatId;
     jokeRaceEligibility.currentContest = contestAddress;
     jokeRaceEligibility.currentTermEnd = termEnd;
     jokeRaceEligibility.currentTopK = topK;
-    jokeRaceEligibility.adminHat = hatIdToHex(adminHat);
+    jokeRaceEligibility.adminHat = adminHat;
     jokeRaceEligibility.save();
-    adminHatAuthority.save();
   } else if (implemenatationAddress == ALLOWLIST_ELIGIBILITY_IMPLEMENTATION) {
     AllowListEligibilityTemplate.create(event.params.instance);
     const allowListEligibility = new AllowListEligibilityObject(
@@ -324,11 +344,6 @@ function getLocalHatAdmins(hatId: string): string[] {
       hatAuthority = new HatAuthority(currentHatId);
       hatAuthority.save();
     }
-
-    //let domainAtNextLevel = hatId.substring(i, i + 4);
-    //if (domainAtNextLevel == "0000") {
-    //  break;
-    //}
   }
 
   return admins;
