@@ -40,6 +40,8 @@ dataSources:
       abis:
         - name: HatsModuleFactory
           file: ./abis/HatsModuleFactory.json
+        - name: Hats
+          file: ./abis/Hats.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
