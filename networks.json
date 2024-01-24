@@ -82,5 +82,49 @@
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 109695493
     }
+  },
+  "sepolia": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 4654775
+    },
+    "HatsSignerGateFactory": {
+      "address": "0x5CB8a5B063B7E94cF39E8A8813A777f49B8DD050",
+      "startBlock": 4929153
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 4655267
+    }
+  },
+  "base": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 7526679
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 7526983
+    }
+  },
+  "celo": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 22586096
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 22586287
+    }
+  },
+  "publicgoods": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 5490118
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 5490406
+    }
   }
 }
