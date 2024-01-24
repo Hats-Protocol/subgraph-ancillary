@@ -211,6 +211,7 @@ export function handleModuleDeployed(
     hatsElectionEligibility.hatId = hatId;
     hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
     hatsElectionEligibility.adminHat = adminHat;
+    hatsElectionEligibility.currentTerm = null;
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
   } else if (implemenatationAddress == PASSTHROUGH_MODULE_IMPLEMENTATION) {

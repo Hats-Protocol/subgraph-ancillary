@@ -15,6 +15,11 @@ import {
   StakingEligibility_JudgeHatChanged,
   StakingEligibility_RecipientHatChanged,
 } from "../generated/templates/StakingEligibility/StakingEligibility";
+import {
+  ElectionOpened,
+  ElectionCompleted,
+  NewTermStarted,
+} from "../generated/templates/HatsElectionEligibility/HatsElectionEligibility";
 import { newMockEvent } from "matchstick-as";
 
 export function mockHatsSignerGateSetupEvent(
@@ -429,4 +434,101 @@ export function mockStakingEligibility_RecipientHatChangedEvent(
   );
 
   return newRecipientHatEvent;
+}
+
+export function mockElectionOpenedEvent(
+  instance: Address,
+  nextTermEnd: BigInt
+): ElectionOpened {
+  // prepare event parameters array
+  const nextTermEndParam = new ethereum.EventParam(
+    "nextTermEnd",
+    ethereum.Value.fromUnsignedBigInt(nextTermEnd)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(nextTermEndParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newElectionOpened = new ElectionOpened(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newElectionOpened;
+}
+
+export function mockElectionCompletedEvent(
+  instance: Address,
+  termEnd: BigInt,
+  winners: Address[],
+  timestamp: BigInt
+): ElectionCompleted {
+  // prepare event parameters array
+  const termEndParam = new ethereum.EventParam(
+    "termEnd",
+    ethereum.Value.fromUnsignedBigInt(termEnd)
+  );
+  const winnersParam = new ethereum.EventParam(
+    "winners",
+    ethereum.Value.fromAddressArray(winners)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(termEndParam);
+  parameters.push(winnersParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  mockEvent.block.timestamp = timestamp;
+  let newElectionCompleted = new ElectionCompleted(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newElectionCompleted;
+}
+
+export function mockNewTermStartedEvent(
+  instance: Address,
+  termEnd: BigInt,
+  timestamp: BigInt
+): NewTermStarted {
+  // prepare event parameters array
+  const termEndParam = new ethereum.EventParam(
+    "termEnd",
+    ethereum.Value.fromUnsignedBigInt(termEnd)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(termEndParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  mockEvent.block.timestamp = timestamp;
+  let newNewTermStarted = new NewTermStarted(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newNewTermStarted;
 }

@@ -170,6 +170,13 @@ templates:
       abis:
         - name: HatsElectionEligibility
           file: ./abis/HatsElectionEligibility.json
+      eventHandlers:
+        - event: ElectionOpened(uint128)
+          handler: handleElectionOpened
+        - event: ElectionCompleted(uint128,address[])
+          handler: handleElectionCompleted
+        - event: NewTermStarted(uint128)
+          handler: handleNewTermStarted
   - name: PassthroughModule
     kind: ethereum/contract
     network: goerli
