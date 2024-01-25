@@ -177,6 +177,8 @@ templates:
           handler: handleElectionCompleted
         - event: NewTermStarted(uint128)
           handler: handleNewTermStarted
+        - event: Recalled(uint128,address[])
+          handler: handleRecalled
   - name: PassthroughModule
     kind: ethereum/contract
     network: goerli

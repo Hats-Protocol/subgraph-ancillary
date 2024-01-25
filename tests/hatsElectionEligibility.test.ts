@@ -20,6 +20,7 @@ import {
   mockElectionCompletedEvent,
   mockElectionOpenedEvent,
   mockNewTermStartedEvent,
+  mockRecalledEvent,
 } from "./utils";
 import { handleModuleDeployed } from "../src/hatsModuleFactory";
 import { HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
@@ -28,6 +29,7 @@ import {
   handleElectionCompleted,
   handleElectionOpened,
   handleNewTermStarted,
+  handleRecalled,
 } from "../src/hatsElectionEligibility";
 
 const ballotBoxHatId =
@@ -190,6 +192,57 @@ describe("Hats Election Eligibility Tests", () => {
           "hatsElectionEligibility",
           hatsElectionInstance
         );
+      });
+
+      describe("And an elected account is recalled", () => {
+        beforeEach(() => {
+          const recalledEvent = mockRecalledEvent(
+            Address.fromString(hatsElectionInstance),
+            BigInt.fromI32(timestamp1),
+            [Address.fromString(account2)]
+          );
+
+          handleRecalled(recalledEvent);
+        });
+
+        test("Test account was recalled", () => {
+          assert.fieldEquals(
+            "HatsElectionEligibility",
+            hatsElectionInstance,
+            "currentTerm",
+            hatsElectionInstance + "_" + timestamp1.toString()
+          );
+          assert.fieldEquals(
+            "ElectionTerm",
+            hatsElectionInstance + "_" + timestamp1.toString(),
+            "termEnd",
+            timestamp1.toString()
+          );
+          assert.fieldEquals(
+            "ElectionTerm",
+            hatsElectionInstance + "_" + timestamp1.toString(),
+            "termStartedAt",
+            (timestamp1 + 100).toString()
+          );
+          assert.fieldEquals(
+            "ElectionTerm",
+            hatsElectionInstance + "_" + timestamp1.toString(),
+            "electionCompletedAt",
+            (timestamp1 + 100).toString()
+          );
+          assert.fieldEquals(
+            "ElectionTerm",
+            hatsElectionInstance + "_" + timestamp1.toString(),
+            "electedAccounts",
+            `[${account1}]`
+          );
+          assert.fieldEquals(
+            "ElectionTerm",
+            hatsElectionInstance + "_" + timestamp1.toString(),
+            "hatsElectionEligibility",
+            hatsElectionInstance
+          );
+        });
       });
 
       describe("And next term is created", () => {

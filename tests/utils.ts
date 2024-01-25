@@ -19,6 +19,7 @@ import {
   ElectionOpened,
   ElectionCompleted,
   NewTermStarted,
+  Recalled,
 } from "../generated/templates/HatsElectionEligibility/HatsElectionEligibility";
 import { newMockEvent } from "matchstick-as";
 
@@ -531,4 +532,39 @@ export function mockNewTermStartedEvent(
   );
 
   return newNewTermStarted;
+}
+
+export function mockRecalledEvent(
+  instance: Address,
+  termEnd: BigInt,
+  accounts: Address[]
+): Recalled {
+  // prepare event parameters array
+  const termEndParam = new ethereum.EventParam(
+    "termEnd",
+    ethereum.Value.fromUnsignedBigInt(termEnd)
+  );
+  const accountsParam = new ethereum.EventParam(
+    "accounts",
+    ethereum.Value.fromAddressArray(accounts)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(termEndParam);
+  parameters.push(accountsParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newRecalled = new Recalled(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newRecalled;
 }

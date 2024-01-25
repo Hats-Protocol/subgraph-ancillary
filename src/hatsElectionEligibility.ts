@@ -2,6 +2,7 @@ import {
   ElectionOpened,
   ElectionCompleted,
   NewTermStarted,
+  Recalled,
 } from "../generated/templates/HatsElectionEligibility/HatsElectionEligibility";
 import { HatsElectionEligibility, ElectionTerm } from "../generated/schema";
 import { BigInt } from "@graphprotocol/graph-ts";
@@ -62,6 +63,37 @@ export function handleNewTermStarted(event: NewTermStarted): void {
   electionTerm.termStartedAt = event.block.timestamp;
 
   hatsElectionEligibility.save();
+  electionTerm.save();
+}
+
+export function handleRecalled(event: Recalled): void {
+  const electionTerm = ElectionTerm.load(
+    getElectionTermId(event.address.toHexString(), event.params.termEnd)
+  ) as ElectionTerm;
+
+  if (electionTerm.electedAccounts == null) {
+    return;
+  }
+
+  const currentElectedAccounts = electionTerm.electedAccounts as string[];
+  const electedAccountsAfterRecall: string[] = [];
+  for (let i = 0; i < currentElectedAccounts.length; i++) {
+    const currentElectedAccount: string = currentElectedAccounts[i];
+    let isRecalled = false;
+
+    for (let j = 0; j < event.params.accounts.length; j++) {
+      const recalledAccount = event.params.accounts[j];
+      if (recalledAccount.toHexString() == currentElectedAccount) {
+        isRecalled = true;
+        break;
+      }
+    }
+
+    if (!isRecalled) {
+      electedAccountsAfterRecall.push(currentElectedAccount);
+    }
+  }
+  electionTerm.electedAccounts = electedAccountsAfterRecall;
   electionTerm.save();
 }
 
