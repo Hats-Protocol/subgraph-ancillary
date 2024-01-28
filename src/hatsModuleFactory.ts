@@ -24,6 +24,7 @@ import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
   JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED,
   ALLOWLIST_ELIGIBILITY_IMPLEMENTATION,
+  HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED,
   HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
   PASSTHROUGH_MODULE_IMPLEMENTATION,
   STAKING_ELIGIBILITY_IMPLEMENTATION,
@@ -168,6 +169,51 @@ export function handleModuleDeployed(
     allowListEligibility.save();
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
+  } else if (
+    implemenatationAddress ==
+    HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
+  ) {
+    const hatsElectionEligibility = new HatsElectionEligbilityObject(
+      event.params.instance.toHexString()
+    );
+
+    let decodedImmutableArgs = (
+      ethereum.decode(
+        "(uint256, uint256)",
+        event.params.otherImmutableArgs
+      ) as ethereum.Value
+    ).toTuple();
+
+    const ballotBoxHat = decodedImmutableArgs[0].toBigInt();
+    // check if hat exists, create new object if not
+    let ballotBoxHatAuthority = HatAuthority.load(hatIdToHex(ballotBoxHat));
+    if (ballotBoxHatAuthority == null) {
+      ballotBoxHatAuthority = new HatAuthority(hatIdToHex(ballotBoxHat));
+    }
+
+    const adminHatInput = decodedImmutableArgs[1].toBigInt();
+    const hatId = hatIdToHex(event.params.hatId);
+
+    let adminHat: string[] = [];
+
+    if (adminHatInput != BigInt.fromI32(0)) {
+      adminHat.push(hatIdToHex(adminHatInput));
+      // check if hat exists, create new object if not
+      let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHatInput));
+      if (adminHatAuthority == null) {
+        adminHatAuthority = new HatAuthority(hatIdToHex(adminHatInput));
+        adminHatAuthority.save();
+      }
+    } else {
+      // admin hats fallback
+      adminHat = getAllAdmins(hatId);
+    }
+
+    hatsElectionEligibility.hatId = hatId;
+    hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
+    hatsElectionEligibility.adminHat = adminHat;
+    hatsElectionEligibility.save();
+    ballotBoxHatAuthority.save();
   } else if (
     implemenatationAddress == HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION
   ) {
