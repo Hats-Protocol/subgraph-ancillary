@@ -56,6 +56,18 @@ type HatsElectionEligibility @entity {
   hatId: String!
   ballotBoxHat: HatAuthority!
   adminHat: [HatAuthority!]!
+  terms: [ElectionTerm!]! @derivedFrom(field: "hatsElectionEligibility")
+  currentTerm: ElectionTerm
+}
+type ElectionTerm @entity {
+  id: ID!
+  hatsElectionEligibility: HatsElectionEligibility!
+  "first term starts when 'elect' is called, next terms start when 'startNextTerm' is called"
+  termStartedAt: BigInt
+  termEnd: BigInt!
+  "election is completed when 'elect' is called"
+  electionCompletedAt: BigInt
+  electedAccounts: [String!]
 }
 
 type PassthroughModule @entity {

@@ -84,6 +84,12 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint128",
+        "name": "termEnd",
+        "type": "uint128"
+      },
+      {
+        "indexed": false,
         "internalType": "address[]",
         "name": "accounts",
         "type": "address[]"
