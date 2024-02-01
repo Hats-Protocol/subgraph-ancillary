@@ -7,6 +7,13 @@ import { HatsSignerGate as HatsSignerGateTemplate } from "../generated/templates
 import { hatIdToHex } from "./utils";
 
 export function handleHatsSignerGateSetup(event: HatsSignerGateSetup): void {
+  if (
+    event.params._hatsSignerGate.toHexString() ==
+    "0x4C0253156aEd0E85aE9f2AeE6C12a9e165B0d03C".toLowerCase()
+  ) {
+    return;
+  }
+
   HatsSignerGateTemplate.create(event.params._hatsSignerGate);
   let hsg = new HatsSignerGate(event.params._hatsSignerGate.toHexString());
 
