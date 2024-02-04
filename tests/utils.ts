@@ -6,6 +6,8 @@ import {
 import { NewTerm } from "../generated/templates/JokeRaceEligibility/JokeRaceEligibility";
 import { NewTerm as NewTermDeprecated } from "../generated/templates/JokeRaceEligibilityDeprecated/JokeRaceEligibilityDeprecated";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
+import { ERC6551AccountCreated } from "../generated/ERC6551Registry/ERC6551Registry";
+import { TxExecuted } from "../generated/templates/HatsAccount1ofN/HatsAccount1ofN";
 import {
   TargetThresholdSet,
   MinThresholdSet,
@@ -567,4 +569,62 @@ export function mockRecalledEvent(
   );
 
   return newRecalled;
+}
+
+export function mockERC6551AccountCreatedEvent(
+  account: Address,
+  implementation: Address,
+  salt: Bytes,
+  chainId: BigInt,
+  tokenContract: Address,
+  tokenId: BigInt
+): ERC6551AccountCreated {
+  // prepare event parameters array
+  const accountParam = new ethereum.EventParam(
+    "account",
+    ethereum.Value.fromAddress(account)
+  );
+  const implementationParam = new ethereum.EventParam(
+    "implementation",
+    ethereum.Value.fromAddress(implementation)
+  );
+  const saltParam = new ethereum.EventParam(
+    "salt",
+    ethereum.Value.fromBytes(salt)
+  );
+  const chainIdParam = new ethereum.EventParam(
+    "chainId",
+    ethereum.Value.fromUnsignedBigInt(chainId)
+  );
+  const tokenContractParam = new ethereum.EventParam(
+    "tokenContract",
+    ethereum.Value.fromAddress(tokenContract)
+  );
+  const tokenIdParam = new ethereum.EventParam(
+    "tokenId",
+    ethereum.Value.fromUnsignedBigInt(tokenId)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(accountParam);
+  parameters.push(implementationParam);
+  parameters.push(saltParam);
+  parameters.push(chainIdParam);
+  parameters.push(tokenContractParam);
+  parameters.push(tokenIdParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newERC6551AccountCreated = new ERC6551AccountCreated(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newERC6551AccountCreated;
 }

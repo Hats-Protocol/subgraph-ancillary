@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: HatsSignerGateFactory
-    network: goerli
+    network: sepolia
     source:
       abi: HatsSignerGateFactory
-      address: "0xA1fB14B5F322651e20F06eE2f2681B8f380bbB0E"
-      startBlock: 9398767
+      address: "0x5CB8a5B063B7E94cF39E8A8813A777f49B8DD050"
+      startBlock: 4929153
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -25,12 +25,33 @@ dataSources:
           handler: handleMultiHatsSignerGateSetup
       file: ./src/hatsSignerGateFactory.ts
   - kind: ethereum
+    name: ERC6551Registry
+    network: sepolia
+    source:
+      abi: ERC6551Registry
+      address: "0x000000006551c19487814612e58FE06813775758"
+      startBlock: 5199209
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - HatsAccount1ofN
+      abis:
+        - name: ERC6551Registry
+          file: ./abis/ERC6551Registry.json
+      eventHandlers:
+        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+            address,indexed uint256)
+          handler: handleErc6551AccountCreated
+      file: ./src/erc6551Registry.ts
+  - kind: ethereum
     name: HatsModuleFactory
-    network: goerli
+    network: sepolia
     source:
       abi: HatsModuleFactory
       address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
-      startBlock: 9713194
+      startBlock: 4655267
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -49,7 +70,7 @@ dataSources:
 templates:
   - kind: ethereum
     name: Hats
-    network: goerli
+    network: sepolia
     source:
       abi: Hats
     mapping:
@@ -64,7 +85,7 @@ templates:
       file: ./src/hats.ts
   - name: HatsSignerGate
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: HatsSignerGate
     mapping:
@@ -84,7 +105,7 @@ templates:
           handler: handleMinThresholdSet
   - name: MultiHatsSignerGate
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: MultiHatsSignerGate
     mapping:
@@ -104,9 +125,27 @@ templates:
           handler: handleMinThresholdSet
         - event: SignerHatsAdded(uint256[])
           handler: handleSignerHatsAdded
+  - name: HatsAccount1ofN
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: HatsAccount1ofN
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/hatsAccount1ofN.ts
+      entities:
+        - HatsAccount1ofN
+      abis:
+        - name: HatsAccount1ofN
+          file: ./abis/HatsAccount1ofN.json
+      eventHandlers:
+        - event: TxExecuted(address)
+          handler: handleTxExecuted
   - name: JokeRaceEligibility
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: JokeRaceEligibility
     mapping:
@@ -124,7 +163,7 @@ templates:
           handler: handleNewTerm
   - name: JokeRaceEligibilityDeprecated
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: JokeRaceEligibilityDeprecated
     mapping:
@@ -142,7 +181,7 @@ templates:
           handler: handleNewTerm
   - name: AllowListEligibility
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: AllowlistEligibility
     mapping:
@@ -157,7 +196,7 @@ templates:
           file: ./abis/AllowlistEligibility.json
   - name: HatsElectionEligibility
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: HatsElectionEligibility
     mapping:
@@ -181,7 +220,7 @@ templates:
           handler: handleRecalled
   - name: PassthroughModule
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: PassthroughModule
     mapping:
@@ -196,7 +235,7 @@ templates:
           file: ./abis/PassthroughModule.json
   - name: StakingEligibility
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: StakingEligibility
     mapping:
@@ -216,7 +255,7 @@ templates:
           handler: handleRecipientHatChanged
   - name: SeasonToggle
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: SeasonToggle
     mapping:
@@ -231,7 +270,7 @@ templates:
           file: ./abis/SeasonToggle.json
   - name: CharacterSheetsLevelEligibility
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: CharacterSheetsLevelEligibility
     mapping:

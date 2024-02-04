@@ -95,6 +95,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 4655267
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 5199209
     }
   },
   "base": {
