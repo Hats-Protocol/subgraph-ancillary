@@ -628,3 +628,37 @@ export function mockERC6551AccountCreatedEvent(
 
   return newERC6551AccountCreated;
 }
+
+export function mockTxExecuted(
+  hatsAccountAddress: Address,
+  signer: Address,
+  blockNumber: BigInt,
+  logIndex: BigInt,
+  data: Bytes
+): TxExecuted {
+  // prepare event parameters array
+  const signerParam = new ethereum.EventParam(
+    "signer",
+    ethereum.Value.fromAddress(signer)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(signerParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  mockEvent.transaction.input = data;
+  mockEvent.block.number = blockNumber;
+  let newTxExecuted = new TxExecuted(
+    hatsAccountAddress,
+    logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  return newTxExecuted;
+}
