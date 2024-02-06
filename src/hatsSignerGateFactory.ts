@@ -9,7 +9,9 @@ import { hatIdToHex } from "./utils";
 export function handleHatsSignerGateSetup(event: HatsSignerGateSetup): void {
   if (
     event.params._hatsSignerGate.toHexString() ==
-    "0x4C0253156aEd0E85aE9f2AeE6C12a9e165B0d03C".toLowerCase()
+      "0x4C0253156aEd0E85aE9f2AeE6C12a9e165B0d03C".toLowerCase() ||
+    event.params._hatsSignerGate.toHexString() ==
+      "0x96e555618D872cC66C3538eEDe515C53b9d91D76".toLowerCase()
   ) {
     return;
   }
