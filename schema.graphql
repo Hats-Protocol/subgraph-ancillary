@@ -3,8 +3,14 @@ enum HatsSignerGateType {
   Multi
 }
 
+enum HatsAccountOperationType {
+  Call
+  DelegateCall
+}
+
 type HatAuthority @entity {
   id: ID!
+  hatsAccount1ofN: [HatsAccount1ofN!]! @derivedFrom(field: "accountOfHat")
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
   jokeraceAdmin: [JokeRaceEligibility!]! @derivedFrom(field: "adminHat")
@@ -94,4 +100,20 @@ type CharacterSheetsLevelEligibility @entity {
   id: ID!
   hatId: String!
   hatAdmins: [HatAuthority!]!
+}
+
+type HatsAccount1ofN @entity {
+  id: ID!
+  accountOfHat: HatAuthority!
+  operations: [HatsAccount1ofNOperation!]! @derivedFrom(field: "hatsAccount")
+}
+
+type HatsAccount1ofNOperation @entity {
+  id: ID!
+  hatsAccount: HatsAccount1ofN!
+  signer: String!
+  to: String!
+  value: BigInt!
+  callData: Bytes!
+  operationType: HatsAccountOperationType!
 }
