@@ -3,6 +3,11 @@ enum HatsSignerGateType {
   Multi
 }
 
+enum HatsAccountOperationType {
+  Call
+  DelegateCall
+}
+
 type HatAuthority @entity {
   id: ID!
   hatsAccount1ofN: [HatsAccount1ofN!]! @derivedFrom(field: "accountOfHat")
@@ -110,4 +115,5 @@ type HatsAccount1ofNOperation @entity {
   to: String!
   value: BigInt!
   callData: Bytes!
+  operationType: HatsAccountOperationType!
 }

@@ -34,6 +34,8 @@ export function handleTxExecuted(event: TxExecuted): void {
     tx.to = decodedCallDataTuple[0].toAddress().toHexString();
     tx.value = decodedCallDataTuple[1].toBigInt();
     tx.callData = decodedCallDataTuple[2].toBytes();
+    tx.operationType =
+      decodedCallDataTuple[3].toI32() == 0 ? "Call" : "DelegateCall";
     tx.save();
   }
 
@@ -64,6 +66,7 @@ export function handleTxExecuted(event: TxExecuted): void {
       tx.to = tuple[0].toAddress().toHexString();
       tx.value = tuple[1].toBigInt();
       tx.callData = tuple[2].toBytes();
+      tx.operationType = tuple[3].toI32() == 0 ? "Call" : "DelegateCall";
       tx.save();
     }
   }
