@@ -100,11 +100,10 @@ type CharacterSheetsLevelEligibility @entity {
 type HatsAccount1ofN @entity {
   id: ID!
   accountOfHat: HatAuthority!
-  transactions: [HatsAccount1ofNTransaction!]!
-    @derivedFrom(field: "hatsAccount")
+  operations: [HatsAccount1ofNOperation!]! @derivedFrom(field: "hatsAccount")
 }
 
-type HatsAccount1ofNTransaction @entity {
+type HatsAccount1ofNOperation @entity {
   id: ID!
   hatsAccount: HatsAccount1ofN!
   signer: String!

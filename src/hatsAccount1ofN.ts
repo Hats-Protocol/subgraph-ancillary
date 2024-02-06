@@ -1,9 +1,6 @@
 import { Address, BigInt, Bytes, ethereum, log } from "@graphprotocol/graph-ts";
 import { TxExecuted } from "../generated/templates/HatsAccount1ofN/HatsAccount1ofN";
-import {
-  HatsAccount1ofN,
-  HatsAccount1ofNTransaction,
-} from "../generated/schema";
+import { HatsAccount1ofN, HatsAccount1ofNOperation } from "../generated/schema";
 
 export function handleTxExecuted(event: TxExecuted): void {
   const hatsAccount1ofN = HatsAccount1ofN.load(
@@ -12,7 +9,7 @@ export function handleTxExecuted(event: TxExecuted): void {
 
   // single execution
   if (event.transaction.input.toHexString().slice(0, 10) == "0x51945447") {
-    const tx = new HatsAccount1ofNTransaction(
+    const tx = new HatsAccount1ofNOperation(
       event.block.number
         .toString()
         .concat("-")
@@ -52,7 +49,7 @@ export function handleTxExecuted(event: TxExecuted): void {
     ) as ethereum.Value;
     const decodedTuples = decodedCallData.toTupleArray<ethereum.Tuple>();
     for (let tupleIndex = 0; tupleIndex < decodedTuples.length; tupleIndex++) {
-      const tx = new HatsAccount1ofNTransaction(
+      const tx = new HatsAccount1ofNOperation(
         event.block.number
           .toString()
           .concat("-")
