@@ -1,4 +1,4 @@
-import { BigInt, ethereum, log } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum, Bytes, log } from "@graphprotocol/graph-ts";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import {
   JokeRaceEligibility as JokeRaceEligibilityObject,
@@ -8,6 +8,8 @@ import {
   StakingEligibility as StakingEligibilityObject,
   SeasonToggle as SeasonToggleObject,
   CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityObject,
+  AgreementEligibility as AgreementEligibilityObject,
+  Agreement,
   HatAuthority,
 } from "../generated/schema";
 import {
@@ -19,6 +21,7 @@ import {
   StakingEligibility as StakingEligibilityTemplate,
   SeasonToggle as SeasonToggleTemplate,
   CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityTemplate,
+  AgreementEligibility as AgreementEligibilityTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
@@ -30,6 +33,7 @@ import {
   STAKING_ELIGIBILITY_IMPLEMENTATION,
   SEASON_TOGGLE_IMPLEMENTATION,
   CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION,
+  AGREEMENT_ELIGIBILITY_IMPLEMENTATION,
 } from "./constants";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
@@ -297,13 +301,6 @@ export function handleModuleDeployed(
       ) as ethereum.Value
     ).toTuple();
 
-    //let decodedImmutableArgs = (
-    //  ethereum.decode(
-    //    "(address)",
-    //    event.params.otherImmutableArgs
-    //  ) as ethereum.Value
-    //).toTuple();
-
     const judgeHat = decodedInitArgs[1].toBigInt();
     // check if hat exists, create new object if not
     let judgeHatAuthority = HatAuthority.load(hatIdToHex(judgeHat));
@@ -355,6 +352,65 @@ export function handleModuleDeployed(
     characterSheetsLevelEligibility.hatAdmins = hatAdmins;
     characterSheetsLevelEligibility.hatId = hatId;
     characterSheetsLevelEligibility.save();
+  } else if (implemenatationAddress == AGREEMENT_ELIGIBILITY_IMPLEMENTATION) {
+    AgreementEligibilityTemplate.create(event.params.instance);
+    const agreementEligibility = new AgreementEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    // prepend data location offset to init args
+    const preparedInitArgs = Bytes.fromHexString(
+      "0x0000000000000000000000000000000000000000000000000000000000000020".concat(
+        event.params.initData.toHexString().slice(2)
+      )
+    );
+
+    // decode the init args and create a new Agreement object
+    let decodedInitArgs = (
+      ethereum.decode("(string)", preparedInitArgs) as ethereum.Value
+    ).toTuple();
+    const agreement = decodedInitArgs[0].toString();
+
+    const agreementObject = new Agreement("1" + "-" + agreementEligibility.id);
+    agreementObject.agreementEligibility = agreementEligibility.id;
+    agreementObject.agreement = agreement;
+    agreementObject.signers = [];
+    agreementObject.graceEndTime = BigInt.fromI32(0);
+
+    // decode the immutable args
+    let decodedImmutableArgs = (
+      ethereum.decode(
+        "(uint256, uint256)",
+        event.params.otherImmutableArgs
+      ) as ethereum.Value
+    ).toTuple();
+
+    const ownerHat = decodedImmutableArgs[0].toBigInt();
+    // check if hat exists, create new object if not
+    let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
+    if (ownerHatAuthority == null) {
+      ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
+    }
+
+    const arbitratorHat = decodedImmutableArgs[1].toBigInt();
+    // check if hat exists, create new object if not
+    let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
+    if (arbitratorHatAuthority == null) {
+      arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat));
+    }
+
+    const hatId = hatIdToHex(event.params.hatId);
+
+    agreementEligibility.hatId = hatId;
+    agreementEligibility.ownerHat = hatIdToHex(ownerHat);
+    agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
+    agreementEligibility.currentAgreement = agreementObject.id;
+    agreementEligibility.currentAgreementId = BigInt.fromI32(1);
+
+    agreementEligibility.save();
+    ownerHatAuthority.save();
+    arbitratorHatAuthority.save();
+    agreementObject.save();
   }
 }
 
