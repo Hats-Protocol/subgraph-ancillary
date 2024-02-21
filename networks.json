@@ -11,6 +11,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 9713194
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 9929721
     }
   },
   "mainnet": {
@@ -25,6 +29,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 18265591
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 18429101
     }
   },
   "matic": {
@@ -39,6 +47,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 48249962
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 49144500
     }
   },
   "gnosis": {
@@ -53,6 +65,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 30023568
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 30979644
     }
   },
   "arbitrum-one": {
@@ -81,6 +97,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 109695493
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 111329307
     }
   },
   "sepolia": {
@@ -109,6 +129,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 7526983
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 5733915
     }
   },
   "celo": {
