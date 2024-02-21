@@ -70,12 +70,12 @@ export function handleAgreementEligibility_AgreementSet(
   ) as AgreementEligibility;
 
   // inc the current agreement ID
-  agreementEligibility.currentAgreementId =
-    agreementEligibility.currentAgreementId.plus(BigInt.fromI32(1));
+  agreementEligibility.currentAgreementNumber =
+    agreementEligibility.currentAgreementNumber.plus(BigInt.fromI32(1));
 
   // create new agreement entity
   const newAgreementId =
-    agreementEligibility.currentAgreementId.toString() +
+    agreementEligibility.currentAgreementNumber.toString() +
     "-" +
     event.address.toHexString();
   const newAgreement = new Agreement(newAgreementId);

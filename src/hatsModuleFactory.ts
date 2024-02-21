@@ -405,7 +405,7 @@ export function handleModuleDeployed(
     agreementEligibility.ownerHat = hatIdToHex(ownerHat);
     agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     agreementEligibility.currentAgreement = agreementObject.id;
-    agreementEligibility.currentAgreementId = BigInt.fromI32(1);
+    agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
 
     agreementEligibility.save();
     ownerHatAuthority.save();

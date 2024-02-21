@@ -111,7 +111,7 @@ type AgreementEligibility @entity {
   ownerHat: HatAuthority!
   arbitratorHat: HatAuthority!
   currentAgreement: Agreement!
-  currentAgreementId: BigInt!
+  currentAgreementNumber: BigInt!
   agreements: [Agreement!]! @derivedFrom(field: "agreementEligibility")
 }
 

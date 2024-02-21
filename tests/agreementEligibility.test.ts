@@ -91,7 +91,7 @@ describe("Agreement Eligibility Tests", () => {
       assert.fieldEquals(
         "AgreementEligibility",
         agreementInstance,
-        "currentAgreementId",
+        "currentAgreementNumber",
         "1"
       );
       assert.fieldEquals(
@@ -247,7 +247,7 @@ describe("Agreement Eligibility Tests", () => {
             assert.fieldEquals(
               "AgreementEligibility",
               agreementInstance,
-              "currentAgreementId",
+              "currentAgreementNumber",
               "2"
             );
             assert.fieldEquals(
