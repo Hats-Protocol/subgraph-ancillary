@@ -15,7 +15,12 @@ import {
   ByteArray,
   log,
 } from "@graphprotocol/graph-ts";
-import { mockHatsModuleFactory_ModuleDeployedEvent } from "./utils";
+import {
+  mockHatsModuleFactory_ModuleDeployedEvent,
+  mockAgreementEligibility_HatClaimedWithAgreementEvent,
+  mockAgreementEligibility_AgreementSignedEvent,
+  mockAgreementEligibility_AgreementSetEvent,
+} from "./utils";
 import { handleModuleDeployed } from "../src/hatsModuleFactory";
 import { AGREEMENT_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
 import { changeEndianness } from "../src/utils";
@@ -43,10 +48,13 @@ const account3 = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 const agreementInstance = "0xcccccccccccccccccccccccccccccccccccccccc";
 
 const timestamp1 = 1000000;
-const timestamp2 = 1000200;
+const grace1 = 3600;
 
 const agreement1 =
   "bafybeih2a5ztsooqtx7hb32oayynxoeiplaqd5llcnezzj2srqgmc2k2da";
+
+const agreement2 =
+  "bafybeih2a5ztsooqtx7hb32oayynxoeiplaqd5llcnezzj2srqgmc2k2db";
 
 describe("Agreement Eligibility Tests", () => {
   afterAll(() => {
@@ -120,6 +128,165 @@ describe("Agreement Eligibility Tests", () => {
         "graceEndTime",
         "0"
       );
+    });
+
+    describe("And an account is signing and claiming", () => {
+      beforeEach(() => {
+        const agreementEligibility_HatClaimedWithAgreementEvent =
+          mockAgreementEligibility_HatClaimedWithAgreementEvent(
+            Address.fromString(agreementInstance),
+            Address.fromString(account1),
+            BigInt.fromString(hatId),
+            agreement1
+          );
+
+        handleAgreementEligibility_HatClaimedWithAgreement(
+          agreementEligibility_HatClaimedWithAgreementEvent
+        );
+      });
+
+      test("Test sign and claim", () => {
+        assert.entityCount("Agreement", 1);
+        assert.fieldEquals(
+          "Agreement",
+          "1" + "-" + agreementInstance,
+          "agreementEligibility",
+          agreementInstance
+        );
+        assert.fieldEquals(
+          "Agreement",
+          "1" + "-" + agreementInstance,
+          "agreement",
+          agreement1
+        );
+        assert.fieldEquals(
+          "Agreement",
+          "1" + "-" + agreementInstance,
+          "signers",
+          `[${account1}]`
+        );
+        assert.fieldEquals(
+          "Agreement",
+          "1" + "-" + agreementInstance,
+          "graceEndTime",
+          "0"
+        );
+      });
+
+      describe("And an account is signing", () => {
+        beforeEach(() => {
+          const agreementEligibility_AgreementSignedEvent =
+            mockAgreementEligibility_AgreementSignedEvent(
+              Address.fromString(agreementInstance),
+              Address.fromString(account2),
+              agreement1
+            );
+
+          handleAgreementEligibility_AgreementSigned(
+            agreementEligibility_AgreementSignedEvent
+          );
+        });
+
+        test("Test sign", () => {
+          assert.entityCount("Agreement", 1);
+          assert.fieldEquals(
+            "Agreement",
+            "1" + "-" + agreementInstance,
+            "agreementEligibility",
+            agreementInstance
+          );
+          assert.fieldEquals(
+            "Agreement",
+            "1" + "-" + agreementInstance,
+            "agreement",
+            agreement1
+          );
+          assert.fieldEquals(
+            "Agreement",
+            "1" + "-" + agreementInstance,
+            "graceEndTime",
+            "0"
+          );
+          assert.fieldEquals(
+            "Agreement",
+            "1" + "-" + agreementInstance,
+            "signers",
+            `[${account1}, ${account2}]`
+          );
+        });
+
+        describe("And a new agreement is set", () => {
+          beforeEach(() => {
+            const agreementEligibility_AgreementSetEvent =
+              mockAgreementEligibility_AgreementSetEvent(
+                Address.fromString(agreementInstance),
+                BigInt.fromI32(timestamp1),
+                agreement2,
+                BigInt.fromI32(grace1)
+              );
+
+            handleAgreementEligibility_AgreementSet(
+              agreementEligibility_AgreementSetEvent
+            );
+          });
+
+          test("Test agreement eligibility entity", () => {
+            assert.entityCount("AgreementEligibility", 1);
+            assert.fieldEquals(
+              "AgreementEligibility",
+              agreementInstance,
+              "ownerHat",
+              ownerHatId
+            );
+            assert.fieldEquals(
+              "AgreementEligibility",
+              agreementInstance,
+              "arbitratorHat",
+              arbitratorHatId
+            );
+            assert.fieldEquals(
+              "AgreementEligibility",
+              agreementInstance,
+              "currentAgreementId",
+              "2"
+            );
+            assert.fieldEquals(
+              "AgreementEligibility",
+              agreementInstance,
+              "currentAgreement",
+              "2" + "-" + agreementInstance
+            );
+          });
+
+          test("Test agreement eligibility entity", () => {
+            assert.entityCount("Agreement", 2);
+            assert.fieldEquals(
+              "Agreement",
+              "2" + "-" + agreementInstance,
+              "agreementEligibility",
+              agreementInstance
+            );
+            assert.fieldEquals(
+              "Agreement",
+              "2" + "-" + agreementInstance,
+              "agreement",
+              agreement2
+            );
+            assert.fieldEquals(
+              "Agreement",
+              "2" + "-" + agreementInstance,
+              "graceEndTime",
+              `${timestamp1 + grace1}`
+            );
+            assert.fieldEquals(
+              "Agreement",
+              "2" + "-" + agreementInstance,
+              "signers",
+              `[]`
+            );
+          });
+        });
+      });
     });
   });
 });
