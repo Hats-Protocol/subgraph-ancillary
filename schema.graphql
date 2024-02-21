@@ -28,6 +28,9 @@ type HatAuthority @entity {
   seasonHatAdmins: [SeasonToggle!]! @derivedFrom(field: "hatAdmins")
   characterSheetsLevelHatAdmins: [CharacterSheetsLevelEligibility!]!
     @derivedFrom(field: "hatAdmins")
+  agreementOwner: [AgreementEligibility!]! @derivedFrom(field: "ownerHat")
+  agreementArbitrator: [AgreementEligibility!]!
+    @derivedFrom(field: "arbitratorHat")
 }
 
 type HatsSignerGate @entity {
@@ -100,6 +103,24 @@ type CharacterSheetsLevelEligibility @entity {
   id: ID!
   hatId: String!
   hatAdmins: [HatAuthority!]!
+}
+
+type AgreementEligibility @entity {
+  id: ID!
+  hatId: String!
+  ownerHat: HatAuthority!
+  arbitratorHat: HatAuthority!
+  currentAgreement: Agreement!
+  currentAgreementNumber: BigInt!
+  agreements: [Agreement!]! @derivedFrom(field: "agreementEligibility")
+}
+
+type Agreement @entity {
+  id: ID!
+  agreementEligibility: AgreementEligibility!
+  agreement: String!
+  signers: [String!]!
+  graceEndTime: BigInt!
 }
 
 type HatsAccount1ofN @entity {

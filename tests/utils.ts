@@ -23,6 +23,11 @@ import {
   NewTermStarted,
   Recalled,
 } from "../generated/templates/HatsElectionEligibility/HatsElectionEligibility";
+import {
+  AgreementEligibility_HatClaimedWithAgreement,
+  AgreementEligibility_AgreementSigned,
+  AgreementEligibility_AgreementSet,
+} from "../generated/templates/AgreementEligibility/AgreementEligibility";
 import { newMockEvent } from "matchstick-as";
 
 export function mockHatsSignerGateSetupEvent(
@@ -661,4 +666,120 @@ export function mockTxExecuted(
   );
 
   return newTxExecuted;
+}
+
+export function mockAgreementEligibility_HatClaimedWithAgreementEvent(
+  instance: Address,
+  claimer: Address,
+  hatId: BigInt,
+  agreement: string
+): AgreementEligibility_HatClaimedWithAgreement {
+  // prepare event parameters array
+  const claimerParam = new ethereum.EventParam(
+    "claimer",
+    ethereum.Value.fromAddress(claimer)
+  );
+  const hatIdParam = new ethereum.EventParam(
+    "hatId",
+    ethereum.Value.fromUnsignedBigInt(hatId)
+  );
+  const agreementParam = new ethereum.EventParam(
+    "agreement",
+    ethereum.Value.fromString(agreement)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(claimerParam);
+  parameters.push(hatIdParam);
+  parameters.push(agreementParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newAgreementEligibility_HatClaimedWithAgreement =
+    new AgreementEligibility_HatClaimedWithAgreement(
+      instance,
+      mockEvent.logIndex,
+      mockEvent.transactionLogIndex,
+      mockEvent.logType,
+      mockEvent.block,
+      mockEvent.transaction,
+      parameters,
+      mockEvent.receipt
+    );
+
+  return newAgreementEligibility_HatClaimedWithAgreement;
+}
+
+export function mockAgreementEligibility_AgreementSignedEvent(
+  instance: Address,
+  signer: Address,
+  agreement: string
+): AgreementEligibility_AgreementSigned {
+  // prepare event parameters array
+  const signerParam = new ethereum.EventParam(
+    "signer",
+    ethereum.Value.fromAddress(signer)
+  );
+  const agreementParam = new ethereum.EventParam(
+    "agreement",
+    ethereum.Value.fromString(agreement)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(signerParam);
+  parameters.push(agreementParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newAgreementEligibility_AgreementSigned =
+    new AgreementEligibility_AgreementSigned(
+      instance,
+      mockEvent.logIndex,
+      mockEvent.transactionLogIndex,
+      mockEvent.logType,
+      mockEvent.block,
+      mockEvent.transaction,
+      parameters,
+      mockEvent.receipt
+    );
+
+  return newAgreementEligibility_AgreementSigned;
+}
+
+export function mockAgreementEligibility_AgreementSetEvent(
+  instance: Address,
+  currentTimestamp: BigInt,
+  agreement: string,
+  grace: BigInt
+): AgreementEligibility_AgreementSet {
+  // prepare event parameters array
+  const agreementParam = new ethereum.EventParam(
+    "agreement",
+    ethereum.Value.fromString(agreement)
+  );
+  const graceParam = new ethereum.EventParam(
+    "grace",
+    ethereum.Value.fromUnsignedBigInt(grace)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(agreementParam);
+  parameters.push(graceParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  mockEvent.block.timestamp = currentTimestamp;
+  let newAgreementEligibility_AgreementSet =
+    new AgreementEligibility_AgreementSet(
+      instance,
+      mockEvent.logIndex,
+      mockEvent.transactionLogIndex,
+      mockEvent.logType,
+      mockEvent.block,
+      mockEvent.transaction,
+      parameters,
+      mockEvent.receipt
+    );
+
+  return newAgreementEligibility_AgreementSet;
 }
