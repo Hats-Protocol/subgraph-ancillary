@@ -10,6 +10,7 @@ import {
   CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityObject,
   AgreementEligibility as AgreementEligibilityObject,
   Agreement,
+  ClaimsHatter,
   HatAuthority,
 } from "../generated/schema";
 import {
@@ -22,6 +23,7 @@ import {
   SeasonToggle as SeasonToggleTemplate,
   CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityTemplate,
   AgreementEligibility as AgreementEligibilityTemplate,
+  MultiClaimsHatter,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
@@ -34,6 +36,7 @@ import {
   SEASON_TOGGLE_IMPLEMENTATION,
   CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION,
   AGREEMENT_ELIGIBILITY_IMPLEMENTATION,
+  MULTI_CLAIMS_HATTER_IMPLEMENTATION,
 } from "./constants";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
@@ -411,6 +414,14 @@ export function handleModuleDeployed(
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
     agreementObject.save();
+  } else if (implemenatationAddress == MULTI_CLAIMS_HATTER_IMPLEMENTATION) {
+    MultiClaimsHatter.create(event.params.instance);
+    const claimsHatter = new ClaimsHatter(event.params.instance.toHexString());
+
+    claimsHatter.hatId = hatIdToHex(event.params.hatId);
+    claimsHatter.claimableHats = [];
+    claimsHatter.claimableForHats = [];
+    claimsHatter.save();
   }
 }
 

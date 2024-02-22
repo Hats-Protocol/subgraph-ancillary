@@ -10,27 +10,40 @@ enum HatsAccountOperationType {
 
 type HatAuthority @entity {
   id: ID!
+  "hats account 1 of n properties"
   hatsAccount1ofN: [HatsAccount1ofN!]! @derivedFrom(field: "accountOfHat")
+  "hsg properties"
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
+  "jokerace eligibility properties"
   jokeraceAdmin: [JokeRaceEligibility!]! @derivedFrom(field: "adminHat")
+  "allowlist eligibility properties"
   allowListOwner: [AllowListEligibility!]! @derivedFrom(field: "ownerHat")
   allowListArbitrator: [AllowListEligibility!]!
     @derivedFrom(field: "arbitratorHat")
+  "elections eligibility properties"
   electionsBallotBox: [HatsElectionEligibility!]!
     @derivedFrom(field: "ballotBoxHat")
   electionsAdmin: [HatsElectionEligibility!]! @derivedFrom(field: "adminHat")
+  "passthrough module properties"
   eligibilityTogglePassthrough: [PassthroughModule!]!
     @derivedFrom(field: "passthroughHat")
+  "staking eligibility properties"
   stakingJudge: [StakingEligibility!]! @derivedFrom(field: "judgeHat")
   stakingRecipient: [StakingEligibility!]! @derivedFrom(field: "recipientHat")
   stakingHatAdmins: [StakingEligibility!]! @derivedFrom(field: "hatAdmins")
+  "season toggle properties"
   seasonHatAdmins: [SeasonToggle!]! @derivedFrom(field: "hatAdmins")
+  "character sheets eligibility properties"
   characterSheetsLevelHatAdmins: [CharacterSheetsLevelEligibility!]!
     @derivedFrom(field: "hatAdmins")
+  "agreement eligibility properties"
   agreementOwner: [AgreementEligibility!]! @derivedFrom(field: "ownerHat")
   agreementArbitrator: [AgreementEligibility!]!
     @derivedFrom(field: "arbitratorHat")
+  "multi claims hatter properties"
+  claimableBy: [ClaimsHatter!]! @derivedFrom(field: "claimableHats")
+  claimableForBy: [ClaimsHatter!]! @derivedFrom(field: "claimableForHats")
 }
 
 type HatsSignerGate @entity {
@@ -137,4 +150,11 @@ type HatsAccount1ofNOperation @entity {
   value: BigInt!
   callData: Bytes!
   operationType: HatsAccountOperationType!
+}
+
+type ClaimsHatter @entity {
+  id: ID!
+  hatId: String!
+  claimableHats: [HatAuthority!]!
+  claimableForHats: [HatAuthority!]!
 }

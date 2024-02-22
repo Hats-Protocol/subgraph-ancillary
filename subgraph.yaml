@@ -41,8 +41,7 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event:
-            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -307,3 +306,23 @@ templates:
           handler: handleAgreementEligibility_AgreementSigned
         - event: AgreementEligibility_AgreementSet(string,uint256)
           handler: handleAgreementEligibility_AgreementSet
+  - name: MultiClaimsHatter
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: MultiClaimsHatter
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/multiClaimsHatter.ts
+      entities:
+        - ClaimsHatter
+      abis:
+        - name: MultiClaimsHatter
+          file: ./abis/MultiClaimsHatter.json
+      eventHandlers:
+        - event: HatsClaimabilitySet(uint256[],uint8[])
+          handler: handleHatsClaimabilitySet
+        - event: HatClaimabilitySet(uint256,uint8)
+          handler: handleHatClaimabilitySet
