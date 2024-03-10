@@ -1,5 +1,5 @@
-import { NewTerm } from "../generated/templates/JokeRaceEligibility/JokeRaceEligibility";
-import { JokeRaceEligibility } from "../generated/schema";
+import { NewTerm } from "../../generated/templates/JokeRaceEligibilityDeprecated/JokeRaceEligibilityDeprecated";
+import { JokeRaceEligibility } from "../../generated/schema";
 
 export function handleNewTerm(event: NewTerm): void {
   const jokeRaceEligibility = JokeRaceEligibility.load(

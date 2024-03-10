@@ -2,8 +2,8 @@ import {
   AgreementEligibility_HatClaimedWithAgreement,
   AgreementEligibility_AgreementSigned,
   AgreementEligibility_AgreementSet,
-} from "../generated/templates/AgreementEligibility/AgreementEligibility";
-import { AgreementEligibility, Agreement } from "../generated/schema";
+} from "../../generated/templates/AgreementEligibility/AgreementEligibility";
+import { AgreementEligibility, Agreement } from "../../generated/schema";
 import { BigInt, log } from "@graphprotocol/graph-ts";
 
 export function handleAgreementEligibility_HatClaimedWithAgreement(
