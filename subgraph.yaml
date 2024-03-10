@@ -3,6 +3,26 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
+    name: Hats
+    network: sepolia
+    source:
+      abi: Hats
+      address: "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137"
+      startBlock: 4654775
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - HatAuthority
+      abis:
+        - name: Hats
+          file: ./abis/Hats.json
+      eventHandlers:
+        - event: HatCreated(uint256,string,uint32,address,address,bool,string)
+          handler: handleHatCreated
+      file: ./src/hats.ts
+  - kind: ethereum
     name: HatsSignerGateFactory
     network: sepolia
     source:
