@@ -3,6 +3,7 @@ import {
   HatsSignerGateSetup,
   MultiHatsSignerGateSetup,
 } from "../generated/HatsSignerGateFactory/HatsSignerGateFactory";
+import { HatCreated } from "../generated/Hats/Hats";
 import { NewTerm } from "../generated/templates/JokeRaceEligibility/JokeRaceEligibility";
 import { NewTerm as NewTermDeprecated } from "../generated/templates/JokeRaceEligibilityDeprecated/JokeRaceEligibilityDeprecated";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
@@ -28,7 +29,12 @@ import {
   AgreementEligibility_AgreementSigned,
   AgreementEligibility_AgreementSet,
 } from "../generated/templates/AgreementEligibility/AgreementEligibility";
-import { newMockEvent } from "matchstick-as";
+import { newMockEvent, createMockedFunction } from "matchstick-as";
+import {
+  ERC6551_REGISTRY,
+  HATS,
+  HATS_ACCOUNT_1_OF_N_IMPLEMENTATION,
+} from "../src/constants";
 
 export function mockHatsSignerGateSetupEvent(
   _hatsSignerGate: Address,
@@ -782,4 +788,90 @@ export function mockAgreementEligibility_AgreementSetEvent(
     );
 
   return newAgreementEligibility_AgreementSet;
+}
+
+export function mockHatCreatedEvent(
+  id: BigInt,
+  details: string,
+  maxSupply: BigInt,
+  eligibility: Address,
+  toggle: Address,
+  mutable: boolean,
+  imageURI: string,
+  chainId: BigInt,
+  expectedHatsAccountAddress: Address
+): HatCreated {
+  // prepare event parameters array
+  let idParam = new ethereum.EventParam(
+    "id",
+    ethereum.Value.fromUnsignedBigInt(id)
+  );
+  let detailsParam = new ethereum.EventParam(
+    "details",
+    ethereum.Value.fromString(details)
+  );
+  let maxSupplyParam = new ethereum.EventParam(
+    "maxSupply",
+    ethereum.Value.fromSignedBigInt(maxSupply)
+  );
+  let eligibilityParam = new ethereum.EventParam(
+    "eligibility",
+    ethereum.Value.fromAddress(eligibility)
+  );
+  let toggleParam = new ethereum.EventParam(
+    "toggle",
+    ethereum.Value.fromAddress(toggle)
+  );
+  let mutableParam = new ethereum.EventParam(
+    "mutable_",
+    ethereum.Value.fromBoolean(mutable)
+  );
+  let imageUriParam = new ethereum.EventParam(
+    "imageURI",
+    ethereum.Value.fromString(imageURI)
+  );
+
+  const parameters = new Array<ethereum.EventParam>();
+  parameters.push(idParam);
+  parameters.push(detailsParam);
+  parameters.push(maxSupplyParam);
+  parameters.push(eligibilityParam);
+  parameters.push(toggleParam);
+  parameters.push(mutableParam);
+  parameters.push(imageUriParam);
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let newHatCreatedEvent = new HatCreated(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    parameters,
+    mockEvent.receipt
+  );
+
+  createMockedFunction(
+    Address.fromString(ERC6551_REGISTRY),
+    "account",
+    "account(address,bytes32,uint256,address,uint256):(address)"
+  )
+    .withArgs([
+      ethereum.Value.fromAddress(
+        Address.fromString(HATS_ACCOUNT_1_OF_N_IMPLEMENTATION)
+      ),
+      ethereum.Value.fromFixedBytes(
+        Bytes.fromHexString(
+          "0x0000000000000000000000000000000000000000000000000000000000000001"
+        )
+      ),
+      ethereum.Value.fromUnsignedBigInt(chainId),
+      ethereum.Value.fromAddress(Address.fromString(HATS)),
+      ethereum.Value.fromUnsignedBigInt(id),
+    ])
+    .returns([ethereum.Value.fromAddress(expectedHatsAccountAddress)]);
+
+  return newHatCreatedEvent;
 }

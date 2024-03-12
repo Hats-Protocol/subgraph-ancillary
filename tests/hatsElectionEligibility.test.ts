@@ -30,7 +30,7 @@ import {
   handleElectionOpened,
   handleNewTermStarted,
   handleRecalled,
-} from "../src/hatsElectionEligibility";
+} from "../src/modules/hatsElectionEligibility";
 
 const ballotBoxHatId =
   "0x0000000100000000000000000000000000000000000000000000000000000000";

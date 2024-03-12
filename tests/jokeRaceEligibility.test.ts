@@ -21,7 +21,7 @@ import {
 } from "./utils";
 import { handleModuleDeployed } from "../src/hatsModuleFactory";
 import { JOKERACE_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
-import { handleNewTerm } from "../src/jokeRaceEligibility";
+import { handleNewTerm } from "../src/modules/jokeRaceEligibility";
 import { changeEndianness } from "../src/utils";
 
 const contest1 = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

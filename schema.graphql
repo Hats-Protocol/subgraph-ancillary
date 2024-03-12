@@ -10,6 +10,8 @@ enum HatsAccountOperationType {
 
 type HatAuthority @entity {
   id: ID!
+  "pre computed hats account address with a salt value of 1, null only if the hat was not created yet"
+  primaryHatsAccount1ofNAddress: String
   hatsAccount1ofN: [HatsAccount1ofN!]! @derivedFrom(field: "accountOfHat")
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")

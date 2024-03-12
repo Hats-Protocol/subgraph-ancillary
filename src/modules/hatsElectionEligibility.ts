@@ -3,8 +3,8 @@ import {
   ElectionCompleted,
   NewTermStarted,
   Recalled,
-} from "../generated/templates/HatsElectionEligibility/HatsElectionEligibility";
-import { HatsElectionEligibility, ElectionTerm } from "../generated/schema";
+} from "../../generated/templates/HatsElectionEligibility/HatsElectionEligibility";
+import { HatsElectionEligibility, ElectionTerm } from "../../generated/schema";
 import { BigInt } from "@graphprotocol/graph-ts";
 
 export function handleElectionOpened(event: ElectionOpened): void {

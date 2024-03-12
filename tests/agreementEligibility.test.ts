@@ -28,7 +28,7 @@ import {
   handleAgreementEligibility_AgreementSet,
   handleAgreementEligibility_AgreementSigned,
   handleAgreementEligibility_HatClaimedWithAgreement,
-} from "../src/agreementEligibility";
+} from "../src/modules/agreementEligibility";
 
 const immutableArgs =
   "0x000000550001000D000100000000000000000000000000000000000000000000000000550001000D000200000000000000000000000000000000000000000000";

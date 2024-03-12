@@ -3,6 +3,26 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
+    name: Hats
+    network: sepolia
+    source:
+      abi: Hats
+      address: "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137"
+      startBlock: 4654775
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - HatAuthority
+      abis:
+        - name: Hats
+          file: ./abis/Hats.json
+      eventHandlers:
+        - event: HatCreated(uint256,string,uint32,address,address,bool,string)
+          handler: handleHatCreated
+      file: ./src/hats.ts
+  - kind: ethereum
     name: HatsSignerGateFactory
     network: sepolia
     source:
@@ -41,8 +61,7 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event:
-            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -69,21 +88,6 @@ dataSources:
           handler: handleModuleDeployed
       file: ./src/hatsModuleFactory.ts
 templates:
-  - kind: ethereum
-    name: Hats
-    network: sepolia
-    source:
-      abi: Hats
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - HatAuthority
-      abis:
-        - name: Hats
-          file: ./abis/Hats.json
-      file: ./src/hats.ts
   - name: HatsSignerGate
     kind: ethereum/contract
     network: sepolia
@@ -153,7 +157,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/jokeRaceEligibility.ts
+      file: ./src/modules/jokeRaceEligibility.ts
       entities:
         - JokeRaceEligibility
       abis:
@@ -171,7 +175,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/jokeRaceEligibilityDeprecated.ts
+      file: ./src/modules/jokeRaceEligibilityDeprecated.ts
       entities:
         - JokeRaceEligibility
       abis:
@@ -189,7 +193,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/allowListEligibility.ts
+      file: ./src/modules/allowListEligibility.ts
       entities:
         - AllowListEligibility
       abis:
@@ -204,7 +208,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/hatsElectionEligibility.ts
+      file: ./src/modules/hatsElectionEligibility.ts
       entities:
         - HatsElectionEligibility
       abis:
@@ -228,7 +232,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/passthroughModule.ts
+      file: ./src/modules/passthroughModule.ts
       entities:
         - PassthroughModule
       abis:
@@ -243,7 +247,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/stakingEligibility.ts
+      file: ./src/modules/stakingEligibility.ts
       entities:
         - StakingEligibility
       abis:
@@ -263,7 +267,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/seasonToggle.ts
+      file: ./src/modules/seasonToggle.ts
       entities:
         - SeasonToggle
       abis:
@@ -278,7 +282,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/characterSheetsLevelEligibility.ts
+      file: ./src/modules/characterSheetsLevelEligibility.ts
       entities:
         - CharacterSheetsLevelEligibility
       abis:
@@ -293,7 +297,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/agreementEligibility.ts
+      file: ./src/modules/agreementEligibility.ts
       entities:
         - AgreementEligibility
         - Agreement

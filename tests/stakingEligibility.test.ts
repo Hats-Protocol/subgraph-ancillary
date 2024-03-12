@@ -25,7 +25,7 @@ import { handleModuleDeployed } from "../src/hatsModuleFactory";
 import {
   handleJudgeHatChanged,
   handleRecipientHatChanged,
-} from "../src/stakingEligibility";
+} from "../src/modules/stakingEligibility";
 import { STAKING_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
 import { changeEndianness } from "../src/utils";
 

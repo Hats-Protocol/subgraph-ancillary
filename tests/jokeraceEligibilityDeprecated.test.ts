@@ -13,7 +13,7 @@ import {
 } from "./utils";
 import { handleModuleDeployed } from "../src/hatsModuleFactory";
 import { JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED } from "../src/constants";
-import { handleNewTerm } from "../src/jokeRaceEligibilityDeprecated";
+import { handleNewTerm } from "../src/modules/jokeRaceEligibilityDeprecated";
 
 const contest1 = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const contest2 = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";

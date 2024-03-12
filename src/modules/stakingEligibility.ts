@@ -1,9 +1,9 @@
 import {
   StakingEligibility_JudgeHatChanged,
   StakingEligibility_RecipientHatChanged,
-} from "../generated/templates/StakingEligibility/StakingEligibility";
-import { StakingEligibility, HatAuthority } from "../generated/schema";
-import { hatIdToHex } from "./utils";
+} from "../../generated/templates/StakingEligibility/StakingEligibility";
+import { StakingEligibility, HatAuthority } from "../../generated/schema";
+import { hatIdToHex } from "../utils";
 
 export function handleJudgeHatChanged(
   event: StakingEligibility_JudgeHatChanged

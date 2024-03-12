@@ -83,6 +83,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 136870116
+    },
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 186184530
     }
   },
   "optimism": {
@@ -143,16 +147,10 @@
     "HatsModuleFactory": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 22586287
-    }
-  },
-  "publicgoods": {
-    "Hats": {
-      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
-      "startBlock": 5490118
     },
-    "HatsModuleFactory": {
-      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
-      "startBlock": 5490406
+    "ERC6551Registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "startBlock": 24480241
     }
   }
 }
