@@ -88,21 +88,6 @@ dataSources:
           handler: handleModuleDeployed
       file: ./src/hatsModuleFactory.ts
 templates:
-  - kind: ethereum
-    name: Hats
-    network: sepolia
-    source:
-      abi: Hats
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - HatAuthority
-      abis:
-        - name: Hats
-          file: ./abis/Hats.json
-      file: ./src/hats.ts
   - name: HatsSignerGate
     kind: ethereum/contract
     network: sepolia
