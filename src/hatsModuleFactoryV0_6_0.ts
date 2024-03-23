@@ -1,5 +1,5 @@
 import { BigInt, ethereum, Bytes, log } from "@graphprotocol/graph-ts";
-import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
+import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactoryV0_6_0/HatsModuleFactoryV0_6_0";
 import {
   JokeRaceEligibility as JokeRaceEligibilityObject,
   AllowListEligibility as AllowListEligibilityObject,

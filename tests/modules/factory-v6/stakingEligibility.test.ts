@@ -17,17 +17,17 @@ import {
   ByteArray,
 } from "@graphprotocol/graph-ts";
 import {
-  mockHatsModuleFactory_ModuleDeployedEvent,
+  mockHatsModuleFactory_ModuleDeployedEventV0_6_0,
   mockStakingEligibility_JudgeHatChangedEvent,
   mockStakingEligibility_RecipientHatChangedEvent,
-} from "./utils";
-import { handleModuleDeployed } from "../src/hatsModuleFactory";
+} from "../../utils";
+import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_6_0";
 import {
   handleJudgeHatChanged,
   handleRecipientHatChanged,
-} from "../src/modules/stakingEligibility";
-import { STAKING_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
-import { changeEndianness } from "../src/utils";
+} from "../../../src/modules/stakingEligibility";
+import { STAKING_ELIGIBILITY_IMPLEMENTATION } from "../../../src/constants";
+import { changeEndianness } from "../../../src/utils";
 
 const judgeHatId =
   "26959946667150639794667015087019630673637144422540572481103610249216";
@@ -72,13 +72,14 @@ describe("Staking Eligibility Tests", () => {
         ethereum.Value.fromFixedSizedArray(mutableArgs)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(STAKING_ELIGIBILITY_IMPLEMENTATION),
-        Address.fromString(stakingInstance),
-        BigInt.fromString(hatId),
-        Bytes.fromHexString(stakingToken),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
+          Address.fromString(STAKING_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(stakingInstance),
+          BigInt.fromString(hatId),
+          Bytes.fromHexString(stakingToken),
+          encodedInitArgs
+        );
 
       createMockedFunction(
         Address.fromString(
@@ -194,13 +195,14 @@ describe("Staking Eligibility Tests", () => {
         ethereum.Value.fromFixedSizedArray(mutableArgs)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(STAKING_ELIGIBILITY_IMPLEMENTATION),
-        Address.fromString(stakingInstanceLinkedAdmins),
-        BigInt.fromString(hatIdLinkedAdmins),
-        Bytes.fromHexString(stakingToken),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
+          Address.fromString(STAKING_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(stakingInstanceLinkedAdmins),
+          BigInt.fromString(hatIdLinkedAdmins),
+          Bytes.fromHexString(stakingToken),
+          encodedInitArgs
+        );
 
       createMockedFunction(
         Address.fromString(

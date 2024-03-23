@@ -7,9 +7,9 @@ import {
   beforeEach,
 } from "matchstick-as/assembly/index";
 import { Address, BigInt, ethereum, Bytes, log } from "@graphprotocol/graph-ts";
-import { mockHatsModuleFactory_ModuleDeployedEvent } from "./utils";
-import { handleModuleDeployed } from "../src/hatsModuleFactory";
-import { PASSTHROUGH_MODULE_IMPLEMENTATION } from "../src/constants";
+import { mockHatsModuleFactory_ModuleDeployedEventV0_7_0 } from "../../utils";
+import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_7_0";
+import { PASSTHROUGH_MODULE_IMPLEMENTATION } from "../../../src/constants";
 
 const passthroughHatId =
   "0x0000000100000000000000000000000000000000000000000000000000000000";
@@ -29,15 +29,17 @@ describe("Passthrough Module Tests", () => {
 
   describe("Passthrough module is created", () => {
     beforeEach(() => {
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(PASSTHROUGH_MODULE_IMPLEMENTATION),
-        Address.fromString(passthroughInstance),
-        BigInt.fromString(hatId),
-        Bytes.fromHexString(
-          "0x0000000100000000000000000000000000000000000000000000000000000000"
-        ),
-        Bytes.fromHexString("0x")
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
+          Address.fromString(PASSTHROUGH_MODULE_IMPLEMENTATION),
+          Address.fromString(passthroughInstance),
+          BigInt.fromString(hatId),
+          Bytes.fromHexString(
+            "0x0000000100000000000000000000000000000000000000000000000000000000"
+          ),
+          Bytes.fromHexString("0x"),
+          BigInt.fromI32(1)
+        );
 
       handleModuleDeployed(moduleDeployedEvent);
     });

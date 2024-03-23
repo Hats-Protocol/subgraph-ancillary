@@ -5,30 +5,21 @@ import {
   clearStore,
   afterAll,
   beforeEach,
-  createMockedFunction,
 } from "matchstick-as/assembly/index";
+import { Address, BigInt, Bytes, log } from "@graphprotocol/graph-ts";
 import {
-  Address,
-  BigInt,
-  ethereum,
-  Bytes,
-  ByteArray,
-  log,
-} from "@graphprotocol/graph-ts";
-import {
-  mockHatsModuleFactory_ModuleDeployedEvent,
+  mockHatsModuleFactory_ModuleDeployedEventV0_7_0,
   mockAgreementEligibility_HatClaimedWithAgreementEvent,
   mockAgreementEligibility_AgreementSignedEvent,
   mockAgreementEligibility_AgreementSetEvent,
-} from "./utils";
-import { handleModuleDeployed } from "../src/hatsModuleFactory";
-import { AGREEMENT_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
-import { changeEndianness } from "../src/utils";
+} from "../../utils";
+import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_7_0";
+import { AGREEMENT_ELIGIBILITY_IMPLEMENTATION } from "../../../src/constants";
 import {
   handleAgreementEligibility_AgreementSet,
   handleAgreementEligibility_AgreementSigned,
   handleAgreementEligibility_HatClaimedWithAgreement,
-} from "../src/modules/agreementEligibility";
+} from "../../../src/modules/agreementEligibility";
 
 const immutableArgs =
   "0x000000550001000D000100000000000000000000000000000000000000000000000000550001000D000200000000000000000000000000000000000000000000";
@@ -63,13 +54,15 @@ describe("Agreement Eligibility Tests", () => {
 
   describe("Agreement eligibility is created", () => {
     beforeEach(() => {
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(AGREEMENT_ELIGIBILITY_IMPLEMENTATION),
-        Address.fromString(agreementInstance),
-        BigInt.fromString(hatId),
-        Bytes.fromHexString(immutableArgs),
-        Bytes.fromHexString(mutableArgs)
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
+          Address.fromString(AGREEMENT_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(agreementInstance),
+          BigInt.fromString(hatId),
+          Bytes.fromHexString(immutableArgs),
+          Bytes.fromHexString(mutableArgs),
+          BigInt.fromI32(1)
+        );
 
       handleModuleDeployed(moduleDeployedEvent);
     });

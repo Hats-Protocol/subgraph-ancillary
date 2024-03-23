@@ -8,7 +8,6 @@ import {
 } from "matchstick-as/assembly/index";
 import { Address, BigInt, Bytes, Value } from "@graphprotocol/graph-ts";
 import { mockERC6551AccountCreatedEvent, mockTxExecuted } from "./utils";
-import { hatIdToHex } from "../src/utils";
 import { handleErc6551AccountCreated } from "../src/erc6551Registry";
 import { handleTxExecuted } from "../src/hatsAccount1ofN";
 import { HATS_ACCOUNT_1_OF_N_IMPLEMENTATION, HATS } from "../src/constants";

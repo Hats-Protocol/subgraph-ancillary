@@ -7,9 +7,9 @@ import {
   beforeEach,
 } from "matchstick-as/assembly/index";
 import { Address, BigInt, ethereum, Bytes, log } from "@graphprotocol/graph-ts";
-import { mockHatsModuleFactory_ModuleDeployedEvent } from "./utils";
-import { handleModuleDeployed } from "../src/hatsModuleFactory";
-import { ALLOWLIST_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
+import { mockHatsModuleFactory_ModuleDeployedEventV0_7_0 } from "../../utils";
+import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_7_0";
+import { ALLOWLIST_ELIGIBILITY_IMPLEMENTATION } from "../../../src/constants";
 
 const ownerHatId =
   "0x0000000100000000000000000000000000000000000000000000000000000000";
@@ -41,15 +41,17 @@ describe("Allow List Eligibility Tests", () => {
         ethereum.Value.fromFixedSizedArray(mutableArgs)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(ALLOWLIST_ELIGIBILITY_IMPLEMENTATION),
-        Address.fromString(allowListInstance),
-        BigInt.fromString(hatId),
-        Bytes.fromHexString(
-          "0x00000001000000000000000000000000000000000000000000000000000000000000000100010000000000000000000000000000000000000000000000000000"
-        ),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
+          Address.fromString(ALLOWLIST_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(allowListInstance),
+          BigInt.fromString(hatId),
+          Bytes.fromHexString(
+            "0x00000001000000000000000000000000000000000000000000000000000000000000000100010000000000000000000000000000000000000000000000000000"
+          ),
+          encodedInitArgs,
+          BigInt.fromI32(1)
+        );
 
       handleModuleDeployed(moduleDeployedEvent);
     });

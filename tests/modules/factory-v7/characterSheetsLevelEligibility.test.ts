@@ -5,7 +5,6 @@ import {
   clearStore,
   afterAll,
   beforeEach,
-  beforeAll,
   createMockedFunction,
 } from "matchstick-as/assembly/index";
 import {
@@ -16,10 +15,10 @@ import {
   log,
   ByteArray,
 } from "@graphprotocol/graph-ts";
-import { mockHatsModuleFactory_ModuleDeployedEvent } from "./utils";
-import { handleModuleDeployed } from "../src/hatsModuleFactory";
-import { SEASON_TOGGLE_IMPLEMENTATION } from "../src/constants";
-import { changeEndianness } from "../src/utils";
+import { mockHatsModuleFactory_ModuleDeployedEventV0_7_0 } from "../../utils";
+import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_7_0";
+import { CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION } from "../../../src/constants";
+import { changeEndianness } from "../../../src/utils";
 
 const hatId =
   "26960358049567071831564234593151059434471056522609336320533481914368";
@@ -27,31 +26,36 @@ const hatId =
 const account1 = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const account2 = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
-const seasonToggleInstance = "0xcccccccccccccccccccccccccccccccccccccccc";
+const characterSheetsLevelEligibilityInstance =
+  "0xcccccccccccccccccccccccccccccccccccccccc";
 
-describe("Season Toggle Tests", () => {
+describe("Character Sheets Level Eligibility Tests", () => {
   afterAll(() => {
     clearStore();
   });
 
-  describe("Season toggle is created", () => {
+  describe("Character sheets level eligibility is created", () => {
     beforeEach(() => {
       let mutableArgs: Array<ethereum.Value> = [
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(2592000)),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(5000)),
+        ethereum.Value.fromUnsignedBigIntArray([BigInt.fromI32(1)]),
+        ethereum.Value.fromUnsignedBigIntArray([BigInt.fromI32(2)]),
       ];
 
       let encodedInitArgs = ethereum.encode(
         ethereum.Value.fromFixedSizedArray(mutableArgs)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(SEASON_TOGGLE_IMPLEMENTATION),
-        Address.fromString(seasonToggleInstance),
-        BigInt.fromString(hatId),
-        Bytes.fromHexString(""),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
+          Address.fromString(CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(characterSheetsLevelEligibilityInstance),
+          BigInt.fromString(hatId),
+          Bytes.fromHexString(
+            "0x083c4e685f64411747548a5ea090630ab0bf17bf7e029eFCbD96804B7284a9eEb74f2F5aB5F79a7e"
+          ),
+          encodedInitArgs,
+          BigInt.fromI32(1)
+        );
 
       createMockedFunction(
         Address.fromString(
@@ -86,17 +90,17 @@ describe("Season Toggle Tests", () => {
       handleModuleDeployed(moduleDeployedEvent);
     });
 
-    test("Test season toggle created", () => {
-      assert.entityCount("SeasonToggle", 1);
+    test("Test character sheets level created", () => {
+      assert.entityCount("CharacterSheetsLevelEligibility", 1);
       assert.fieldEquals(
-        "SeasonToggle",
-        seasonToggleInstance,
+        "CharacterSheetsLevelEligibility",
+        characterSheetsLevelEligibilityInstance,
         "hatId",
         "0x0000000100010001000000000000000000000000000000000000000000000000"
       );
       assert.fieldEquals(
-        "SeasonToggle",
-        seasonToggleInstance,
+        "CharacterSheetsLevelEligibility",
+        characterSheetsLevelEligibilityInstance,
         "hatAdmins",
         "[0x0000000100000000000000000000000000000000000000000000000000000000, 0x0000000100010000000000000000000000000000000000000000000000000000]"
       );
