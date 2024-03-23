@@ -16,13 +16,13 @@ import {
   log,
 } from "@graphprotocol/graph-ts";
 import {
-  mockHatsModuleFactory_ModuleDeployedEvent,
+  mockHatsModuleFactory_ModuleDeployedEventV0_6_0,
   mockNewTermEvent,
-} from "./utils";
-import { handleModuleDeployed } from "../src/hatsModuleFactory";
-import { JOKERACE_ELIGIBILITY_IMPLEMENTATION } from "../src/constants";
-import { handleNewTerm } from "../src/modules/jokeRaceEligibility";
-import { changeEndianness } from "../src/utils";
+} from "../../utils";
+import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_6_0";
+import { JOKERACE_ELIGIBILITY_IMPLEMENTATION } from "../../../src/constants";
+import { handleNewTerm } from "../../../src/modules/jokeRaceEligibility";
+import { changeEndianness } from "../../../src/utils";
 
 const contest1 = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const contest2 = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
@@ -55,15 +55,16 @@ describe("JokeRace Eligibility Tests", () => {
         ethereum.Value.fromFixedSizedArray(args)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(JOKERACE_ELIGIBILITY_IMPLEMENTATION),
-        Address.fromString(jokeRaceInstance),
-        BigInt.fromString(hatId),
-        Bytes.fromHexString(
-          "0x0000000100000000000000000000000000000000000000000000000000000000"
-        ),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
+          Address.fromString(JOKERACE_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(jokeRaceInstance),
+          BigInt.fromString(hatId),
+          Bytes.fromHexString(
+            "0x0000000100000000000000000000000000000000000000000000000000000000"
+          ),
+          encodedInitArgs
+        );
 
       handleModuleDeployed(moduleDeployedEvent);
     });
@@ -155,15 +156,16 @@ describe("JokeRace Eligibility Tests", () => {
         ethereum.Value.fromFixedSizedArray(args)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(JOKERACE_ELIGIBILITY_IMPLEMENTATION),
-        Address.fromString(jokeRaceWithAdminFallbackInstance),
-        BigInt.fromString(hatIdAdminsFallback),
-        Bytes.fromHexString(
-          "0x0000000000000000000000000000000000000000000000000000000000000000"
-        ),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
+          Address.fromString(JOKERACE_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(jokeRaceWithAdminFallbackInstance),
+          BigInt.fromString(hatIdAdminsFallback),
+          Bytes.fromHexString(
+            "0x0000000000000000000000000000000000000000000000000000000000000000"
+          ),
+          encodedInitArgs
+        );
 
       createMockedFunction(
         Address.fromString(

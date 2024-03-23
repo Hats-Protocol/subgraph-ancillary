@@ -15,10 +15,10 @@ import {
   ByteArray,
   log,
 } from "@graphprotocol/graph-ts";
-import { mockHatsModuleFactory_ModuleDeployedEvent } from "./utils";
-import { handleModuleDeployed } from "../src/hatsModuleFactory";
-import { HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED } from "../src/constants";
-import { changeEndianness } from "../src/utils";
+import { mockHatsModuleFactory_ModuleDeployedEventV0_6_0 } from "../../utils";
+import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_6_0";
+import { HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED } from "../../../src/constants";
+import { changeEndianness } from "../../../src/utils";
 
 const ballotBoxHatId =
   "0x0000000100000000000000000000000000000000000000000000000000000000";
@@ -51,15 +51,18 @@ describe("Hats Election Eligibility Tests", () => {
         ethereum.Value.fromFixedSizedArray(mutableArgs)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED),
-        Address.fromString(hatsElectionInstance),
-        BigInt.fromString(hatId),
-        Bytes.fromHexString(
-          "0x00000001000000000000000000000000000000000000000000000000000000000000000100010000000000000000000000000000000000000000000000000000"
-        ),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
+          Address.fromString(
+            HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
+          ),
+          Address.fromString(hatsElectionInstance),
+          BigInt.fromString(hatId),
+          Bytes.fromHexString(
+            "0x00000001000000000000000000000000000000000000000000000000000000000000000100010000000000000000000000000000000000000000000000000000"
+          ),
+          encodedInitArgs
+        );
 
       handleModuleDeployed(moduleDeployedEvent);
     });
@@ -97,15 +100,18 @@ describe("Hats Election Eligibility Tests", () => {
         ethereum.Value.fromFixedSizedArray(mutableArgs)
       )!;
 
-      const moduleDeployedEvent = mockHatsModuleFactory_ModuleDeployedEvent(
-        Address.fromString(HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED),
-        Address.fromString(hatElectionsWithAdminsFallbackInstance),
-        BigInt.fromString(hatIdAdminsFallback),
-        Bytes.fromHexString(
-          "0x00000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-        ),
-        encodedInitArgs
-      );
+      const moduleDeployedEvent =
+        mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
+          Address.fromString(
+            HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
+          ),
+          Address.fromString(hatElectionsWithAdminsFallbackInstance),
+          BigInt.fromString(hatIdAdminsFallback),
+          Bytes.fromHexString(
+            "0x00000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          ),
+          encodedInitArgs
+        );
 
       createMockedFunction(
         Address.fromString(
