@@ -158,6 +158,10 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 22586096
     },
+    "HatsSignerGateFactory": {
+      "address": "0x5CB8a5B063B7E94cF39E8A8813A777f49B8DD050",
+      "startBlock": 25293413
+    },
     "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 22586287
