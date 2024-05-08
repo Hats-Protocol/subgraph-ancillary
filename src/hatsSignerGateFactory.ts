@@ -1,3 +1,4 @@
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
   HatsSignerGateSetup,
   MultiHatsSignerGateSetup,
@@ -19,32 +20,64 @@ export function handleHatsSignerGateSetup(event: HatsSignerGateSetup): void {
     return;
   }
 
-  HatsSignerGateTemplate.create(event.params._hatsSignerGate);
-  let hsg = new HatsSignerGate(event.params._hatsSignerGate.toHexString());
-
-  // check if owner hat exists, create new object if not
-  let ownerHat = HatAuthority.load(hatIdToHex(event.params._ownerHatId));
-  if (ownerHat == null) {
-    ownerHat = new HatAuthority(hatIdToHex(event.params._ownerHatId));
+  // patch for including instances that were deployed in a deprecated factory
+  if (
+    event.params._hatsSignerGate.toHexString().toLowerCase() ==
+      "0x54a8D7DE1e6C89a164bF73b8414980fD78714935".toLowerCase() &&
+    event.block.number == BigInt.fromString("14164262")
+  ) {
+    // recreate hsg 0xad2d50e0259f31c1d9f9D1430d0ff9Ea8305c85C from Base
+    createHsg(
+      Address.fromString(
+        "0xad2d50e0259f31c1d9f9D1430d0ff9Ea8305c85C".toLowerCase()
+      ),
+      BigInt.fromString(
+        "377439664716248287426848749960570468768546267599534423130416380641280"
+      ),
+      BigInt.fromString(
+        "377439664722525389162235430724406258191753934015636778574880415154176"
+      ),
+      Address.fromString(
+        "0x18542245cA523DFF96AF766047fE9423E0BED3C0".toLowerCase()
+      ),
+      BigInt.fromI32(3),
+      BigInt.fromI32(5),
+      BigInt.fromI32(7)
+    );
+  } else if (
+    event.params._hatsSignerGate.toHexString().toLowerCase() ==
+      "0x5688187d29c9cd15805a3d261151D992a70bf9E6".toLowerCase() &&
+    event.block.number == BigInt.fromString("56717312")
+  ) {
+    // recreate hsg 0x7Ca9A1C8b90C2Bf67580f2c1ECA3B81024F27843 from Polygon
+    createHsg(
+      Address.fromString(
+        "0x7Ca9A1C8b90C2Bf67580f2c1ECA3B81024F27843".toLowerCase()
+      ),
+      BigInt.fromString(
+        "1078398278062164922088191142223080866283112022585589307639110247120896"
+      ),
+      BigInt.fromString(
+        "1078398278068442023823577822986916655706319689001691663083574281633792"
+      ),
+      Address.fromString(
+        "0x18542245cA523DFF96AF766047fE9423E0BED3C0".toLowerCase()
+      ),
+      BigInt.fromI32(3),
+      BigInt.fromI32(5),
+      BigInt.fromI32(7)
+    );
   }
 
-  // check if signer hat exists, create new object if not
-  let signerHat = HatAuthority.load(hatIdToHex(event.params._signersHatId));
-  if (signerHat == null) {
-    signerHat = new HatAuthority(hatIdToHex(event.params._signersHatId));
-  }
-
-  hsg.type = "Single";
-  hsg.ownerHat = ownerHat.id;
-  hsg.signerHats = [signerHat.id];
-  hsg.safe = event.params._safe.toHexString();
-  hsg.minThreshold = event.params._minThreshold;
-  hsg.targetThreshold = event.params._targetThreshold;
-  hsg.maxSigners = event.params._maxSigners;
-
-  hsg.save();
-  ownerHat.save();
-  signerHat.save();
+  createHsg(
+    event.params._hatsSignerGate,
+    event.params._ownerHatId,
+    event.params._signersHatId,
+    event.params._safe,
+    event.params._minThreshold,
+    event.params._targetThreshold,
+    event.params._maxSigners
+  );
 }
 
 export function handleMultiHatsSignerGateSetup(
@@ -82,4 +115,41 @@ export function handleMultiHatsSignerGateSetup(
 
   hsg.save();
   ownerHat.save();
+}
+
+function createHsg(
+  hsgAddress: Address,
+  ownerHatId: BigInt,
+  signersHatId: BigInt,
+  safaAddress: Address,
+  minThreshold: BigInt,
+  targetThreshold: BigInt,
+  maxSigners: BigInt
+): void {
+  HatsSignerGateTemplate.create(hsgAddress);
+  let hsg = new HatsSignerGate(hsgAddress.toHexString());
+
+  // check if owner hat exists, create new object if not
+  let ownerHat = HatAuthority.load(hatIdToHex(ownerHatId));
+  if (ownerHat == null) {
+    ownerHat = new HatAuthority(hatIdToHex(ownerHatId));
+  }
+
+  // check if signer hat exists, create new object if not
+  let signerHat = HatAuthority.load(hatIdToHex(signersHatId));
+  if (signerHat == null) {
+    signerHat = new HatAuthority(hatIdToHex(signersHatId));
+  }
+
+  hsg.type = "Single";
+  hsg.ownerHat = ownerHat.id;
+  hsg.signerHats = [signerHat.id];
+  hsg.safe = safaAddress.toHexString();
+  hsg.minThreshold = minThreshold;
+  hsg.targetThreshold = targetThreshold;
+  hsg.maxSigners = maxSigners;
+
+  hsg.save();
+  ownerHat.save();
+  signerHat.save();
 }

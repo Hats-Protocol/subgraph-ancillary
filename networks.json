@@ -27,8 +27,8 @@
       "startBlock": 44952020
     },
     "HatsSignerGateFactory": {
-      "address": "0x0F22eFC6EA47b1EFF42D1A2a6E69440929400F86",
-      "startBlock": 48836679
+      "address": "0xCF448cF035c4fF9C05a481796E5215AEb7D35C99",
+      "startBlock": 56698548
     },
     "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
@@ -137,8 +137,8 @@
       "startBlock": 7526679
     },
     "HatsSignerGateFactory": {
-      "address": "0x5CB8a5B063B7E94cF39E8A8813A777f49B8DD050",
-      "startBlock": 13667800
+      "address": "0x55E408657C06A812d78dC9169369F0f28A12cBA6",
+      "startBlock": 14164185
     },
     "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
@@ -159,8 +159,8 @@
       "startBlock": 22586096
     },
     "HatsSignerGateFactory": {
-      "address": "0x5CB8a5B063B7E94cF39E8A8813A777f49B8DD050",
-      "startBlock": 25293413
+      "address": "0x55E408657C06A812d78dC9169369F0f28A12cBA6",
+      "startBlock": 25489443
     },
     "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
