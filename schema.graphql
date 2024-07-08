@@ -33,6 +33,7 @@ type HatAuthority @entity {
   agreementOwner: [AgreementEligibility!]! @derivedFrom(field: "ownerHat")
   agreementArbitrator: [AgreementEligibility!]!
     @derivedFrom(field: "arbitratorHat")
+  baalStakingJudge: [HatsStakingShaman!]! @derivedFrom(field: "judgeHat")
 }
 
 type HatsSignerGate @entity {
@@ -139,4 +140,25 @@ type HatsAccount1ofNOperation @entity {
   value: BigInt!
   callData: Bytes!
   operationType: HatsAccountOperationType!
+}
+
+type HatsStakingShaman @entity {
+  id: ID!
+  hatId: String!
+  judgeHat: HatAuthority!
+  baal: String!
+  stakingProxyImpl: String!
+  sharesToken: String!
+  minStake: BigInt!
+  coolDownBuffer: BigInt!
+  stakes: [ShamanStake!]! @derivedFrom(field: "stakingShaman")
+}
+
+type ShamanStake @entity {
+  id: ID!
+  stakingShaman: HatsStakingShaman!
+  staker: String!
+  amount: BigInt!
+  unstakingAmount: BigInt!
+  canUnstakeAfter: BigInt!
 }
