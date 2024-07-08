@@ -11,6 +11,8 @@ import {
   AgreementEligibility as AgreementEligibilityObject,
   Agreement,
   HatAuthority,
+  HatsStakingShaman as HatsStakingShamanObject,
+  ShamanStake,
 } from "../generated/schema";
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
@@ -22,6 +24,7 @@ import {
   SeasonToggle as SeasonToggleTemplate,
   CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityTemplate,
   AgreementEligibility as AgreementEligibilityTemplate,
+  HatsStakingShaman as HatsStakingShamanTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
@@ -34,7 +37,9 @@ import {
   SEASON_TOGGLE_IMPLEMENTATION,
   CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION,
   AGREEMENT_ELIGIBILITY_IMPLEMENTATION,
+  HATS_STAKING_SHAMAN_IMPLEMENTATION,
 } from "./constants";
+import { HatsStakingShaman as HatsStakingShamanContract } from "../generated/templates/HatsStakingShaman/HatsStakingShaman";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -411,6 +416,38 @@ export function handleModuleDeployed(
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
     agreementObject.save();
+  } else if (implemenatationAddress == HATS_STAKING_SHAMAN_IMPLEMENTATION) {
+    HatsStakingShamanTemplate.create(event.params.instance);
+    const hatsStakingShaman = new HatsStakingShamanObject(
+      event.params.instance.toHexString()
+    );
+    const hatsStakingShamanContract = HatsStakingShamanContract.bind(
+      event.params.instance
+    );
+
+    const cooldownBuffer = hatsStakingShamanContract.cooldownBuffer();
+    const judgeHat = hatsStakingShamanContract.judge();
+    const minStake = hatsStakingShamanContract.minStake();
+    const baal = hatsStakingShamanContract.BAAL();
+    const stakingProxyImpl = hatsStakingShamanContract.STAKING_PROXY_IMPL();
+    const sharesToken = hatsStakingShamanContract.SHARES_TOKEN();
+    const hatId = hatIdToHex(event.params.hatId);
+
+    // check if hat exists, create new object if not
+    let judgeHatAuthority = HatAuthority.load(hatIdToHex(judgeHat));
+    if (judgeHatAuthority == null) {
+      judgeHatAuthority = new HatAuthority(hatIdToHex(judgeHat));
+      judgeHatAuthority.save();
+    }
+
+    hatsStakingShaman.hatId = hatId;
+    hatsStakingShaman.judgeHat = hatIdToHex(judgeHat);
+    hatsStakingShaman.coolDownBuffer = cooldownBuffer;
+    hatsStakingShaman.minStake = minStake;
+    hatsStakingShaman.baal = baal.toHexString();
+    hatsStakingShaman.stakingProxyImpl = stakingProxyImpl.toHexString();
+    hatsStakingShaman.sharesToken = sharesToken.toHexString();
+    hatsStakingShaman.save();
   }
 }
 
