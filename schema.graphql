@@ -61,6 +61,16 @@ type AllowListEligibility @entity {
   hatId: String!
   ownerHat: HatAuthority!
   arbitratorHat: HatAuthority!
+  eligibilityData: [AllowListEligibilityData!]!
+    @derivedFrom(field: "allowListEligibility")
+}
+
+type AllowListEligibilityData @entity {
+  id: ID!
+  allowListEligibility: AllowListEligibility!
+  address: String!
+  eligible: Boolean!
+  badStanding: Boolean!
 }
 
 type HatsElectionEligibility @entity {
