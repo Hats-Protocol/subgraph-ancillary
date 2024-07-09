@@ -13,6 +13,7 @@ import {
   HatAuthority,
   HatsStakingShaman as HatsStakingShamanObject,
   ShamanStake,
+  HatsFarcasterDelegator as HatsFarcasterDelegatorObject,
 } from "../generated/schema";
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
@@ -25,6 +26,7 @@ import {
   CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityTemplate,
   AgreementEligibility as AgreementEligibilityTemplate,
   HatsStakingShaman as HatsStakingShamanTemplate,
+  HatsFarcasterDelegator as HatsFarcasterDelegatorTemplate,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
@@ -38,8 +40,10 @@ import {
   CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION,
   AGREEMENT_ELIGIBILITY_IMPLEMENTATION,
   HATS_STAKING_SHAMAN_IMPLEMENTATION,
+  HATS_FARCASTER_DELEGATOR_IMPLEMENTATION,
 } from "./constants";
 import { HatsStakingShaman as HatsStakingShamanContract } from "../generated/templates/HatsStakingShaman/HatsStakingShaman";
+import { HatsFarcasterDelegator as HatsFarcasterDelegatorContract } from "../generated/templates/HatsFarcasterDelegator/HatsFarcasterDelegator";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -448,6 +452,35 @@ export function handleModuleDeployed(
     hatsStakingShaman.stakingProxyImpl = stakingProxyImpl.toHexString();
     hatsStakingShaman.sharesToken = sharesToken.toHexString();
     hatsStakingShaman.save();
+  } else if (
+    implemenatationAddress == HATS_FARCASTER_DELEGATOR_IMPLEMENTATION
+  ) {
+    HatsFarcasterDelegatorTemplate.create(event.params.instance);
+    const hatsFarcasterDelegator = new HatsFarcasterDelegatorObject(
+      event.params.instance.toHexString()
+    );
+    const hatsFarcasterDelegatorContract = HatsFarcasterDelegatorContract.bind(
+      event.params.instance
+    );
+
+    const ownerHat = hatsFarcasterDelegatorContract.ownerHat();
+    const casterHat = event.params.hatId;
+
+    let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
+    if (ownerHatAuthority == null) {
+      ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
+      ownerHatAuthority.save();
+    }
+
+    let casterHatAuthority = HatAuthority.load(hatIdToHex(casterHat));
+    if (casterHatAuthority == null) {
+      casterHatAuthority = new HatAuthority(hatIdToHex(casterHat));
+      casterHatAuthority.save();
+    }
+
+    hatsFarcasterDelegator.caster = hatIdToHex(casterHat);
+    hatsFarcasterDelegator.owner = hatIdToHex(ownerHat);
+    hatsFarcasterDelegator.save();
   }
 }
 

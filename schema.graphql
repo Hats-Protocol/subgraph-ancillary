@@ -34,6 +34,10 @@ type HatAuthority @entity {
   agreementArbitrator: [AgreementEligibility!]!
     @derivedFrom(field: "arbitratorHat")
   baalStakingJudge: [HatsStakingShaman!]! @derivedFrom(field: "judgeHat")
+  hatsFarcasterDelegatorOwner: [HatsFarcasterDelegator!]!
+    @derivedFrom(field: "owner")
+  hatsFarcasterDelegatorCaster: [HatsFarcasterDelegator!]!
+    @derivedFrom(field: "caster")
 }
 
 type HatsSignerGate @entity {
@@ -171,4 +175,10 @@ type ShamanStake @entity {
   amount: BigInt!
   unstakingAmount: BigInt!
   canUnstakeAfter: BigInt!
+}
+
+type HatsFarcasterDelegator @entity {
+  id: ID!
+  caster: HatAuthority!
+  owner: HatAuthority!
 }
