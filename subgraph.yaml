@@ -96,6 +96,8 @@ dataSources:
           file: ./abis/HatsStakingShaman.json
         - name: HatsFarcasterDelegator
           file: ./abis/HatsFarcasterDelegator.json
+        - name: StakingEligibility
+          file: ./abis/StakingEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -131,6 +133,8 @@ dataSources:
           file: ./abis/HatsStakingShaman.json
         - name: HatsFarcasterDelegator
           file: ./abis/HatsFarcasterDelegator.json
+        - name: StakingEligibility
+          file: ./abis/StakingEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
