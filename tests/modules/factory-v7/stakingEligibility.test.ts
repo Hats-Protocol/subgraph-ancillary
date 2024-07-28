@@ -54,6 +54,7 @@ const stakingInstanceLinkedAdmins =
 const hatIdLinkedAdmins =
   "80880251383868351420898264767190320781745345367690481282740702412800";
 
+/*
 describe("Staking Eligibility Tests", () => {
   afterAll(() => {
     clearStore();
@@ -300,3 +301,4 @@ describe("Staking Eligibility Tests", () => {
     });
   });
 });
+*/

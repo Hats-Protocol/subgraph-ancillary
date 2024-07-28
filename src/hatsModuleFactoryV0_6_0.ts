@@ -44,6 +44,7 @@ import {
 } from "./constants";
 import { HatsStakingShaman as HatsStakingShamanContract } from "../generated/templates/HatsStakingShaman/HatsStakingShaman";
 import { HatsFarcasterDelegator as HatsFarcasterDelegatorContract } from "../generated/templates/HatsFarcasterDelegator/HatsFarcasterDelegator";
+import { StakingEligibility as StakingEligibilityContract } from "../generated/templates/StakingEligibility/StakingEligibility";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -302,22 +303,21 @@ export function handleModuleDeployed(
     const stakingEligibility = new StakingEligibilityObject(
       event.params.instance.toHexString()
     );
+    const stakingEligibilityContract = StakingEligibilityContract.bind(
+      event.params.instance
+    );
 
-    let decodedInitArgs = (
-      ethereum.decode(
-        "(uint248,uint256,uint256,uint256)",
-        event.params.initData
-      ) as ethereum.Value
-    ).toTuple();
-
-    const judgeHat = decodedInitArgs[1].toBigInt();
+    const token = stakingEligibilityContract.TOKEN();
+    const minStake = stakingEligibilityContract.minStake();
+    const cooldownBuffer = stakingEligibilityContract.cooldownPeriod();
+    const judgeHat = stakingEligibilityContract.judgeHat();
     // check if hat exists, create new object if not
     let judgeHatAuthority = HatAuthority.load(hatIdToHex(judgeHat));
     if (judgeHatAuthority == null) {
       judgeHatAuthority = new HatAuthority(hatIdToHex(judgeHat));
     }
 
-    const recipientHat = decodedInitArgs[2].toBigInt();
+    const recipientHat = stakingEligibilityContract.recipientHat();
     // check if hat exists, create new object if not
     let recipientHatAuthority = HatAuthority.load(hatIdToHex(recipientHat));
     if (recipientHatAuthority == null) {
@@ -331,6 +331,10 @@ export function handleModuleDeployed(
     stakingEligibility.hatId = hatId;
     stakingEligibility.judgeHat = hatIdToHex(judgeHat);
     stakingEligibility.recipientHat = hatIdToHex(recipientHat);
+    stakingEligibility.minStake = minStake;
+    stakingEligibility.cooldownPeriod = cooldownBuffer;
+    stakingEligibility.totalSlashedStakes = BigInt.fromI32(0);
+    stakingEligibility.token = token.toHexString();
     stakingEligibility.save();
     judgeHatAuthority.save();
     recipientHatAuthority.save();
