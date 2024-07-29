@@ -105,6 +105,18 @@ dataSources:
           file: ./abis/HatsFarcasterDelegator.json
         - name: StakingEligibility
           file: ./abis/StakingEligibility.json
+        - name: Erc20Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: Erc721Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: Erc1155Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: HatWearingEligibility
+          file: ./abis/HatWearingEligibility.json
+        - name: CoLinksEligibility
+          file: ./abis/CoLinksEligibility.json
+        - name: GitcoinPassportEligibility
+          file: ./abis/GitcoinPassportEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -148,6 +160,18 @@ dataSources:
           file: ./abis/HatsFarcasterDelegator.json
         - name: StakingEligibility
           file: ./abis/StakingEligibility.json
+        - name: Erc20Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: Erc721Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: Erc1155Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: HatWearingEligibility
+          file: ./abis/HatWearingEligibility.json
+        - name: CoLinksEligibility
+          file: ./abis/CoLinksEligibility.json
+        - name: GitcoinPassportEligibility
+          file: ./abis/GitcoinPassportEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
