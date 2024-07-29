@@ -61,7 +61,8 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event:
+            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -107,9 +108,9 @@ dataSources:
         - name: Erc20Eligibility
           file: ./abis/Erc20Eligibility.json
         - name: Erc721Eligibility
-          file: ./abis/Erc20Eligibility.json
+          file: ./abis/Erc721Eligibility.json
         - name: Erc1155Eligibility
-          file: ./abis/Erc20Eligibility.json
+          file: ./abis/Erc1155Eligibility.json
         - name: HatWearingEligibility
           file: ./abis/HatWearingEligibility.json
         - name: CoLinksEligibility
@@ -162,9 +163,9 @@ dataSources:
         - name: Erc20Eligibility
           file: ./abis/Erc20Eligibility.json
         - name: Erc721Eligibility
-          file: ./abis/Erc20Eligibility.json
+          file: ./abis/Erc721Eligibility.json
         - name: Erc1155Eligibility
-          file: ./abis/Erc20Eligibility.json
+          file: ./abis/Erc1155Eligibility.json
         - name: HatWearingEligibility
           file: ./abis/HatWearingEligibility.json
         - name: CoLinksEligibility
