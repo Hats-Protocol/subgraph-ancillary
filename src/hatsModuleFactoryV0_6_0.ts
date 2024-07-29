@@ -519,9 +519,11 @@ export function handleModuleDeployed(
     );
 
     const token = erc20EligibilityContract.ERC20_TOKEN_ADDRESS();
+    const minBalance = erc20EligibilityContract.MIN_BALANCE();
     const hatId = erc20EligibilityContract.hatId();
 
     erc20Eligibility.token = token.toHexString();
+    erc20Eligibility.minBalance = minBalance;
     erc20Eligibility.hatId = hatIdToHex(hatId);
     erc20Eligibility.save();
   } else if (implemenatationAddress == ERC721_ELIGIBILITY_IMPLEMENTATION) {
@@ -534,9 +536,11 @@ export function handleModuleDeployed(
     );
 
     const token = erc721EligibilityContract.ERC721_TOKEN_ADDRESS();
+    const minBalance = erc721EligibilityContract.MIN_BALANCE();
     const hatId = erc721EligibilityContract.hatId();
 
     erc721Eligibility.token = token.toHexString();
+    erc721Eligibility.minBalance = minBalance;
     erc721Eligibility.hatId = hatIdToHex(hatId);
     erc721Eligibility.save();
   } else if (implemenatationAddress == ERC1155_ELIGIBILITY_IMPLEMENTATION) {
