@@ -58,17 +58,17 @@ export function handleRecipientHatChanged(
   recipientHatAuthority.save();
 }
 
-export function handleStake(event: StakingEligibility_Staked): void {
+export function handleStaked(event: StakingEligibility_Staked): void {
   const stakingEligibility = StakingEligibility.load(
     event.address.toHexString()
   ) as StakingEligibility;
 
   let stake = Stake.load(
-    getStakeId(event.address.toHexString(), event.params.staker.toString())
+    getStakeId(event.address.toHexString(), event.params.staker.toHexString())
   );
   if (stake == null) {
     stake = new Stake(
-      getStakeId(event.address.toHexString(), event.params.staker.toString())
+      getStakeId(event.address.toHexString(), event.params.staker.toHexString())
     );
     stake.stakingEligiblity = stakingEligibility.id;
     stake.staker = event.params.staker.toHexString();
@@ -93,7 +93,7 @@ export function handleUnstakeBegun(
   ) as StakingEligibility;
 
   let stake = Stake.load(
-    getStakeId(event.address.toHexString(), event.params.staker.toString())
+    getStakeId(event.address.toHexString(), event.params.staker.toHexString())
   ) as Stake;
   stake.cooldownAmount = event.params.amount;
   stake.cooldownEndsAt = event.params.cooldownEnd;
@@ -109,7 +109,7 @@ export function handleSlashed(event: StakingEligibility_Slashed): void {
   ) as StakingEligibility;
 
   let stake = Stake.load(
-    getStakeId(event.address.toHexString(), event.params.wearer.toString())
+    getStakeId(event.address.toHexString(), event.params.wearer.toHexString())
   ) as Stake;
   stake.slashed = true;
   stake.amount = BigInt.fromI32(0);
@@ -148,7 +148,7 @@ export function handleForgiven(event: StakingEligibility_Forgiven): void {
   ) as StakingEligibility;
 
   let stake = Stake.load(
-    getStakeId(event.address.toHexString(), event.params.staker.toString())
+    getStakeId(event.address.toHexString(), event.params.staker.toHexString())
   ) as Stake;
   stake.slashed = false;
 
