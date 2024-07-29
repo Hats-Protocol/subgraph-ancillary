@@ -40,6 +40,7 @@ type HatAuthority @entity {
     @derivedFrom(field: "caster")
 }
 
+" *** Gates *** "
 type HatsSignerGate @entity {
   id: ID!
   type: HatsSignerGateType!
@@ -49,110 +50,6 @@ type HatsSignerGate @entity {
   minThreshold: BigInt!
   targetThreshold: BigInt!
   maxSigners: BigInt!
-}
-
-type JokeRaceEligibility @entity {
-  id: ID!
-  hatId: String!
-  adminHat: [HatAuthority!]!
-  currentContest: String!
-  currentTermEnd: BigInt!
-  currentTopK: BigInt!
-}
-
-type AllowListEligibility @entity {
-  id: ID!
-  hatId: String!
-  ownerHat: HatAuthority!
-  arbitratorHat: HatAuthority!
-  eligibilityData: [AllowListEligibilityData!]!
-    @derivedFrom(field: "allowListEligibility")
-}
-
-type AllowListEligibilityData @entity {
-  id: ID!
-  allowListEligibility: AllowListEligibility!
-  address: String!
-  eligible: Boolean!
-  badStanding: Boolean!
-}
-
-type HatsElectionEligibility @entity {
-  id: ID!
-  hatId: String!
-  ballotBoxHat: HatAuthority!
-  adminHat: [HatAuthority!]!
-  terms: [ElectionTerm!]! @derivedFrom(field: "hatsElectionEligibility")
-  currentTerm: ElectionTerm
-}
-type ElectionTerm @entity {
-  id: ID!
-  hatsElectionEligibility: HatsElectionEligibility!
-  "first term starts when 'elect' is called, next terms start when 'startNextTerm' is called"
-  termStartedAt: BigInt
-  termEnd: BigInt!
-  "election is completed when 'elect' is called"
-  electionCompletedAt: BigInt
-  electedAccounts: [String!]
-}
-
-type PassthroughModule @entity {
-  id: ID!
-  hatId: String!
-  passthroughHat: HatAuthority!
-}
-
-type StakingEligibility @entity {
-  id: ID!
-  hatId: String!
-  token: String!
-  judgeHat: HatAuthority!
-  recipientHat: HatAuthority!
-  hatAdmins: [HatAuthority!]!
-  minStake: BigInt!
-  cooldownPeriod: BigInt!
-  totalSlashedStakes: BigInt!
-  stakes: [Stake!]! @derivedFrom(field: "stakingEligiblity")
-}
-
-type Stake @entity {
-  id: ID!
-  stakingEligiblity: StakingEligibility!
-  staker: String!
-  amount: BigInt!
-  slashed: Boolean!
-  cooldownAmount: BigInt!
-  cooldownEndsAt: BigInt!
-}
-
-type SeasonToggle @entity {
-  id: ID!
-  hatId: String!
-  hatAdmins: [HatAuthority!]!
-}
-
-type CharacterSheetsLevelEligibility @entity {
-  id: ID!
-  hatId: String!
-  hatAdmins: [HatAuthority!]!
-}
-
-type AgreementEligibility @entity {
-  id: ID!
-  hatId: String!
-  ownerHat: HatAuthority!
-  arbitratorHat: HatAuthority!
-  currentAgreement: Agreement!
-  currentAgreementNumber: BigInt!
-  agreements: [Agreement!]! @derivedFrom(field: "agreementEligibility")
-}
-
-type Agreement @entity {
-  id: ID!
-  agreementEligibility: AgreementEligibility!
-  agreement: String!
-  signers: [String!]!
-  graceEndTime: BigInt!
 }
 
 type HatsAccount1ofN @entity {
@@ -196,4 +93,155 @@ type HatsFarcasterDelegator @entity {
   id: ID!
   caster: HatAuthority!
   owner: HatAuthority!
+}
+
+" *** Modules *** "
+interface HatsModule @entity {
+  id: ID!
+  hatId: String!
+}
+
+type JokeRaceEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  adminHat: [HatAuthority!]!
+  currentContest: String!
+  currentTermEnd: BigInt!
+  currentTopK: BigInt!
+}
+
+type AllowListEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  ownerHat: HatAuthority!
+  arbitratorHat: HatAuthority!
+  eligibilityData: [AllowListEligibilityData!]!
+    @derivedFrom(field: "allowListEligibility")
+}
+
+type AllowListEligibilityData @entity {
+  id: ID!
+  allowListEligibility: AllowListEligibility!
+  address: String!
+  eligible: Boolean!
+  badStanding: Boolean!
+}
+
+type HatsElectionEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  ballotBoxHat: HatAuthority!
+  adminHat: [HatAuthority!]!
+  terms: [ElectionTerm!]! @derivedFrom(field: "hatsElectionEligibility")
+  currentTerm: ElectionTerm
+}
+type ElectionTerm @entity {
+  id: ID!
+  hatsElectionEligibility: HatsElectionEligibility!
+  "first term starts when 'elect' is called, next terms start when 'startNextTerm' is called"
+  termStartedAt: BigInt
+  termEnd: BigInt!
+  "election is completed when 'elect' is called"
+  electionCompletedAt: BigInt
+  electedAccounts: [String!]
+}
+
+type PassthroughModule implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  passthroughHat: HatAuthority!
+}
+
+type StakingEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  token: String!
+  judgeHat: HatAuthority!
+  recipientHat: HatAuthority!
+  hatAdmins: [HatAuthority!]!
+  minStake: BigInt!
+  cooldownPeriod: BigInt!
+  totalSlashedStakes: BigInt!
+  stakes: [Stake!]! @derivedFrom(field: "stakingEligiblity")
+}
+
+type Stake @entity {
+  id: ID!
+  stakingEligiblity: StakingEligibility!
+  staker: String!
+  amount: BigInt!
+  slashed: Boolean!
+  cooldownAmount: BigInt!
+  cooldownEndsAt: BigInt!
+}
+
+type SeasonToggle implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  hatAdmins: [HatAuthority!]!
+}
+
+type CharacterSheetsLevelEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  hatAdmins: [HatAuthority!]!
+}
+
+type AgreementEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  ownerHat: HatAuthority!
+  arbitratorHat: HatAuthority!
+  currentAgreement: Agreement!
+  currentAgreementNumber: BigInt!
+  agreements: [Agreement!]! @derivedFrom(field: "agreementEligibility")
+}
+
+type Agreement @entity {
+  id: ID!
+  agreementEligibility: AgreementEligibility!
+  agreement: String!
+  signers: [String!]!
+  graceEndTime: BigInt!
+}
+
+type Erc20Eligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  token: String!
+  minBalance: BigInt!
+}
+
+type Erc721Eligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  token: String!
+  minBalance: BigInt!
+}
+
+type Erc1155Eligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  contractAddress: String!
+  tokens: [BigInt!]!
+  minBalances: [BigInt!]!
+}
+
+type HatWearingEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  criterionHat: String!
+}
+
+type GitcoinPassportEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  decoder: String!
+  scoreCriterion: BigInt!
+}
+
+type CoLinksEligibility implements HatsModule @entity {
+  id: ID!
+  hatId: String!
+  threshold: BigInt!
 }
