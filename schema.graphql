@@ -105,9 +105,24 @@ type PassthroughModule @entity {
 type StakingEligibility @entity {
   id: ID!
   hatId: String!
+  token: String!
   judgeHat: HatAuthority!
   recipientHat: HatAuthority!
   hatAdmins: [HatAuthority!]!
+  minStake: BigInt!
+  cooldownPeriod: BigInt!
+  totalSlashedStakes: BigInt!
+  stakes: [Stake!]! @derivedFrom(field: "stakingEligiblity")
+}
+
+type Stake @entity {
+  id: ID!
+  stakingEligiblity: StakingEligibility!
+  staker: String!
+  amount: BigInt!
+  slashed: Boolean!
+  cooldownAmount: BigInt!
+  cooldownEndsAt: BigInt!
 }
 
 type SeasonToggle @entity {

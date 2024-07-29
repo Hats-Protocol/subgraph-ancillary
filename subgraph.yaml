@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Hats
-    network: optimism
+    network: sepolia
     source:
       abi: Hats
       address: "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137"
-      startBlock: 106747286
+      startBlock: 4654775
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -24,11 +24,11 @@ dataSources:
       file: ./src/hats.ts
   - kind: ethereum
     name: HatsSignerGateFactory
-    network: optimism
+    network: sepolia
     source:
       abi: HatsSignerGateFactory
-      address: "0x39Ae0B5e81A69F7092EC4394b111b6a6411377e8"
-      startBlock: 110986323
+      address: "0x5CB8a5B063B7E94cF39E8A8813A777f49B8DD050"
+      startBlock: 4929153
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -46,11 +46,11 @@ dataSources:
       file: ./src/hatsSignerGateFactory.ts
   - kind: ethereum
     name: ERC6551Registry
-    network: optimism
+    network: sepolia
     source:
       abi: ERC6551Registry
       address: "0x000000006551c19487814612e58FE06813775758"
-      startBlock: 111329307
+      startBlock: 5199209
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -67,11 +67,11 @@ dataSources:
       file: ./src/erc6551Registry.ts
   - kind: ethereum
     name: HatsModuleFactoryV0_6_0
-    network: optimism
+    network: sepolia
     source:
       abi: HatsModuleFactoryV0_6_0
       address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
-      startBlock: 109695493
+      startBlock: 4655267
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -96,17 +96,19 @@ dataSources:
           file: ./abis/HatsStakingShaman.json
         - name: HatsFarcasterDelegator
           file: ./abis/HatsFarcasterDelegator.json
+        - name: StakingEligibility
+          file: ./abis/StakingEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
       file: ./src/hatsModuleFactoryV0_6_0.ts
   - kind: ethereum
     name: HatsModuleFactoryV0_7_0
-    network: optimism
+    network: sepolia
     source:
       abi: HatsModuleFactoryV0_7_0
       address: "0x0a3f85fa597B6a967271286aA0724811acDF5CD9"
-      startBlock: 117616123
+      startBlock: 5516083
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -131,6 +133,8 @@ dataSources:
           file: ./abis/HatsStakingShaman.json
         - name: HatsFarcasterDelegator
           file: ./abis/HatsFarcasterDelegator.json
+        - name: StakingEligibility
+          file: ./abis/StakingEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
@@ -138,7 +142,7 @@ dataSources:
 templates:
   - name: HatsSignerGate
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: HatsSignerGate
     mapping:
@@ -158,7 +162,7 @@ templates:
           handler: handleMinThresholdSet
   - name: MultiHatsSignerGate
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: MultiHatsSignerGate
     mapping:
@@ -180,7 +184,7 @@ templates:
           handler: handleSignerHatsAdded
   - name: HatsAccount1ofN
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: HatsAccount1ofN
     mapping:
@@ -198,7 +202,7 @@ templates:
           handler: handleTxExecuted
   - name: JokeRaceEligibility
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: JokeRaceEligibility
     mapping:
@@ -216,7 +220,7 @@ templates:
           handler: handleNewTerm
   - name: JokeRaceEligibilityDeprecated
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: JokeRaceEligibilityDeprecated
     mapping:
@@ -234,7 +238,7 @@ templates:
           handler: handleNewTerm
   - name: AllowListEligibility
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: AllowlistEligibility
     mapping:
@@ -263,7 +267,7 @@ templates:
           handler: handleAccountsStandingChanged
   - name: HatsElectionEligibility
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: HatsElectionEligibility
     mapping:
@@ -287,7 +291,7 @@ templates:
           handler: handleRecalled
   - name: PassthroughModule
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: PassthroughModule
     mapping:
@@ -302,7 +306,7 @@ templates:
           file: ./abis/PassthroughModule.json
   - name: StakingEligibility
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: StakingEligibility
     mapping:
@@ -312,6 +316,7 @@ templates:
       file: ./src/modules/stakingEligibility.ts
       entities:
         - StakingEligibility
+        - Stake
       abis:
         - name: StakingEligibility
           file: ./abis/StakingEligibility.json
@@ -320,9 +325,21 @@ templates:
           handler: handleJudgeHatChanged
         - event: StakingEligibility_RecipientHatChanged(uint256)
           handler: handleRecipientHatChanged
+        - event: StakingEligibility_Staked(address,uint248)
+          handler: handleStaked
+        - event: StakingEligibility_UnstakeBegun(address,uint248,uint256)
+          handler: handleUnstakeBegun
+        - event: StakingEligibility_Slashed(address,uint248)
+          handler: handleSlashed
+        - event: StakingEligibility_MinStakeChanged(uint248)
+          handler: handleMinStakeChanged
+        - event: StakingEligibility_CooldownPeriodChanged(uint256)
+          handler: handleCooldownPeriodChanged
+        - event: StakingEligibility_Forgiven(address)
+          handler: handleForgiven
   - name: SeasonToggle
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: SeasonToggle
     mapping:
@@ -337,7 +354,7 @@ templates:
           file: ./abis/SeasonToggle.json
   - name: CharacterSheetsLevelEligibility
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: CharacterSheetsLevelEligibility
     mapping:
@@ -352,7 +369,7 @@ templates:
           file: ./abis/CharacterSheetsLevelEligibility.json
   - name: AgreementEligibility
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: AgreementEligibility
     mapping:
@@ -375,7 +392,7 @@ templates:
           handler: handleAgreementEligibility_AgreementSet
   - name: HatsStakingShaman
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: HatsStakingShaman
     mapping:
@@ -404,7 +421,7 @@ templates:
           handler: handleJudgeSet
   - name: HatsFarcasterDelegator
     kind: ethereum/contract
-    network: optimism
+    network: sepolia
     source:
       abi: HatsFarcasterDelegator
     mapping:
