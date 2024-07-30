@@ -115,6 +115,8 @@ export function handleSlashed(event: StakingEligibility_Slashed): void {
   stake.amount = BigInt.fromI32(0);
   stake.cooldownAmount = BigInt.fromI32(0);
   stake.cooldownEndsAt = BigInt.fromI32(0);
+  stakingEligibility.totalSlashedStakes =
+    stakingEligibility.totalSlashedStakes.plus(event.params.amount);
 
   stake.save();
   stakingEligibility.save();

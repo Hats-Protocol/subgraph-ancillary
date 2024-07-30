@@ -61,7 +61,8 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event:
+            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -87,6 +88,12 @@ dataSources:
         - AgreementEligibility
         - JokeRaceEligibility
         - HatsStakingShaman
+        - Erc20Eligibility
+        - Erc721Eligibility
+        - Erc1155Eligibility
+        - HatWearingEligibility
+        - CoLinksEligibility
+        - GitcoinPassportEligibility
       abis:
         - name: HatsModuleFactoryV0_6_0
           file: ./abis/HatsModuleFactoryV0_6_0.json
@@ -98,6 +105,18 @@ dataSources:
           file: ./abis/HatsFarcasterDelegator.json
         - name: StakingEligibility
           file: ./abis/StakingEligibility.json
+        - name: Erc20Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: Erc721Eligibility
+          file: ./abis/Erc721Eligibility.json
+        - name: Erc1155Eligibility
+          file: ./abis/Erc1155Eligibility.json
+        - name: HatWearingEligibility
+          file: ./abis/HatWearingEligibility.json
+        - name: CoLinksEligibility
+          file: ./abis/CoLinksEligibility.json
+        - name: GitcoinPassportEligibility
+          file: ./abis/GitcoinPassportEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -124,6 +143,12 @@ dataSources:
         - AgreementEligibility
         - JokeRaceEligibility
         - HatsStakingShaman
+        - Erc20Eligibility
+        - Erc721Eligibility
+        - Erc1155Eligibility
+        - HatWearingEligibility
+        - CoLinksEligibility
+        - GitcoinPassportEligibility
       abis:
         - name: HatsModuleFactoryV0_7_0
           file: ./abis/HatsModuleFactoryV0_7_0.json
@@ -135,6 +160,18 @@ dataSources:
           file: ./abis/HatsFarcasterDelegator.json
         - name: StakingEligibility
           file: ./abis/StakingEligibility.json
+        - name: Erc20Eligibility
+          file: ./abis/Erc20Eligibility.json
+        - name: Erc721Eligibility
+          file: ./abis/Erc721Eligibility.json
+        - name: Erc1155Eligibility
+          file: ./abis/Erc1155Eligibility.json
+        - name: HatWearingEligibility
+          file: ./abis/HatWearingEligibility.json
+        - name: CoLinksEligibility
+          file: ./abis/CoLinksEligibility.json
+        - name: GitcoinPassportEligibility
+          file: ./abis/GitcoinPassportEligibility.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
@@ -434,3 +471,93 @@ templates:
       abis:
         - name: HatsFarcasterDelegator
           file: ./abis/HatsFarcasterDelegator.json
+  - name: Erc20Eligibility
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: Erc20Eligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/erc20Eligibility.ts
+      entities:
+        - Erc20Eligibility
+      abis:
+        - name: Erc20Eligibility
+          file: ./abis/Erc20Eligibility.json
+  - name: Erc721Eligibility
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: Erc721Eligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/erc721Eligibility.ts
+      entities:
+        - Erc721Eligibility
+      abis:
+        - name: Erc721Eligibility
+          file: ./abis/Erc721Eligibility.json
+  - name: Erc1155Eligibility
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: Erc1155Eligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/erc1155Eligibility.ts
+      entities:
+        - Erc1155Eligibility
+      abis:
+        - name: Erc1155Eligibility
+          file: ./abis/Erc1155Eligibility.json
+  - name: HatWearingEligibility
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: HatWearingEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/hatWearingEligibility.ts
+      entities:
+        - HatWearingEligibility
+      abis:
+        - name: HatWearingEligibility
+          file: ./abis/HatWearingEligibility.json
+  - name: GitcoinPassportEligibility
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: GitcoinPassportEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/gitcoinPassportEligibility.ts
+      entities:
+        - GitcoinPassportEligibility
+      abis:
+        - name: GitcoinPassportEligibility
+          file: ./abis/GitcoinPassportEligibility.json
+  - name: CoLinksEligibility
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: CoLinksEligibility
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/coLinksEligibility.ts
+      entities:
+        - CoLinksEligibility
+      abis:
+        - name: CoLinksEligibility
+          file: ./abis/CoLinksEligibility.json
