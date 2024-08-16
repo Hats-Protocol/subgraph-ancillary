@@ -30,7 +30,8 @@ import {
   StakingEligibility as StakingEligibilityTemplate,
   SeasonToggle as SeasonToggleTemplate,
   CharacterSheetsLevelEligibility as CharacterSheetsLevelEligibilityTemplate,
-  AgreementEligibility as AgreementEligibilityTemplate,
+  AgreementEligibilityV_0_1_0 as AgreementEligibilityV_0_1_0Template,
+  AgreementEligibilityV_0_2_0 as AgreementEligibilityV_0_2_0Template,
   HatsStakingShaman as HatsStakingShamanTemplate,
   HatsFarcasterDelegator as HatsFarcasterDelegatorTemplate,
   Erc20Eligibility as Erc20EligibilityTemplate,
@@ -50,7 +51,8 @@ import {
   STAKING_ELIGIBILITY_IMPLEMENTATION,
   SEASON_TOGGLE_IMPLEMENTATION,
   CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION,
-  AGREEMENT_ELIGIBILITY_IMPLEMENTATION,
+  AGREEMENT_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
+  AGREEMENT_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
   HATS_STAKING_SHAMAN_IMPLEMENTATION,
   HATS_FARCASTER_DELEGATOR_IMPLEMENTATION,
   ERC20_ELIGIBILITY_IMPLEMENTATION,
@@ -69,6 +71,8 @@ import { Erc1155Eligibility as Erc1155EligibilityContract } from "../generated/t
 import { HatWearingEligibility as HatWearingEligibilityContract } from "../generated/templates/HatWearingEligibility/HatWearingEligibility";
 import { GitcoinPassportEligibility as GitcoinPassportEligibilityContract } from "../generated/templates/GitcoinPassportEligibility/GitcoinPassportEligibility";
 import { CoLinksEligibility as CoLinksEligibilityContract } from "../generated/templates/CoLinksEligibility/CoLinksEligibility";
+import { AgreementEligibilityV_0_1_0 as AgreementEligibilityV_0_1_0Contract } from "../generated/templates/AgreementEligibilityV_0_1_0/AgreementEligibilityV_0_1_0";
+import { AgreementEligibilityV_0_2_0 as AgreementEligibilityV_0_2_0Contract } from "../generated/templates/AgreementEligibilityV_0_2_0/AgreementEligibilityV_0_2_0";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -389,24 +393,17 @@ export function handleModuleDeployed(
     characterSheetsLevelEligibility.hatAdmins = hatAdmins;
     characterSheetsLevelEligibility.hatId = hatId;
     characterSheetsLevelEligibility.save();
-  } else if (implemenatationAddress == AGREEMENT_ELIGIBILITY_IMPLEMENTATION) {
-    AgreementEligibilityTemplate.create(event.params.instance);
+  } else if (
+    implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
+  ) {
+    AgreementEligibilityV_0_1_0Template.create(event.params.instance);
     const agreementEligibility = new AgreementEligibilityObject(
       event.params.instance.toHexString()
     );
 
-    // prepend data location offset to init args
-    const preparedInitArgs = Bytes.fromHexString(
-      "0x0000000000000000000000000000000000000000000000000000000000000020".concat(
-        event.params.initData.toHexString().slice(2)
-      )
-    );
-
-    // decode the init args and create a new Agreement object
-    let decodedInitArgs = (
-      ethereum.decode("(string)", preparedInitArgs) as ethereum.Value
-    ).toTuple();
-    const agreement = decodedInitArgs[0].toString();
+    const agreementEligibilityContract =
+      AgreementEligibilityV_0_1_0Contract.bind(event.params.instance);
+    const agreement = agreementEligibilityContract.currentAgreement();
 
     const agreementObject = new Agreement("1" + "-" + agreementEligibility.id);
     agreementObject.agreementEligibility = agreementEligibility.id;
@@ -414,22 +411,14 @@ export function handleModuleDeployed(
     agreementObject.signers = [];
     agreementObject.graceEndTime = BigInt.fromI32(0);
 
-    // decode the immutable args
-    let decodedImmutableArgs = (
-      ethereum.decode(
-        "(uint256, uint256)",
-        event.params.otherImmutableArgs
-      ) as ethereum.Value
-    ).toTuple();
-
-    const ownerHat = decodedImmutableArgs[0].toBigInt();
+    const ownerHat = agreementEligibilityContract.OWNER_HAT();
     // check if hat exists, create new object if not
     let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
     if (ownerHatAuthority == null) {
       ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
     }
 
-    const arbitratorHat = decodedImmutableArgs[1].toBigInt();
+    const arbitratorHat = agreementEligibilityContract.ARBITRATOR_HAT();
     // check if hat exists, create new object if not
     let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
     if (arbitratorHatAuthority == null) {
@@ -443,6 +432,53 @@ export function handleModuleDeployed(
     agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     agreementEligibility.currentAgreement = agreementObject.id;
     agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
+    agreementEligibility.version = "0.1.0";
+
+    agreementEligibility.save();
+    ownerHatAuthority.save();
+    arbitratorHatAuthority.save();
+    agreementObject.save();
+  } else if (
+    implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
+  ) {
+    AgreementEligibilityV_0_2_0Template.create(event.params.instance);
+    const agreementEligibility = new AgreementEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    const agreementEligibilityContract =
+      AgreementEligibilityV_0_2_0Contract.bind(event.params.instance);
+
+    const agreement = agreementEligibilityContract.currentAgreement();
+
+    const agreementObject = new Agreement("1" + "-" + agreementEligibility.id);
+    agreementObject.agreementEligibility = agreementEligibility.id;
+    agreementObject.agreement = agreement;
+    agreementObject.signers = [];
+    agreementObject.graceEndTime = BigInt.fromI32(0);
+
+    const ownerHat = agreementEligibilityContract.ownerHat();
+    // check if hat exists, create new object if not
+    let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
+    if (ownerHatAuthority == null) {
+      ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
+    }
+
+    const arbitratorHat = agreementEligibilityContract.arbitratorHat();
+    // check if hat exists, create new object if not
+    let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
+    if (arbitratorHatAuthority == null) {
+      arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat));
+    }
+
+    const hatId = hatIdToHex(event.params.hatId);
+
+    agreementEligibility.hatId = hatId;
+    agreementEligibility.ownerHat = hatIdToHex(ownerHat);
+    agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
+    agreementEligibility.currentAgreement = agreementObject.id;
+    agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
+    agreementEligibility.version = "0.2.0";
 
     agreementEligibility.save();
     ownerHatAuthority.save();
