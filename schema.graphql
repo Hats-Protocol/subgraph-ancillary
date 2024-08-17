@@ -98,11 +98,13 @@ type HatsFarcasterDelegator @entity {
 " *** Modules *** "
 interface HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
 }
 
 type JokeRaceEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   adminHat: [HatAuthority!]!
   currentContest: String!
@@ -112,6 +114,7 @@ type JokeRaceEligibility implements HatsModule @entity {
 
 type AllowListEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   ownerHat: HatAuthority!
   arbitratorHat: HatAuthority!
@@ -129,6 +132,7 @@ type AllowListEligibilityData @entity {
 
 type HatsElectionEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   ballotBoxHat: HatAuthority!
   adminHat: [HatAuthority!]!
@@ -148,12 +152,14 @@ type ElectionTerm @entity {
 
 type PassthroughModule implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   passthroughHat: HatAuthority!
 }
 
 type StakingEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   token: String!
   judgeHat: HatAuthority!
@@ -177,18 +183,21 @@ type Stake @entity {
 
 type SeasonToggle implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   hatAdmins: [HatAuthority!]!
 }
 
 type CharacterSheetsLevelEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   hatAdmins: [HatAuthority!]!
 }
 
 type AgreementEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   ownerHat: HatAuthority!
   arbitratorHat: HatAuthority!
@@ -207,6 +216,7 @@ type Agreement @entity {
 
 type Erc20Eligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   token: String!
   minBalance: BigInt!
@@ -214,6 +224,7 @@ type Erc20Eligibility implements HatsModule @entity {
 
 type Erc721Eligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   token: String!
   minBalance: BigInt!
@@ -221,6 +232,7 @@ type Erc721Eligibility implements HatsModule @entity {
 
 type Erc1155Eligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   contractAddress: String!
   tokens: [BigInt!]!
@@ -229,12 +241,14 @@ type Erc1155Eligibility implements HatsModule @entity {
 
 type HatWearingEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   criterionHat: String!
 }
 
 type GitcoinPassportEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   decoder: String!
   scoreCriterion: BigInt!
@@ -242,6 +256,7 @@ type GitcoinPassportEligibility implements HatsModule @entity {
 
 type CoLinksEligibility implements HatsModule @entity {
   id: ID!
+  version: String
   hatId: String!
   threshold: BigInt!
 }

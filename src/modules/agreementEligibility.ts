@@ -2,9 +2,12 @@ import {
   AgreementEligibility_HatClaimedWithAgreement,
   AgreementEligibility_AgreementSigned,
   AgreementEligibility_AgreementSet,
-} from "../../generated/templates/AgreementEligibility/AgreementEligibility";
+  AgreementEligibility_OwnerHatSet,
+  AgreementEligibility_ArbitratorHatSet,
+} from "../../generated/templates/AgreementEligibilityV_0_2_0/AgreementEligibilityV_0_2_0";
 import { AgreementEligibility, Agreement } from "../../generated/schema";
 import { BigInt, log } from "@graphprotocol/graph-ts";
+import { hatIdToHex } from "../utils";
 
 export function handleAgreementEligibility_HatClaimedWithAgreement(
   event: AgreementEligibility_HatClaimedWithAgreement
@@ -88,5 +91,29 @@ export function handleAgreementEligibility_AgreementSet(
   agreementEligibility.currentAgreement = newAgreement.id;
 
   newAgreement.save();
+  agreementEligibility.save();
+}
+
+export function handleAgreementEligibility_OwnerHatSet(
+  event: AgreementEligibility_OwnerHatSet
+): void {
+  const agreementEligibility = AgreementEligibility.load(
+    event.address.toHexString()
+  ) as AgreementEligibility;
+
+  agreementEligibility.ownerHat = hatIdToHex(event.params.newOwnerHat);
+  agreementEligibility.save();
+}
+
+export function handleAgreementEligibility_ArbitratorHatSet(
+  event: AgreementEligibility_ArbitratorHatSet
+): void {
+  const agreementEligibility = AgreementEligibility.load(
+    event.address.toHexString()
+  ) as AgreementEligibility;
+
+  agreementEligibility.arbitratorHat = hatIdToHex(
+    event.params.newArbitratorHat
+  );
   agreementEligibility.save();
 }

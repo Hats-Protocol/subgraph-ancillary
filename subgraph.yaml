@@ -61,8 +61,7 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event:
-            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -117,6 +116,14 @@ dataSources:
           file: ./abis/CoLinksEligibility.json
         - name: GitcoinPassportEligibility
           file: ./abis/GitcoinPassportEligibility.json
+        - name: AgreementEligibilityV_0_1_0
+          file: ./abis/AgreementEligibilityV_0_1_0.json
+        - name: AgreementEligibilityV_0_2_0
+          file: ./abis/AgreementEligibilityV_0_2_0.json
+        - name: AllowListEligibilityV_0_1_0
+          file: ./abis/AllowlistEligibilityV_0_1_0.json
+        - name: AllowListEligibilityV_0_2_0
+          file: ./abis/AllowlistEligibilityV_0_2_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -172,6 +179,14 @@ dataSources:
           file: ./abis/CoLinksEligibility.json
         - name: GitcoinPassportEligibility
           file: ./abis/GitcoinPassportEligibility.json
+        - name: AgreementEligibilityV_0_1_0
+          file: ./abis/AgreementEligibilityV_0_1_0.json
+        - name: AgreementEligibilityV_0_2_0
+          file: ./abis/AgreementEligibilityV_0_2_0.json
+        - name: AllowListEligibilityV_0_1_0
+          file: ./abis/AllowlistEligibilityV_0_1_0.json
+        - name: AllowListEligibilityV_0_2_0
+          file: ./abis/AllowlistEligibilityV_0_2_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
@@ -273,22 +288,22 @@ templates:
       eventHandlers:
         - event: NewTerm(address,uint256,uint256)
           handler: handleNewTerm
-  - name: AllowListEligibility
+  - name: AllowListEligibilityV_0_1_0
     kind: ethereum/contract
     network: sepolia
     source:
-      abi: AllowlistEligibility
+      abi: AllowListEligibilityV_0_1_0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/modules/allowListEligibility.ts
+      file: ./src/modules/allowListEligibilityV_0_1_0.ts
       entities:
         - AllowListEligibility
         - AllowListEligibilityData
       abis:
-        - name: AllowlistEligibility
-          file: ./abis/AllowlistEligibility.json
+        - name: AllowListEligibilityV_0_1_0
+          file: ./abis/AllowlistEligibilityV_0_1_0.json
       eventHandlers:
         - event: AccountAdded(address)
           handler: handleAccountAdded
@@ -302,6 +317,39 @@ templates:
           handler: handleAccountStandingChanged
         - event: AccountsStandingChanged(address[],bool[])
           handler: handleAccountsStandingChanged
+  - name: AllowListEligibilityV_0_2_0
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: AllowListEligibilityV_0_2_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/allowListEligibilityV_0_2_0.ts
+      entities:
+        - AllowListEligibility
+        - AllowListEligibilityData
+      abis:
+        - name: AllowListEligibilityV_0_2_0
+          file: ./abis/AllowlistEligibilityV_0_2_0.json
+      eventHandlers:
+        - event: AccountAdded(address)
+          handler: handleAccountAdded
+        - event: AccountsAdded(address[])
+          handler: handleAccountsAdded
+        - event: AccountRemoved(address)
+          handler: handleAccountRemoved
+        - event: AccountsRemoved(address[])
+          handler: handleAccountsRemoved
+        - event: AccountStandingChanged(address,bool)
+          handler: handleAccountStandingChanged
+        - event: AccountsStandingChanged(address[],bool[])
+          handler: handleAccountsStandingChanged
+        - event: OwnerHatSet(uint256)
+          handler: handleOwnerHatSet
+        - event: ArbitratorHatSet(uint256)
+          handler: handleArbitratorHatSet
   - name: HatsElectionEligibility
     kind: ethereum/contract
     network: sepolia
@@ -404,11 +452,11 @@ templates:
       abis:
         - name: CharacterSheetsLevelEligibility
           file: ./abis/CharacterSheetsLevelEligibility.json
-  - name: AgreementEligibility
+  - name: AgreementEligibilityV_0_1_0
     kind: ethereum/contract
     network: sepolia
     source:
-      abi: AgreementEligibility
+      abi: AgreementEligibilityV_0_1_0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -418,8 +466,8 @@ templates:
         - AgreementEligibility
         - Agreement
       abis:
-        - name: AgreementEligibility
-          file: ./abis/AgreementEligibility.json
+        - name: AgreementEligibilityV_0_1_0
+          file: ./abis/AgreementEligibilityV_0_1_0.json
       eventHandlers:
         - event: AgreementEligibility_HatClaimedWithAgreement(address,uint256,string)
           handler: handleAgreementEligibility_HatClaimedWithAgreement
@@ -427,6 +475,33 @@ templates:
           handler: handleAgreementEligibility_AgreementSigned
         - event: AgreementEligibility_AgreementSet(string,uint256)
           handler: handleAgreementEligibility_AgreementSet
+  - name: AgreementEligibilityV_0_2_0
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: AgreementEligibilityV_0_2_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/agreementEligibility.ts
+      entities:
+        - AgreementEligibility
+        - Agreement
+      abis:
+        - name: AgreementEligibilityV_0_2_0
+          file: ./abis/AgreementEligibilityV_0_2_0.json
+      eventHandlers:
+        - event: AgreementEligibility_HatClaimedWithAgreement(address,uint256,string)
+          handler: handleAgreementEligibility_HatClaimedWithAgreement
+        - event: AgreementEligibility_AgreementSigned(address,string)
+          handler: handleAgreementEligibility_AgreementSigned
+        - event: AgreementEligibility_AgreementSet(string,uint256)
+          handler: handleAgreementEligibility_AgreementSet
+        - event: AgreementEligibility_OwnerHatSet(uint256)
+          handler: handleAgreementEligibility_OwnerHatSet
+        - event: AgreementEligibility_ArbitratorHatSet(uint256)
+          handler: handleAgreementEligibility_ArbitratorHatSet
   - name: HatsStakingShaman
     kind: ethereum/contract
     network: sepolia
