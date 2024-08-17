@@ -24,7 +24,8 @@ import {
 import {
   JokeRaceEligibility as JokeRaceEligibilityTemplate,
   JokeRaceEligibilityDeprecated as JokeRaceEligibilityDeprecatedTemplate,
-  AllowListEligibility as AllowListEligibilityTemplate,
+  AllowListEligibilityV_0_1_0 as AllowListEligibilityV_0_1_0Template,
+  AllowListEligibilityV_0_2_0 as AllowListEligibilityV_0_2_0Template,
   HatsElectionEligibility as HatsElectionEligibilityTemplate,
   PassthroughModule as PassthroughModuleTemplate,
   StakingEligibility as StakingEligibilityTemplate,
@@ -44,7 +45,8 @@ import {
 import {
   JOKERACE_ELIGIBILITY_IMPLEMENTATION,
   JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED,
-  ALLOWLIST_ELIGIBILITY_IMPLEMENTATION,
+  ALLOWLIST_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
+  ALLOWLIST_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
   HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED,
   HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
   PASSTHROUGH_MODULE_IMPLEMENTATION,
@@ -73,6 +75,8 @@ import { GitcoinPassportEligibility as GitcoinPassportEligibilityContract } from
 import { CoLinksEligibility as CoLinksEligibilityContract } from "../generated/templates/CoLinksEligibility/CoLinksEligibility";
 import { AgreementEligibilityV_0_1_0 as AgreementEligibilityV_0_1_0Contract } from "../generated/templates/AgreementEligibilityV_0_1_0/AgreementEligibilityV_0_1_0";
 import { AgreementEligibilityV_0_2_0 as AgreementEligibilityV_0_2_0Contract } from "../generated/templates/AgreementEligibilityV_0_2_0/AgreementEligibilityV_0_2_0";
+import { AllowListEligibilityV_0_1_0 as AllowlistEligibilityV_0_1_0Contract } from "../generated/templates/AllowListEligibilityV_0_1_0/AllowListEligibilityV_0_1_0";
+import { AllowListEligibilityV_0_2_0 as AllowlistEligibilityV_0_2_0Contract } from "../generated/templates/AllowListEligibilityV_0_2_0/AllowListEligibilityV_0_2_0";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -178,27 +182,56 @@ export function handleModuleDeployed(
     jokeRaceEligibility.currentTopK = topK;
     jokeRaceEligibility.adminHat = adminHat;
     jokeRaceEligibility.save();
-  } else if (implemenatationAddress == ALLOWLIST_ELIGIBILITY_IMPLEMENTATION) {
-    AllowListEligibilityTemplate.create(event.params.instance);
+  } else if (
+    implemenatationAddress == ALLOWLIST_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
+  ) {
+    AllowListEligibilityV_0_1_0Template.create(event.params.instance);
     const allowListEligibility = new AllowListEligibilityObject(
       event.params.instance.toHexString()
     );
 
-    let decodedImmutableArgs = (
-      ethereum.decode(
-        "(uint256, uint256)",
-        event.params.otherImmutableArgs
-      ) as ethereum.Value
-    ).toTuple();
+    const allowListEligibilityContract =
+      AllowlistEligibilityV_0_1_0Contract.bind(event.params.instance);
 
-    const ownerHat = decodedImmutableArgs[0].toBigInt();
+    const ownerHat = allowListEligibilityContract.OWNER_HAT();
     // check if hat exists, create new object if not
     let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
     if (ownerHatAuthority == null) {
       ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
     }
 
-    const arbitratorHat = decodedImmutableArgs[1].toBigInt();
+    const arbitratorHat = allowListEligibilityContract.ARBITRATOR_HAT();
+    // check if hat exists, create new object if not
+    let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
+    if (arbitratorHatAuthority == null) {
+      arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat));
+    }
+
+    allowListEligibility.hatId = hatIdToHex(event.params.hatId);
+    allowListEligibility.ownerHat = hatIdToHex(ownerHat);
+    allowListEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
+    allowListEligibility.save();
+    ownerHatAuthority.save();
+    arbitratorHatAuthority.save();
+  } else if (
+    implemenatationAddress == ALLOWLIST_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
+  ) {
+    AllowListEligibilityV_0_2_0Template.create(event.params.instance);
+    const allowListEligibility = new AllowListEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    const allowListEligibilityContract =
+      AllowlistEligibilityV_0_2_0Contract.bind(event.params.instance);
+
+    const ownerHat = allowListEligibilityContract.ownerHat();
+    // check if hat exists, create new object if not
+    let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
+    if (ownerHatAuthority == null) {
+      ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
+    }
+
+    const arbitratorHat = allowListEligibilityContract.arbitratorHat();
     // check if hat exists, create new object if not
     let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
     if (arbitratorHatAuthority == null) {

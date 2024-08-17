@@ -120,6 +120,10 @@ dataSources:
           file: ./abis/AgreementEligibilityV_0_1_0.json
         - name: AgreementEligibilityV_0_2_0
           file: ./abis/AgreementEligibilityV_0_2_0.json
+        - name: AllowListEligibilityV_0_1_0
+          file: ./abis/AllowlistEligibilityV_0_1_0.json
+        - name: AllowListEligibilityV_0_2_0
+          file: ./abis/AllowlistEligibilityV_0_2_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -179,6 +183,10 @@ dataSources:
           file: ./abis/AgreementEligibilityV_0_1_0.json
         - name: AgreementEligibilityV_0_2_0
           file: ./abis/AgreementEligibilityV_0_2_0.json
+        - name: AllowListEligibilityV_0_1_0
+          file: ./abis/AllowlistEligibilityV_0_1_0.json
+        - name: AllowListEligibilityV_0_2_0
+          file: ./abis/AllowlistEligibilityV_0_2_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
@@ -280,22 +288,22 @@ templates:
       eventHandlers:
         - event: NewTerm(address,uint256,uint256)
           handler: handleNewTerm
-  - name: AllowListEligibility
+  - name: AllowListEligibilityV_0_1_0
     kind: ethereum/contract
     network: sepolia
     source:
-      abi: AllowlistEligibility
+      abi: AllowListEligibilityV_0_1_0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/modules/allowListEligibility.ts
+      file: ./src/modules/allowListEligibilityV_0_1_0.ts
       entities:
         - AllowListEligibility
         - AllowListEligibilityData
       abis:
-        - name: AllowlistEligibility
-          file: ./abis/AllowlistEligibility.json
+        - name: AllowListEligibilityV_0_1_0
+          file: ./abis/AllowlistEligibilityV_0_1_0.json
       eventHandlers:
         - event: AccountAdded(address)
           handler: handleAccountAdded
@@ -309,6 +317,39 @@ templates:
           handler: handleAccountStandingChanged
         - event: AccountsStandingChanged(address[],bool[])
           handler: handleAccountsStandingChanged
+  - name: AllowListEligibilityV_0_2_0
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: AllowListEligibilityV_0_2_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/allowListEligibilityV_0_2_0.ts
+      entities:
+        - AllowListEligibility
+        - AllowListEligibilityData
+      abis:
+        - name: AllowListEligibilityV_0_2_0
+          file: ./abis/AllowlistEligibilityV_0_2_0.json
+      eventHandlers:
+        - event: AccountAdded(address)
+          handler: handleAccountAdded
+        - event: AccountsAdded(address[])
+          handler: handleAccountsAdded
+        - event: AccountRemoved(address)
+          handler: handleAccountRemoved
+        - event: AccountsRemoved(address[])
+          handler: handleAccountsRemoved
+        - event: AccountStandingChanged(address,bool)
+          handler: handleAccountStandingChanged
+        - event: AccountsStandingChanged(address[],bool[])
+          handler: handleAccountsStandingChanged
+        - event: OwnerHatSet(uint256)
+          handler: handleOwnerHatSet
+        - event: ArbitratorHatSet(uint256)
+          handler: handleArbitratorHatSet
   - name: HatsElectionEligibility
     kind: ethereum/contract
     network: sepolia

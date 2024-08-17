@@ -5,7 +5,9 @@ import {
   AccountsRemoved,
   AccountStandingChanged,
   AccountsStandingChanged,
-} from "../../generated/templates/AllowListEligibility/AllowListEligibility";
+  OwnerHatSet,
+  ArbitratorHatSet,
+} from "../../generated/templates/AllowListEligibilityV_0_2_0/AllowListEligibilityV_0_2_0";
 import {
   AllowListEligibilityData,
   AllowListEligibility,
@@ -167,6 +169,26 @@ export function handleAccountsStandingChanged(
     eligibilityData.save();
   }
 
+  allowListEligibility.save();
+}
+
+export function handleOwnerHatSet(event: OwnerHatSet): void {
+  const allowListEligibility = AllowListEligibility.load(
+    event.address.toHexString()
+  ) as AllowListEligibility;
+
+  allowListEligibility.ownerHat = hatIdToHex(event.params.newOwnerHat);
+  allowListEligibility.save();
+}
+
+export function handleArbitratorHatSet(event: ArbitratorHatSet): void {
+  const allowListEligibility = AllowListEligibility.load(
+    event.address.toHexString()
+  ) as AllowListEligibility;
+
+  allowListEligibility.arbitratorHat = hatIdToHex(
+    event.params.newArbitratorHat
+  );
   allowListEligibility.save();
 }
 
