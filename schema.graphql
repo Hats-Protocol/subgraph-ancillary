@@ -102,6 +102,15 @@ interface HatsModule @entity {
   hatId: String!
 }
 
+interface HatsModuleEvent {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+}
+
+" Jokerace Eligibility "
 type JokeRaceEligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -112,6 +121,7 @@ type JokeRaceEligibility implements HatsModule @entity {
   currentTopK: BigInt!
 }
 
+" Allowlist Eligibility "
 type AllowListEligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -120,6 +130,16 @@ type AllowListEligibility implements HatsModule @entity {
   arbitratorHat: HatAuthority!
   eligibilityData: [AllowListEligibilityData!]!
     @derivedFrom(field: "allowListEligibility")
+  events: [AllowlistEvent!]! @derivedFrom(field: "allowlistEligibilityInstance")
+}
+
+interface AllowlistEvent implements HatsModuleEvent {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
 }
 
 type AllowListEligibilityData @entity {
@@ -130,6 +150,89 @@ type AllowListEligibilityData @entity {
   badStanding: Boolean!
 }
 
+type AllowlistAccountAdded implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  account: String!
+}
+
+type AllowlistAccountsAdded implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  accounts: [String!]!
+}
+
+type AllowlistAccountRemoved implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  account: String!
+}
+
+type AllowlistAccountsRemoved implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  accounts: [String!]!
+}
+
+type AllowlistAccountStandingChanged implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  account: String!
+  standing: Boolean!
+}
+
+type AllowlistAccountsStandingChanged implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  accounts: [String!]!
+  standings: [Boolean!]!
+}
+
+type AllowlistOwnerHatSet implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  newOwnerHat: String!
+}
+
+type AllowlistArbitratorHatSet implements HatsModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  allowlistEligibilityInstance: AllowListEligibility!
+  newArbitratorHat: String!
+}
+
+"HatsElection Eligibility"
 type HatsElectionEligibility implements HatsModule @entity {
   id: ID!
   version: String
