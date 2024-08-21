@@ -337,7 +337,7 @@ type Agreement_HatClaimedWithAgreementEvent implements AgreementEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  agreementEligibilityInstance: AllowListEligibility!
+  agreementEligibilityInstance: AgreementEligibility!
   claimer: String!
   hatId: String!
   agreement: String!
@@ -349,7 +349,7 @@ type Agreement_AgreementSignedEvent implements AgreementEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  agreementEligibilityInstance: AllowListEligibility!
+  agreementEligibilityInstance: AgreementEligibility!
   signer: String!
   agreement: String!
 }
@@ -360,7 +360,7 @@ type Agreement_AgreementSetEvent implements AgreementEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  agreementEligibilityInstance: AllowListEligibility!
+  agreementEligibilityInstance: AgreementEligibility!
   agreement: String!
   grace: BigInt!
 }
@@ -371,7 +371,7 @@ type Agreement_OwnerHatSetEvent implements AgreementEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  agreementEligibilityInstance: AllowListEligibility!
+  agreementEligibilityInstance: AgreementEligibility!
   newOwnerHat: String!
 }
 
@@ -381,7 +381,7 @@ type Agreement_ArbitratorHatSetEvent implements AgreementEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  agreementEligibilityInstance: AllowListEligibility!
+  agreementEligibilityInstance: AgreementEligibility!
   newArbitratorHat: String!
 }
 
