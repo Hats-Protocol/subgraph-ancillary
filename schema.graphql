@@ -150,7 +150,7 @@ type AllowListEligibilityData @entity {
   badStanding: Boolean!
 }
 
-type AllowlistAccountAdded implements HatsModuleEvent @entity {
+type Allowlist_AccountAddedEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -160,7 +160,7 @@ type AllowlistAccountAdded implements HatsModuleEvent @entity {
   account: String!
 }
 
-type AllowlistAccountsAdded implements HatsModuleEvent @entity {
+type Allowlist_AccountsAddedEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -170,7 +170,7 @@ type AllowlistAccountsAdded implements HatsModuleEvent @entity {
   accounts: [String!]!
 }
 
-type AllowlistAccountRemoved implements HatsModuleEvent @entity {
+type Allowlist_AccountRemovedEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -180,7 +180,7 @@ type AllowlistAccountRemoved implements HatsModuleEvent @entity {
   account: String!
 }
 
-type AllowlistAccountsRemoved implements HatsModuleEvent @entity {
+type Allowlist_AccountsRemovedEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -190,7 +190,7 @@ type AllowlistAccountsRemoved implements HatsModuleEvent @entity {
   accounts: [String!]!
 }
 
-type AllowlistAccountStandingChanged implements HatsModuleEvent @entity {
+type Allowlist_AccountStandingChangedEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -201,7 +201,7 @@ type AllowlistAccountStandingChanged implements HatsModuleEvent @entity {
   standing: Boolean!
 }
 
-type AllowlistAccountsStandingChanged implements HatsModuleEvent @entity {
+type Allowlist_AccountsStandingChangedEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -212,7 +212,7 @@ type AllowlistAccountsStandingChanged implements HatsModuleEvent @entity {
   standings: [Boolean!]!
 }
 
-type AllowlistOwnerHatSet implements HatsModuleEvent @entity {
+type Allowlist_OwnerHatSetEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -222,7 +222,7 @@ type AllowlistOwnerHatSet implements HatsModuleEvent @entity {
   newOwnerHat: String!
 }
 
-type AllowlistArbitratorHatSet implements HatsModuleEvent @entity {
+type Allowlist_ArbitratorHatSetEvent implements AllowlistEvent @entity {
   id: ID!
   module: HatsModule!
   blockNumber: Int!
@@ -253,6 +253,7 @@ type ElectionTerm @entity {
   electedAccounts: [String!]
 }
 
+" Passthrough Module "
 type PassthroughModule implements HatsModule @entity {
   id: ID!
   version: String
@@ -260,6 +261,7 @@ type PassthroughModule implements HatsModule @entity {
   passthroughHat: HatAuthority!
 }
 
+" Staking Eligibility "
 type StakingEligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -284,6 +286,7 @@ type Stake @entity {
   cooldownEndsAt: BigInt!
 }
 
+" Season Toggle "
 type SeasonToggle implements HatsModule @entity {
   id: ID!
   version: String
@@ -291,6 +294,7 @@ type SeasonToggle implements HatsModule @entity {
   hatAdmins: [HatAuthority!]!
 }
 
+" Charecter Sheets Level Eligibility "
 type CharacterSheetsLevelEligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -298,6 +302,7 @@ type CharacterSheetsLevelEligibility implements HatsModule @entity {
   hatAdmins: [HatAuthority!]!
 }
 
+" Agreement Eligibility "
 type AgreementEligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -317,6 +322,70 @@ type Agreement @entity {
   graceEndTime: BigInt!
 }
 
+interface AgreementEvent implements HatsModuleEvent {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AgreementEligibility!
+}
+
+type Agreement_HatClaimedWithAgreementEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AllowListEligibility!
+  claimer: String!
+  hatId: String!
+  agreement: String!
+}
+
+type Agreement_AgreementSignedEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AllowListEligibility!
+  signer: String!
+  agreement: String!
+}
+
+type Agreement_AgreementSetEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AllowListEligibility!
+  agreement: String!
+  grace: BigInt!
+}
+
+type Agreement_OwnerHatSetEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AllowListEligibility!
+  newOwnerHat: String!
+}
+
+type Agreement_ArbitratorHatSetEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AllowListEligibility!
+  newArbitratorHat: String!
+}
+
+" Erc20 Eligibility "
 type Erc20Eligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -325,6 +394,7 @@ type Erc20Eligibility implements HatsModule @entity {
   minBalance: BigInt!
 }
 
+" Erc721 Eligibility "
 type Erc721Eligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -333,6 +403,7 @@ type Erc721Eligibility implements HatsModule @entity {
   minBalance: BigInt!
 }
 
+" Erc1155 Eligibility "
 type Erc1155Eligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -342,6 +413,7 @@ type Erc1155Eligibility implements HatsModule @entity {
   minBalances: [BigInt!]!
 }
 
+" Hat Wearing Eligibility "
 type HatWearingEligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -349,6 +421,7 @@ type HatWearingEligibility implements HatsModule @entity {
   criterionHat: String!
 }
 
+" Gitcoin Passport Eligibility "
 type GitcoinPassportEligibility implements HatsModule @entity {
   id: ID!
   version: String
@@ -357,6 +430,7 @@ type GitcoinPassportEligibility implements HatsModule @entity {
   scoreCriterion: BigInt!
 }
 
+" CoLinks Eligibility "
 type CoLinksEligibility implements HatsModule @entity {
   id: ID!
   version: String

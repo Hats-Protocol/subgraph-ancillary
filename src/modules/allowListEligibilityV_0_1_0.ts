@@ -9,12 +9,12 @@ import {
 import {
   AllowListEligibilityData,
   AllowListEligibility,
-  AllowlistAccountAdded,
-  AllowlistAccountsAdded,
-  AllowlistAccountRemoved,
-  AllowlistAccountsRemoved,
-  AllowlistAccountStandingChanged,
-  AllowlistAccountsStandingChanged,
+  Allowlist_AccountAddedEvent,
+  Allowlist_AccountsAddedEvent,
+  Allowlist_AccountRemovedEvent,
+  Allowlist_AccountsRemovedEvent,
+  Allowlist_AccountStandingChangedEvent,
+  Allowlist_AccountsStandingChangedEvent,
 } from "../../generated/schema";
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { createEventID } from "./utils";
@@ -39,7 +39,7 @@ export function handleAccountAdded(event: AccountAdded): void {
     eligibilityData.eligible = true;
   }
 
-  const allowlistAccountAdded = new AllowlistAccountAdded(
+  const allowlistAccountAdded = new Allowlist_AccountAddedEvent(
     createEventID(event, "AccountAdded")
   );
   allowlistAccountAdded.module = allowListEligibility.id;
@@ -78,7 +78,7 @@ export function handleAccountsAdded(event: AccountsAdded): void {
     eligibilityData.save();
   }
 
-  const allowlistAccountsAdded = new AllowlistAccountsAdded(
+  const allowlistAccountsAdded = new Allowlist_AccountsAddedEvent(
     createEventID(event, "AccountsAdded")
   );
   allowlistAccountsAdded.module = allowListEligibility.id;
@@ -117,7 +117,7 @@ export function handleAccountRemoved(event: AccountRemoved): void {
     eligibilityData.eligible = false;
   }
 
-  const allowlistAccountRemoved = new AllowlistAccountRemoved(
+  const allowlistAccountRemoved = new Allowlist_AccountRemovedEvent(
     createEventID(event, "AccountRemoved")
   );
   allowlistAccountRemoved.module = allowListEligibility.id;
@@ -157,7 +157,7 @@ export function handleAccountsRemoved(event: AccountsRemoved): void {
     eligibilityData.save();
   }
 
-  const allowlistAccountsRemoved = new AllowlistAccountsRemoved(
+  const allowlistAccountsRemoved = new Allowlist_AccountsRemovedEvent(
     createEventID(event, "AccountsRemoved")
   );
   allowlistAccountsRemoved.module = allowListEligibility.id;
@@ -199,9 +199,10 @@ export function handleAccountStandingChanged(
     eligibilityData.badStanding = !event.params.standing;
   }
 
-  const allowlistAccountStandingChanged = new AllowlistAccountStandingChanged(
-    createEventID(event, "AccountStandingChanged")
-  );
+  const allowlistAccountStandingChanged =
+    new Allowlist_AccountStandingChangedEvent(
+      createEventID(event, "AccountStandingChanged")
+    );
   allowlistAccountStandingChanged.module = allowListEligibility.id;
   allowlistAccountStandingChanged.allowlistEligibilityInstance =
     allowListEligibility.id;
@@ -241,9 +242,10 @@ export function handleAccountsStandingChanged(
     eligibilityData.save();
   }
 
-  const allowlistAccountsStandingChanged = new AllowlistAccountsStandingChanged(
-    createEventID(event, "AccountsRemoved")
-  );
+  const allowlistAccountsStandingChanged =
+    new Allowlist_AccountsStandingChangedEvent(
+      createEventID(event, "AccountsRemoved")
+    );
   allowlistAccountsStandingChanged.module = allowListEligibility.id;
   allowlistAccountsStandingChanged.allowlistEligibilityInstance =
     allowListEligibility.id;
