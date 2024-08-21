@@ -216,6 +216,7 @@ export function handleAccountStandingChanged(
   allowlistAccountStandingChanged.timestamp = event.block.timestamp;
   allowlistAccountStandingChanged.transactionID = event.transaction.hash;
   allowlistAccountStandingChanged.account = event.params.account.toHexString();
+  allowlistAccountStandingChanged.standing = event.params.standing;
 
   allowlistAccountStandingChanged.save();
   eligibilityData.save();
@@ -264,6 +265,7 @@ export function handleAccountsStandingChanged(
     accounts.push(event.params.accounts[i].toHexString());
   }
   allowlistAccountsStandingChanged.accounts = accounts;
+  allowlistAccountsStandingChanged.standings = event.params.standing;
 
   allowlistAccountsStandingChanged.save();
   allowListEligibility.save();
