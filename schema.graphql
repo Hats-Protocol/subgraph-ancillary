@@ -253,6 +253,57 @@ type ElectionTerm @entity {
   electedAccounts: [String!]
 }
 
+interface ElectionEvent implements HatsModuleEvent {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  electionEligibilityInstance: HatsElectionEligibility!
+}
+
+type Election_ElectionOpenedEvent implements ElectionEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  electionEligibilityInstance: HatsElectionEligibility!
+  nextTermEnd: BigInt!
+}
+
+type Election_ElectionCompletedEvent implements ElectionEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  electionEligibilityInstance: HatsElectionEligibility!
+  termEnd: BigInt!
+  winners: [String!]!
+}
+
+type Election_NewTermStartedEvent implements ElectionEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  electionEligibilityInstance: HatsElectionEligibility!
+  termEnd: BigInt!
+}
+
+type Election_RecalledEvent implements ElectionEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  electionEligibilityInstance: HatsElectionEligibility!
+  termEnd: BigInt!
+  accounts: [String!]!
+}
+
 " Passthrough Module "
 type PassthroughModule implements HatsModule @entity {
   id: ID!
