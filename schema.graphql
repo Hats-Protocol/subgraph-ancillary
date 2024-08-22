@@ -241,6 +241,7 @@ type HatsElectionEligibility implements HatsModule @entity {
   adminHat: [HatAuthority!]!
   terms: [ElectionTerm!]! @derivedFrom(field: "hatsElectionEligibility")
   currentTerm: ElectionTerm
+  events: [ElectionEvent!]! @derivedFrom(field: "electionEligibilityInstance")
 }
 type ElectionTerm @entity {
   id: ID!
@@ -325,6 +326,7 @@ type StakingEligibility implements HatsModule @entity {
   cooldownPeriod: BigInt!
   totalSlashedStakes: BigInt!
   stakes: [Stake!]! @derivedFrom(field: "stakingEligiblity")
+  events: [StakingEvent!]! @derivedFrom(field: "stakingEligibilityInstance")
 }
 
 type Stake @entity {
@@ -353,7 +355,6 @@ type Staking_StakedEvent implements StakingEvent @entity {
   timestamp: BigInt!
   transactionID: Bytes!
   stakingEligibilityInstance: StakingEligibility!
-  hatId: String!
   staker: String!
   amount: BigInt!
 }
@@ -365,7 +366,6 @@ type Staking_UnstakeBegunEvent implements StakingEvent @entity {
   timestamp: BigInt!
   transactionID: Bytes!
   stakingEligibilityInstance: StakingEligibility!
-  hatId: String!
   staker: String!
   amount: BigInt!
   cooldownEnd: BigInt!
@@ -378,7 +378,6 @@ type Staking_SlashedEvent implements StakingEvent @entity {
   timestamp: BigInt!
   transactionID: Bytes!
   stakingEligibilityInstance: StakingEligibility!
-  hatId: String!
   wearer: String!
   amount: BigInt!
 }
@@ -459,6 +458,7 @@ type AgreementEligibility implements HatsModule @entity {
   currentAgreement: Agreement!
   currentAgreementNumber: BigInt!
   agreements: [Agreement!]! @derivedFrom(field: "agreementEligibility")
+  events: [AgreementEvent!]! @derivedFrom(field: "agreementEligibilityInstance")
 }
 
 type Agreement @entity {
