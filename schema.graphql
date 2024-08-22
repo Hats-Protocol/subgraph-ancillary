@@ -337,6 +337,102 @@ type Stake @entity {
   cooldownEndsAt: BigInt!
 }
 
+interface StakingEvent implements HatsModuleEvent {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+}
+
+type Staking_StakedEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  hatId: String!
+  staker: String!
+  amount: BigInt!
+}
+
+type Staking_UnstakeBegunEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  hatId: String!
+  staker: String!
+  amount: BigInt!
+  cooldownEnd: BigInt!
+}
+
+type Staking_SlashedEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  hatId: String!
+  wearer: String!
+  amount: BigInt!
+}
+
+type Staking_MinStakeChangedEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  newMinStake: BigInt!
+}
+
+type Staking_JudgeHatChangedEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  newJudgeHat: String!
+}
+
+type Staking_RecipientHatChangedEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  newRecipientHat: String!
+}
+
+type Staking_CooldownPeriodChangedEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  newDelay: BigInt!
+}
+
+type Staking_ForgivenEvent implements StakingEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  stakingEligibilityInstance: StakingEligibility!
+  staker: String!
+}
+
 " Season Toggle "
 type SeasonToggle implements HatsModule @entity {
   id: ID!
