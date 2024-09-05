@@ -1,4 +1,4 @@
-import { NewTerm } from "../../generated/templates/JokeRaceEligibilityDeprecated/JokeRaceEligibilityDeprecated";
+import { NewTerm } from "../../generated/templates/JokeRaceEligibilityV_0_1_0/JokeRaceEligibilityV_0_1_0";
 import { JokeRaceEligibility } from "../../generated/schema";
 
 export function handleNewTerm(event: NewTerm): void {

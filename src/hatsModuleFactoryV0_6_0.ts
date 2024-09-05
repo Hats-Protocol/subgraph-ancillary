@@ -22,11 +22,12 @@ import {
   CoLinksEligibility as CoLinksEligibilityObject,
 } from "../generated/schema";
 import {
-  JokeRaceEligibility as JokeRaceEligibilityTemplate,
-  JokeRaceEligibilityDeprecated as JokeRaceEligibilityDeprecatedTemplate,
+  JokeRaceEligibilityV_0_2_0 as JokeRaceEligibilityV_0_2_0Template,
+  JokeRaceEligibilityV_0_1_0 as JokeRaceEligibilityV_0_1_0Template,
   AllowListEligibilityV_0_1_0 as AllowListEligibilityV_0_1_0Template,
   AllowListEligibilityV_0_2_0 as AllowListEligibilityV_0_2_0Template,
-  HatsElectionEligibility as HatsElectionEligibilityTemplate,
+  HatsElectionEligibilityV_0_1_0 as HatsElectionEligibilityV_0_1_0Template,
+  HatsElectionEligibilityV_0_2_0 as HatsElectionEligibilityV_0_2_0Template,
   PassthroughModule as PassthroughModuleTemplate,
   StakingEligibility as StakingEligibilityTemplate,
   SeasonToggle as SeasonToggleTemplate,
@@ -43,12 +44,12 @@ import {
   CoLinksEligibility as CoLinksEligibilityTemplate,
 } from "../generated/templates";
 import {
-  JOKERACE_ELIGIBILITY_IMPLEMENTATION,
-  JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED,
+  JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
+  JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
   ALLOWLIST_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
   ALLOWLIST_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
-  HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED,
-  HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION,
+  HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
+  HATS_ELECTION_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
   PASSTHROUGH_MODULE_IMPLEMENTATION,
   STAKING_ELIGIBILITY_IMPLEMENTATION,
   SEASON_TOGGLE_IMPLEMENTATION,
@@ -84,8 +85,8 @@ export function handleModuleDeployed(
 ): void {
   const implemenatationAddress = event.params.implementation.toHexString();
 
-  if (implemenatationAddress == JOKERACE_ELIGIBILITY_IMPLEMENTATION) {
-    JokeRaceEligibilityTemplate.create(event.params.instance);
+  if (implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION) {
+    JokeRaceEligibilityV_0_2_0Template.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
       event.params.instance.toHexString()
     );
@@ -133,9 +134,9 @@ export function handleModuleDeployed(
     jokeRaceEligibility.adminHat = adminHat;
     jokeRaceEligibility.save();
   } else if (
-    implemenatationAddress == JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
+    implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
   ) {
-    JokeRaceEligibilityDeprecatedTemplate.create(event.params.instance);
+    JokeRaceEligibilityV_0_1_0Template.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
       event.params.instance.toHexString()
     );
@@ -247,9 +248,9 @@ export function handleModuleDeployed(
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
   } else if (
-    implemenatationAddress ==
-    HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
+    implemenatationAddress == HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
   ) {
+    HatsElectionEligibilityV_0_1_0Template.create(event.params.instance);
     const hatsElectionEligibility = new HatsElectionEligbilityObject(
       event.params.instance.toHexString()
     );
@@ -292,9 +293,9 @@ export function handleModuleDeployed(
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
   } else if (
-    implemenatationAddress == HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION
+    implemenatationAddress == HATS_ELECTION_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
   ) {
-    HatsElectionEligibilityTemplate.create(event.params.instance);
+    HatsElectionEligibilityV_0_2_0Template.create(event.params.instance);
     const hatsElectionEligibility = new HatsElectionEligbilityObject(
       event.params.instance.toHexString()
     );

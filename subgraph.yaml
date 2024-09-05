@@ -61,7 +61,8 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event:
+            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -252,39 +253,39 @@ templates:
       eventHandlers:
         - event: TxExecuted(address)
           handler: handleTxExecuted
-  - name: JokeRaceEligibility
+  - name: JokeRaceEligibilityV_0_2_0
     kind: ethereum/contract
     network: sepolia
     source:
-      abi: JokeRaceEligibility
+      abi: JokeRaceEligibilityV_0_2_0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/modules/jokeRaceEligibility.ts
+      file: ./src/modules/jokeRaceEligibilityV_0_2_0.ts
       entities:
         - JokeRaceEligibility
       abis:
-        - name: JokeRaceEligibility
-          file: ./abis/JokeRaceEligibility.json
+        - name: JokeRaceEligibilityV_0_2_0
+          file: ./abis/JokeRaceEligibilityV_0_2_0.json
       eventHandlers:
         - event: NewTerm(address,uint256,uint256)
           handler: handleNewTerm
-  - name: JokeRaceEligibilityDeprecated
+  - name: JokeRaceEligibilityV_0_1_0
     kind: ethereum/contract
     network: sepolia
     source:
-      abi: JokeRaceEligibilityDeprecated
+      abi: JokeRaceEligibilityV_0_1_0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/modules/jokeRaceEligibilityDeprecated.ts
+      file: ./src/modules/jokeRaceEligibilityV_0_1_0.ts
       entities:
         - JokeRaceEligibility
       abis:
-        - name: JokeRaceEligibilityDeprecated
-          file: ./abis/JokeRaceEligibilityDeprecated.json
+        - name: JokeRaceEligibilityV_0_1_0
+          file: ./abis/JokeRaceEligibilityV_0_1_0.json
       eventHandlers:
         - event: NewTerm(address,uint256,uint256)
           handler: handleNewTerm
@@ -350,21 +351,43 @@ templates:
           handler: handleOwnerHatSet
         - event: ArbitratorHatSet(uint256)
           handler: handleArbitratorHatSet
-  - name: HatsElectionEligibility
+  - name: HatsElectionEligibilityV_0_1_0
     kind: ethereum/contract
     network: sepolia
     source:
-      abi: HatsElectionEligibility
+      abi: HatsElectionEligibilityV_0_1_0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/modules/hatsElectionEligibility.ts
+      file: ./src/modules/hatsElectionEligibilityV_0_1_0.ts
       entities:
         - HatsElectionEligibility
       abis:
-        - name: HatsElectionEligibility
-          file: ./abis/HatsElectionEligibility.json
+        - name: HatsElectionEligibilityV_0_1_0
+          file: ./abis/HatsElectionEligibilityV_0_1_0.json
+      eventHandlers:
+        - event: ElectionOpened(uint128)
+          handler: handleElectionOpened
+        - event: ElectionCompleted(uint128,address[])
+          handler: handleElectionCompleted
+        - event: NewTermStarted(uint128)
+          handler: handleNewTermStarted
+  - name: HatsElectionEligibilityV_0_2_0
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: HatsElectionEligibilityV_0_2_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/hatsElectionEligibilityV_0_2_0.ts
+      entities:
+        - HatsElectionEligibility
+      abis:
+        - name: HatsElectionEligibilityV_0_2_0
+          file: ./abis/HatsElectionEligibilityV_0_2_0.json
       eventHandlers:
         - event: ElectionOpened(uint128)
           handler: handleElectionOpened

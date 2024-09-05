@@ -12,8 +12,8 @@ import {
   mockNewTermDeprecatedEvent,
 } from "../../utils";
 import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_7_0";
-import { JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED } from "../../../src/constants";
-import { handleNewTerm } from "../../../src/modules/jokeRaceEligibilityDeprecated";
+import { JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION } from "../../../src/constants";
+import { handleNewTerm } from "../../../src/modules/jokeRaceEligibilityV_0_1_0";
 
 const contest1 = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const contest2 = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
@@ -44,7 +44,7 @@ describe("Deprecated JokeRace Eligibility Tests", () => {
 
       const moduleDeployedEvent =
         mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
-          Address.fromString(JOKERACE_ELIGIBILITY_IMPLEMENTATION_DEPRECATED),
+          Address.fromString(JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION),
           Address.fromString(jokeRaceInstance),
           BigInt.fromString(hatId),
           Bytes.fromHexString(
