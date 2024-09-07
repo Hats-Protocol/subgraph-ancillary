@@ -3,7 +3,7 @@ import {
   ElectionCompleted,
   NewTermStarted,
   Recalled,
-} from "../../generated/templates/HatsElectionEligibility/HatsElectionEligibility";
+} from "../../generated/templates/HatsElectionEligibilityV_0_1_0/HatsElectionEligibilityV_0_1_0";
 import {
   HatsElectionEligibility,
   ElectionTerm,

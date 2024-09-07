@@ -6,8 +6,5 @@ export function handleNewTerm(event: NewTerm): void {
     event.address.toHexString()
   ) as JokeRaceEligibility;
 
-  jokeRaceEligibility.currentContest = event.params.NewContest.toHexString();
-  jokeRaceEligibility.currentTermEnd = event.params.newTermEnd;
-  jokeRaceEligibility.currentTopK = event.params.newTopK;
   jokeRaceEligibility.save();
 }

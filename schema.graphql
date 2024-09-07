@@ -116,9 +116,21 @@ type JokeRaceEligibility implements HatsModule @entity {
   version: String
   hatId: String!
   adminHat: [HatAuthority!]!
-  currentContest: String!
-  currentTermEnd: BigInt!
-  currentTopK: BigInt!
+  currentTerm: JokeRaceEligibilityTerm
+  nextTerm: JokeRaceEligibilityTerm
+  allTerms: [JokeRaceEligibilityTerm!]!
+    @derivedFrom(field: "jokeRaceEligibility")
+}
+
+type JokeRaceEligibilityTerm @entity {
+  id: ID!
+  jokeRaceEligibility: JokeRaceEligibility!
+  termStartedAt: BigInt
+  termEndsAt: BigInt!
+  topK: BigInt!
+  transitionPeriod: BigInt!
+  contest: String!
+  winners: [String!]
 }
 
 " Allowlist Eligibility "

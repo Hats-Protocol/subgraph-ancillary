@@ -2,6 +2,7 @@ import { BigInt, ethereum, Bytes, log } from "@graphprotocol/graph-ts";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactoryV0_6_0/HatsModuleFactoryV0_6_0";
 import {
   JokeRaceEligibility as JokeRaceEligibilityObject,
+  JokeRaceEligibilityTerm,
   AllowListEligibility as AllowListEligibilityObject,
   HatsElectionEligibility as HatsElectionEligbilityObject,
   PassthroughModule as PassthroughModuleObject,
@@ -24,6 +25,7 @@ import {
 import {
   JokeRaceEligibilityV_0_2_0 as JokeRaceEligibilityV_0_2_0Template,
   JokeRaceEligibilityV_0_1_0 as JokeRaceEligibilityV_0_1_0Template,
+  JokeRaceEligibilityV_0_3_0 as JokeRaceEligibilityV_0_3_0Template,
   AllowListEligibilityV_0_1_0 as AllowListEligibilityV_0_1_0Template,
   AllowListEligibilityV_0_2_0 as AllowListEligibilityV_0_2_0Template,
   HatsElectionEligibilityV_0_1_0 as HatsElectionEligibilityV_0_1_0Template,
@@ -46,6 +48,7 @@ import {
 import {
   JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
   JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
+  JOKERACE_ELIGIBILITY_V_0_3_0_IMPLEMENTATION,
   ALLOWLIST_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
   ALLOWLIST_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
   HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
@@ -78,6 +81,8 @@ import { AgreementEligibilityV_0_1_0 as AgreementEligibilityV_0_1_0Contract } fr
 import { AgreementEligibilityV_0_2_0 as AgreementEligibilityV_0_2_0Contract } from "../generated/templates/AgreementEligibilityV_0_2_0/AgreementEligibilityV_0_2_0";
 import { AllowListEligibilityV_0_1_0 as AllowlistEligibilityV_0_1_0Contract } from "../generated/templates/AllowListEligibilityV_0_1_0/AllowListEligibilityV_0_1_0";
 import { AllowListEligibilityV_0_2_0 as AllowlistEligibilityV_0_2_0Contract } from "../generated/templates/AllowListEligibilityV_0_2_0/AllowListEligibilityV_0_2_0";
+import { JokeRaceEligibilityV_0_3_0 as JokeRaceEligibilityV_0_3_0Contract } from "../generated/templates/JokeRaceEligibilityV_0_3_0/JokeRaceEligibilityV_0_3_0";
+import { JokeRaceContest as JokeRaceContestContract } from "../generated/templates/JokeRaceContest/JokeRaceContest";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -85,7 +90,54 @@ export function handleModuleDeployed(
 ): void {
   const implemenatationAddress = event.params.implementation.toHexString();
 
-  if (implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION) {
+  if (implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_3_0_IMPLEMENTATION) {
+    JokeRaceEligibilityV_0_3_0Template.create(event.params.instance);
+    const jokeRaceEligibility = new JokeRaceEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    const jokeRaceEligibilityContract = JokeRaceEligibilityV_0_3_0Contract.bind(
+      event.params.instance
+    );
+
+    const adminHatInput = jokeRaceEligibilityContract.ADMIN_HAT();
+    const hatId = hatIdToHex(event.params.hatId);
+
+    let adminHat: string[] = [];
+
+    if (adminHatInput != BigInt.fromI32(0)) {
+      adminHat.push(hatIdToHex(adminHatInput));
+      // check if hat exists, create new object if not
+      let adminHatAuthority = HatAuthority.load(hatIdToHex(adminHatInput));
+      if (adminHatAuthority == null) {
+        adminHatAuthority = new HatAuthority(hatIdToHex(adminHatInput));
+        adminHatAuthority.save();
+      }
+    } else {
+      // admin hats fallback
+      adminHat = getAllAdmins(hatId);
+    }
+
+    const nextTermDetails = jokeRaceEligibilityContract.terms(
+      BigInt.fromI32(1)
+    );
+    const nextTerm = new JokeRaceEligibilityTerm(
+      event.params.instance.toHexString() + "-" + "1"
+    );
+    nextTerm.jokeRaceEligibility = jokeRaceEligibility.id;
+    nextTerm.termEndsAt = nextTermDetails.getTermEnd();
+    nextTerm.topK = nextTermDetails.getTopK();
+    nextTerm.transitionPeriod = nextTermDetails.getTransitionPeriod();
+    nextTerm.contest = nextTermDetails.getContest().toHexString();
+
+    jokeRaceEligibility.hatId = hatId;
+    jokeRaceEligibility.adminHat = adminHat;
+    jokeRaceEligibility.nextTerm = nextTerm.id;
+    nextTerm.save();
+    jokeRaceEligibility.save();
+  } else if (
+    implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
+  ) {
     JokeRaceEligibilityV_0_2_0Template.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
       event.params.instance.toHexString()
@@ -128,9 +180,6 @@ export function handleModuleDeployed(
     }
 
     jokeRaceEligibility.hatId = hatId;
-    jokeRaceEligibility.currentContest = contestAddress;
-    jokeRaceEligibility.currentTermEnd = termEnd;
-    jokeRaceEligibility.currentTopK = topK;
     jokeRaceEligibility.adminHat = adminHat;
     jokeRaceEligibility.save();
   } else if (
@@ -178,9 +227,6 @@ export function handleModuleDeployed(
     }
 
     jokeRaceEligibility.hatId = hatId;
-    jokeRaceEligibility.currentContest = contestAddress;
-    jokeRaceEligibility.currentTermEnd = termEnd;
-    jokeRaceEligibility.currentTopK = topK;
     jokeRaceEligibility.adminHat = adminHat;
     jokeRaceEligibility.save();
   } else if (

@@ -1,4 +1,4 @@
-import { NewTerm } from "../../generated/templates/JokeRaceEligibility/JokeRaceEligibility";
+import { NewTerm } from "../../generated/templates/JokeRaceEligibilityV_0_2_0/JokeRaceEligibilityV_0_2_0";
 import { JokeRaceEligibility } from "../../generated/schema";
 
 export function handleNewTerm(event: NewTerm): void {
@@ -6,8 +6,5 @@ export function handleNewTerm(event: NewTerm): void {
     event.address.toHexString()
   ) as JokeRaceEligibility;
 
-  jokeRaceEligibility.currentContest = event.params.NewContest.toHexString();
-  jokeRaceEligibility.currentTermEnd = event.params.newTermEnd;
-  jokeRaceEligibility.currentTopK = event.params.newTopK;
   jokeRaceEligibility.save();
 }
