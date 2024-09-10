@@ -70,7 +70,10 @@ import {
 } from "./constants";
 import { HatsStakingShaman as HatsStakingShamanContract } from "../generated/templates/HatsStakingShaman/HatsStakingShaman";
 import { HatsFarcasterDelegator as HatsFarcasterDelegatorContract } from "../generated/templates/HatsFarcasterDelegator/HatsFarcasterDelegator";
-import { StakingEligibility as StakingEligibilityContract } from "../generated/templates/StakingEligibility/StakingEligibility";
+import {
+  ChangeRecipientHatCall,
+  StakingEligibility as StakingEligibilityContract,
+} from "../generated/templates/StakingEligibility/StakingEligibility";
 import { Erc20Eligibility as Erc20EligibilityContract } from "../generated/templates/Erc20Eligibility/Erc20Eligibility";
 import { Erc721Eligibility as Erc721EligibilityContract } from "../generated/templates/Erc721Eligibility/Erc721Eligibility";
 import { Erc1155Eligibility as Erc1155EligibilityContract } from "../generated/templates/Erc1155Eligibility/Erc1155Eligibility";
@@ -132,6 +135,7 @@ export function handleModuleDeployed(
     jokeRaceEligibility.hatId = hatId;
     jokeRaceEligibility.adminHat = adminHat;
     jokeRaceEligibility.nextTerm = nextTerm.id;
+    jokeRaceEligibility.version = "0.3.0";
     nextTerm.save();
     jokeRaceEligibility.save();
   } else if (
@@ -180,6 +184,7 @@ export function handleModuleDeployed(
 
     jokeRaceEligibility.hatId = hatId;
     jokeRaceEligibility.adminHat = adminHat;
+    jokeRaceEligibility.version = "0.2.0";
     jokeRaceEligibility.save();
   } else if (
     implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
@@ -227,6 +232,7 @@ export function handleModuleDeployed(
 
     jokeRaceEligibility.hatId = hatId;
     jokeRaceEligibility.adminHat = adminHat;
+    jokeRaceEligibility.version = "0.1.0";
     jokeRaceEligibility.save();
   } else if (
     implemenatationAddress == ALLOWLIST_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
@@ -335,6 +341,7 @@ export function handleModuleDeployed(
     hatsElectionEligibility.hatId = hatId;
     hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
     hatsElectionEligibility.adminHat = adminHat;
+    hatsElectionEligibility.version = "0.1.0";
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
   } else if (
@@ -381,6 +388,7 @@ export function handleModuleDeployed(
     hatsElectionEligibility.ballotBoxHat = hatIdToHex(ballotBoxHat);
     hatsElectionEligibility.adminHat = adminHat;
     hatsElectionEligibility.currentTerm = null;
+    hatsElectionEligibility.version = "0.2.0";
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
   } else if (implemenatationAddress == PASSTHROUGH_MODULE_IMPLEMENTATION) {
@@ -405,6 +413,7 @@ export function handleModuleDeployed(
 
     passthroughModule.hatId = hatIdToHex(event.params.hatId);
     passthroughModule.passthroughHat = hatIdToHex(passthroughHat);
+    passthroughModule.version = "0.1.0";
     passthroughModule.save();
     passthroughHatAuthority.save();
   } else if (implemenatationAddress == STAKING_ELIGIBILITY_IMPLEMENTATION) {
@@ -444,6 +453,7 @@ export function handleModuleDeployed(
     stakingEligibility.cooldownPeriod = cooldownBuffer;
     stakingEligibility.totalSlashedStakes = BigInt.fromI32(0);
     stakingEligibility.token = token.toHexString();
+    stakingEligibility.version = "0.1.0";
     stakingEligibility.save();
     judgeHatAuthority.save();
     recipientHatAuthority.save();
@@ -458,6 +468,7 @@ export function handleModuleDeployed(
 
     seasonToggle.hatAdmins = hatAdmins;
     seasonToggle.hatId = hatId;
+    seasonToggle.version = "0.1.0";
     seasonToggle.save();
   } else if (
     implemenatationAddress == CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION
@@ -473,6 +484,7 @@ export function handleModuleDeployed(
 
     characterSheetsLevelEligibility.hatAdmins = hatAdmins;
     characterSheetsLevelEligibility.hatId = hatId;
+    characterSheetsLevelEligibility.version = "0.1.0";
     characterSheetsLevelEligibility.save();
   } else if (
     implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
@@ -642,6 +654,7 @@ export function handleModuleDeployed(
     erc20Eligibility.token = token.toHexString();
     erc20Eligibility.minBalance = minBalance;
     erc20Eligibility.hatId = hatIdToHex(hatId);
+    erc20Eligibility.version = "0.1.0";
     erc20Eligibility.save();
   } else if (implemenatationAddress == ERC721_ELIGIBILITY_IMPLEMENTATION) {
     Erc721EligibilityTemplate.create(event.params.instance);
@@ -659,6 +672,7 @@ export function handleModuleDeployed(
     erc721Eligibility.token = token.toHexString();
     erc721Eligibility.minBalance = minBalance;
     erc721Eligibility.hatId = hatIdToHex(hatId);
+    erc721Eligibility.version = "0.1.0";
     erc721Eligibility.save();
   } else if (implemenatationAddress == ERC1155_ELIGIBILITY_IMPLEMENTATION) {
     Erc1155EligibilityTemplate.create(event.params.instance);
@@ -679,6 +693,7 @@ export function handleModuleDeployed(
     erc1155Eligibility.hatId = hatIdToHex(hatId);
     erc1155Eligibility.tokens = tokenIds.slice(0, numTokens.toI32());
     erc1155Eligibility.minBalances = minBalances.slice(0, numTokens.toI32());
+    erc1155Eligibility.version = "0.1.0";
     erc1155Eligibility.save();
   } else if (implemenatationAddress == HAT_WEARING_ELIGIBILITY_IMPLEMENTATION) {
     HatWearingEligibilityTemplate.create(event.params.instance);
@@ -694,6 +709,7 @@ export function handleModuleDeployed(
 
     hatWearingEligibility.hatId = hatIdToHex(hatId);
     hatWearingEligibility.criterionHat = hatIdToHex(criterionHat);
+    hatWearingEligibility.version = "0.1.0";
     hatWearingEligibility.save();
   } else if (
     implemenatationAddress == GITCOIN_PASSPORT_ELIGIBILITY_IMPLEMENTATION
@@ -712,6 +728,7 @@ export function handleModuleDeployed(
     gitcoinPassportEligibility.hatId = hatIdToHex(hatId);
     gitcoinPassportEligibility.decoder = decoder.toHexString();
     gitcoinPassportEligibility.scoreCriterion = scoreCriterion;
+    gitcoinPassportEligibility.version = "0.1.0";
     gitcoinPassportEligibility.save();
   } else if (implemenatationAddress == COLINKS_ELIGIBILITY_IMPLEMENTATION) {
     CoLinksEligibilityTemplate.create(event.params.instance);
@@ -727,6 +744,7 @@ export function handleModuleDeployed(
 
     coLinksEligibility.hatId = hatIdToHex(hatId);
     coLinksEligibility.threshold = threshold;
+    coLinksEligibility.version = "0.1.0";
     coLinksEligibility.save();
   }
 }
