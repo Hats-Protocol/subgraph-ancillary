@@ -1,5 +1,5 @@
 import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts";
-import { Hats } from "../generated/templates/Hats/Hats";
+import { Hats } from "../generated/Hats/Hats";
 
 export function hatIdToHex(hatId: BigInt): string {
   return "0x" + hatId.toHexString().slice(2).padStart(64, "0");

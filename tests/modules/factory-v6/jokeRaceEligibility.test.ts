@@ -20,8 +20,8 @@ import {
   mockNewTermEvent,
 } from "../../utils";
 import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_6_0";
-import { JOKERACE_ELIGIBILITY_IMPLEMENTATION } from "../../../src/constants";
-import { handleNewTerm } from "../../../src/modules/jokeRaceEligibility";
+import { JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION } from "../../../src/constants";
+import { handleNewTerm } from "../../../src/modules/jokeRaceEligibilityV_0_2_0";
 import { changeEndianness } from "../../../src/utils";
 
 const contest1 = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -57,7 +57,7 @@ describe("JokeRace Eligibility Tests", () => {
 
       const moduleDeployedEvent =
         mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
-          Address.fromString(JOKERACE_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION),
           Address.fromString(jokeRaceInstance),
           BigInt.fromString(hatId),
           Bytes.fromHexString(
@@ -158,7 +158,7 @@ describe("JokeRace Eligibility Tests", () => {
 
       const moduleDeployedEvent =
         mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
-          Address.fromString(JOKERACE_ELIGIBILITY_IMPLEMENTATION),
+          Address.fromString(JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION),
           Address.fromString(jokeRaceWithAdminFallbackInstance),
           BigInt.fromString(hatIdAdminsFallback),
           Bytes.fromHexString(

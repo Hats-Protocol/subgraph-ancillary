@@ -17,7 +17,7 @@ import {
 } from "@graphprotocol/graph-ts";
 import { mockHatsModuleFactory_ModuleDeployedEventV0_7_0 } from "../../utils";
 import { handleModuleDeployed } from "../../../src/hatsModuleFactoryV0_7_0";
-import { HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED } from "../../../src/constants";
+import { HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION } from "../../../src/constants";
 import { changeEndianness } from "../../../src/utils";
 
 const ballotBoxHatId =
@@ -53,9 +53,7 @@ describe("Hats Election Eligibility Tests", () => {
 
       const moduleDeployedEvent =
         mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
-          Address.fromString(
-            HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
-          ),
+          Address.fromString(HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION),
           Address.fromString(hatsElectionInstance),
           BigInt.fromString(hatId),
           Bytes.fromHexString(
@@ -103,9 +101,7 @@ describe("Hats Election Eligibility Tests", () => {
 
       const moduleDeployedEvent =
         mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
-          Address.fromString(
-            HATS_ELECTION_ELIGIBILITY_IMPLEMENTATION_DEPRECATED
-          ),
+          Address.fromString(HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION),
           Address.fromString(hatElectionsWithAdminsFallbackInstance),
           BigInt.fromString(hatIdAdminsFallback),
           Bytes.fromHexString(
