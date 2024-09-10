@@ -6,8 +6,11 @@ import {
 import {
   JokeRaceEligibility,
   JokeRaceEligibilityTerm,
+  JokeRace_NextTermSetEvent,
+  JokeRace_TermStartedEvent,
 } from "../../generated/schema";
 import { JokeRaceContest as JokeRaceContestContract } from "../../generated/templates/JokeRaceContest/JokeRaceContest";
+import { createEventID } from "./utils";
 
 export function handleNextTermSet(event: NextTermSet): void {
   const jokeRaceEligibility = JokeRaceEligibility.load(
@@ -46,6 +49,20 @@ export function handleNextTermSet(event: NextTermSet): void {
     nextTerm.save();
     jokeRaceEligibility.save();
   }
+
+  const nextTermSetEvent = new JokeRace_NextTermSetEvent(
+    createEventID(event, "NextTermSet")
+  );
+  nextTermSetEvent.module = jokeRaceEligibility.id;
+  nextTermSetEvent.jokeRaceEligibilityInstance = jokeRaceEligibility.id;
+  nextTermSetEvent.blockNumber = event.block.number.toI32();
+  nextTermSetEvent.timestamp = event.block.timestamp;
+  nextTermSetEvent.transactionID = event.transaction.hash;
+  nextTermSetEvent.newContest = event.params.newContest.toHexString();
+  nextTermSetEvent.newTermEnd = event.params.newTermEnd;
+  nextTermSetEvent.newTopK = event.params.newTopK;
+  nextTermSetEvent.newTransitionPeriod = event.params.newTransitionPeriod;
+  nextTermSetEvent.save();
 }
 
 export function handleTermStarted(event: TermStarted): void {
@@ -86,4 +103,18 @@ export function handleTermStarted(event: TermStarted): void {
     jokeRaceEligibility.save();
     term.save();
   }
+
+  const TermStartedEvent = new JokeRace_TermStartedEvent(
+    createEventID(event, "TermStarted")
+  );
+  TermStartedEvent.module = jokeRaceEligibility.id;
+  TermStartedEvent.jokeRaceEligibilityInstance = jokeRaceEligibility.id;
+  TermStartedEvent.blockNumber = event.block.number.toI32();
+  TermStartedEvent.timestamp = event.block.timestamp;
+  TermStartedEvent.transactionID = event.transaction.hash;
+  TermStartedEvent.contest = event.params.contest.toHexString();
+  TermStartedEvent.termEnd = event.params.termEnd;
+  TermStartedEvent.topK = event.params.topK;
+  TermStartedEvent.transitionPeriod = event.params.transitionPeriod;
+  TermStartedEvent.save();
 }

@@ -82,7 +82,6 @@ import { AgreementEligibilityV_0_2_0 as AgreementEligibilityV_0_2_0Contract } fr
 import { AllowListEligibilityV_0_1_0 as AllowlistEligibilityV_0_1_0Contract } from "../generated/templates/AllowListEligibilityV_0_1_0/AllowListEligibilityV_0_1_0";
 import { AllowListEligibilityV_0_2_0 as AllowlistEligibilityV_0_2_0Contract } from "../generated/templates/AllowListEligibilityV_0_2_0/AllowListEligibilityV_0_2_0";
 import { JokeRaceEligibilityV_0_3_0 as JokeRaceEligibilityV_0_3_0Contract } from "../generated/templates/JokeRaceEligibilityV_0_3_0/JokeRaceEligibilityV_0_3_0";
-import { JokeRaceContest as JokeRaceContestContract } from "../generated/templates/JokeRaceContest/JokeRaceContest";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(

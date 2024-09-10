@@ -61,7 +61,8 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event:
+            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -125,6 +126,12 @@ dataSources:
           file: ./abis/AllowlistEligibilityV_0_1_0.json
         - name: AllowListEligibilityV_0_2_0
           file: ./abis/AllowlistEligibilityV_0_2_0.json
+        - name: JokeRaceEligibilityV_0_3_0
+          file: ./abis/JokeRaceEligibilityV_0_3_0.json
+        - name: JokeRaceEligibilityV_0_2_0
+          file: ./abis/JokeRaceEligibilityV_0_2_0.json
+        - name: JokeRaceEligibilityV_0_1_0
+          file: ./abis/JokeRaceEligibilityV_0_1_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -189,6 +196,12 @@ dataSources:
           file: ./abis/AllowlistEligibilityV_0_1_0.json
         - name: AllowListEligibilityV_0_2_0
           file: ./abis/AllowlistEligibilityV_0_2_0.json
+        - name: JokeRaceEligibilityV_0_3_0
+          file: ./abis/JokeRaceEligibilityV_0_3_0.json
+        - name: JokeRaceEligibilityV_0_2_0
+          file: ./abis/JokeRaceEligibilityV_0_2_0.json
+        - name: JokeRaceEligibilityV_0_1_0
+          file: ./abis/JokeRaceEligibilityV_0_1_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
@@ -266,9 +279,14 @@ templates:
       file: ./src/modules/jokeRaceEligibilityV_0_3_0.ts
       entities:
         - JokeRaceEligibility
+        - JokeRace_NextTermSetEvent
+        - JokeRace_TermStartedEvent
+        - JokeRaceEligibilityTerm
       abis:
         - name: JokeRaceEligibilityV_0_3_0
           file: ./abis/JokeRaceEligibilityV_0_3_0.json
+        - name: JokeRaceContest
+          file: ./abis/JokeRaceContest.json
       eventHandlers:
         - event: NextTermSet(address,uint256,uint256,uint256)
           handler: handleNextTermSet
@@ -286,6 +304,7 @@ templates:
       file: ./src/modules/jokeRaceEligibilityV_0_2_0.ts
       entities:
         - JokeRaceEligibility
+        - JokeRaceEligibilityTerm
       abis:
         - name: JokeRaceEligibilityV_0_2_0
           file: ./abis/JokeRaceEligibilityV_0_2_0.json
@@ -304,6 +323,7 @@ templates:
       file: ./src/modules/jokeRaceEligibilityV_0_1_0.ts
       entities:
         - JokeRaceEligibility
+        - JokeRaceEligibilityTerm
       abis:
         - name: JokeRaceEligibilityV_0_1_0
           file: ./abis/JokeRaceEligibilityV_0_1_0.json

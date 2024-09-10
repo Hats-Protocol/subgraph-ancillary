@@ -120,6 +120,7 @@ type JokeRaceEligibility implements HatsModule @entity {
   nextTerm: JokeRaceEligibilityTerm
   allTerms: [JokeRaceEligibilityTerm!]!
     @derivedFrom(field: "jokeRaceEligibility")
+  events: [JokeRaceEvent!]! @derivedFrom(field: "jokeRaceEligibilityInstance")
 }
 
 type JokeRaceEligibilityTerm @entity {
@@ -131,6 +132,41 @@ type JokeRaceEligibilityTerm @entity {
   transitionPeriod: BigInt!
   contest: String!
   winners: [String!]
+}
+
+interface JokeRaceEvent implements HatsModuleEvent {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  jokeRaceEligibilityInstance: JokeRaceEligibility!
+}
+
+type JokeRace_NextTermSetEvent implements JokeRaceEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  jokeRaceEligibilityInstance: JokeRaceEligibility!
+  newContest: String!
+  newTopK: BigInt!
+  newTermEnd: BigInt!
+  newTransitionPeriod: BigInt!
+}
+
+type JokeRace_TermStartedEvent implements JokeRaceEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  jokeRaceEligibilityInstance: JokeRaceEligibility!
+  contest: String!
+  topK: BigInt!
+  termEnd: BigInt!
+  transitionPeriod: BigInt!
 }
 
 " Allowlist Eligibility "
