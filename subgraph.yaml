@@ -61,8 +61,7 @@ dataSources:
         - name: ERC6551Registry
           file: ./abis/ERC6551Registry.json
       eventHandlers:
-        - event:
-            ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
+        - event: ERC6551AccountCreated(address,indexed address,bytes32,uint256,indexed
             address,indexed uint256)
           handler: handleErc6551AccountCreated
       file: ./src/erc6551Registry.ts
@@ -192,10 +191,14 @@ dataSources:
           file: ./abis/AgreementEligibilityV_0_1_0.json
         - name: AgreementEligibilityV_0_2_0
           file: ./abis/AgreementEligibilityV_0_2_0.json
+        - name: AgreementEligibilityV_0_3_0
+          file: ./abis/AgreementEligibilityV_0_3_0.json
         - name: AllowListEligibilityV_0_1_0
           file: ./abis/AllowlistEligibilityV_0_1_0.json
         - name: AllowListEligibilityV_0_2_0
           file: ./abis/AllowlistEligibilityV_0_2_0.json
+        - name: AllowListEligibilityV_0_3_0
+          file: ./abis/AllowlistEligibilityV_0_3_0.json
         - name: JokeRaceEligibilityV_0_3_0
           file: ./abis/JokeRaceEligibilityV_0_3_0.json
         - name: JokeRaceEligibilityV_0_2_0
@@ -407,6 +410,39 @@ templates:
           handler: handleOwnerHatSet
         - event: ArbitratorHatSet(uint256)
           handler: handleArbitratorHatSet
+  - name: AllowListEligibilityV_0_3_0
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: AllowListEligibilityV_0_3_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/allowListEligibilityV_0_3_0.ts
+      entities:
+        - AllowListEligibility
+        - AllowListEligibilityData
+      abis:
+        - name: AllowListEligibilityV_0_3_0
+          file: ./abis/AllowlistEligibilityV_0_3_0.json
+      eventHandlers:
+        - event: AccountAdded(address)
+          handler: handleAccountAdded
+        - event: AccountsAdded(address[])
+          handler: handleAccountsAdded
+        - event: AccountRemoved(address)
+          handler: handleAccountRemoved
+        - event: AccountsRemoved(address[])
+          handler: handleAccountsRemoved
+        - event: AccountStandingChanged(address,bool)
+          handler: handleAccountStandingChanged
+        - event: AccountsStandingChanged(address[],bool[])
+          handler: handleAccountsStandingChanged
+        - event: OwnerHatSet(uint256)
+          handler: handleOwnerHatSet
+        - event: ArbitratorHatSet(uint256)
+          handler: handleArbitratorHatSet
   - name: HatsElectionEligibilityV_0_1_0
     kind: ethereum/contract
     network: sepolia
@@ -570,6 +606,33 @@ templates:
       abis:
         - name: AgreementEligibilityV_0_2_0
           file: ./abis/AgreementEligibilityV_0_2_0.json
+      eventHandlers:
+        - event: AgreementEligibility_HatClaimedWithAgreement(address,uint256,string)
+          handler: handleAgreementEligibility_HatClaimedWithAgreement
+        - event: AgreementEligibility_AgreementSigned(address,string)
+          handler: handleAgreementEligibility_AgreementSigned
+        - event: AgreementEligibility_AgreementSet(string,uint256)
+          handler: handleAgreementEligibility_AgreementSet
+        - event: AgreementEligibility_OwnerHatSet(uint256)
+          handler: handleAgreementEligibility_OwnerHatSet
+        - event: AgreementEligibility_ArbitratorHatSet(uint256)
+          handler: handleAgreementEligibility_ArbitratorHatSet
+  - name: AgreementEligibilityV_0_3_0
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: AgreementEligibilityV_0_3_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/agreementEligibilityV_0_3_0.ts
+      entities:
+        - AgreementEligibility
+        - Agreement
+      abis:
+        - name: AgreementEligibilityV_0_3_0
+          file: ./abis/AgreementEligibilityV_0_3_0.json
       eventHandlers:
         - event: AgreementEligibility_HatClaimedWithAgreement(address,uint256,string)
           handler: handleAgreementEligibility_HatClaimedWithAgreement
