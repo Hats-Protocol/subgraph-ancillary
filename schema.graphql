@@ -506,6 +506,7 @@ type AgreementEligibility implements HatsModule @entity {
   currentAgreement: Agreement!
   currentAgreementNumber: BigInt!
   agreements: [Agreement!]! @derivedFrom(field: "agreementEligibility")
+  badStandings: [String!]!
   events: [AgreementEvent!]! @derivedFrom(field: "agreementEligibilityInstance")
 }
 
@@ -631,4 +632,20 @@ type CoLinksEligibility implements HatsModule @entity {
   version: String
   hatId: String!
   threshold: BigInt!
+}
+
+" Chains "
+type HatsEligibilitiesChain implements HatsModule @entity {
+  id: ID!
+  version: String
+  hatId: String!
+  rulesets: [EligibilitiesRuleset!]! @derivedFrom(field: "eligibilitiesChain")
+  moduleAddresses: [String!]!
+  numRulesets: BigInt!
+}
+
+type EligibilitiesRuleset @entity {
+  id: ID!
+  eligibilitiesChain: HatsEligibilitiesChain!
+  modules: [HatsModule!]!
 }
