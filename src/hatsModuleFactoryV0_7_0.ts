@@ -21,6 +21,8 @@ import {
   HatWearingEligibility as HatWearingEligibilityObject,
   GitcoinPassportEligibility as GitcoinPassportEligibilityObject,
   CoLinksEligibility as CoLinksEligibilityObject,
+  HatsEligibilitiesChain as HatsEligibilitiesChainObject,
+  EligibilitiesRuleset as EligibilitiesRulesetObject,
 } from "../generated/schema";
 import {
   JokeRaceEligibilityV_0_2_0 as JokeRaceEligibilityV_0_2_0Template,
@@ -71,6 +73,8 @@ import {
   HAT_WEARING_ELIGIBILITY_IMPLEMENTATION,
   GITCOIN_PASSPORT_ELIGIBILITY_IMPLEMENTATION,
   COLINKS_ELIGIBILITY_IMPLEMENTATION,
+  HATS_ELIGIBILITIES_CHAIN_V_0_1_0_IMPLEMENTATION,
+  HATS_ELIGIBILITIES_CHAIN_V_0_2_0_IMPLEMENTATION,
 } from "./constants";
 import { HatsStakingShaman as HatsStakingShamanContract } from "../generated/templates/HatsStakingShaman/HatsStakingShaman";
 import { HatsFarcasterDelegator as HatsFarcasterDelegatorContract } from "../generated/templates/HatsFarcasterDelegator/HatsFarcasterDelegator";
@@ -91,6 +95,8 @@ import { AllowListEligibilityV_0_1_0 as AllowlistEligibilityV_0_1_0Contract } fr
 import { AllowListEligibilityV_0_2_0 as AllowlistEligibilityV_0_2_0Contract } from "../generated/templates/AllowListEligibilityV_0_2_0/AllowListEligibilityV_0_2_0";
 import { AllowListEligibilityV_0_3_0 as AllowlistEligibilityV_0_3_0Contract } from "../generated/templates/AllowListEligibilityV_0_3_0/AllowListEligibilityV_0_3_0";
 import { JokeRaceEligibilityV_0_3_0 as JokeRaceEligibilityV_0_3_0Contract } from "../generated/templates/JokeRaceEligibilityV_0_3_0/JokeRaceEligibilityV_0_3_0";
+import { HatsEligibilitiesChainV_0_1_0 as HatsEligibilitiesChainV_0_1_0Contract } from "../generated/templates/HatsEligibilitiesChainV_0_1_0/HatsEligibilitiesChainV_0_1_0";
+import { HatsEligibilitiesChainV_0_2_0 as HatsEligibilitiesChainV_0_2_0Contract } from "../generated/templates/HatsEligibilitiesChainV_0_2_0/HatsEligibilitiesChainV_0_2_0";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -563,6 +569,7 @@ export function handleModuleDeployed(
     agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     agreementEligibility.currentAgreement = agreementObject.id;
     agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
+    agreementEligibility.badStandings = [];
     agreementEligibility.version = "0.1.0";
 
     agreementEligibility.save();
@@ -609,6 +616,7 @@ export function handleModuleDeployed(
     agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     agreementEligibility.currentAgreement = agreementObject.id;
     agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
+    agreementEligibility.badStandings = [];
     agreementEligibility.version = "0.2.0";
 
     agreementEligibility.save();
@@ -655,6 +663,7 @@ export function handleModuleDeployed(
     agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     agreementEligibility.currentAgreement = agreementObject.id;
     agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
+    agreementEligibility.badStandings = [];
     agreementEligibility.version = "0.3.0";
 
     agreementEligibility.save();
@@ -830,6 +839,90 @@ export function handleModuleDeployed(
     coLinksEligibility.threshold = threshold;
     coLinksEligibility.version = "0.1.0";
     coLinksEligibility.save();
+  } else if (
+    implemenatationAddress == HATS_ELIGIBILITIES_CHAIN_V_0_1_0_IMPLEMENTATION
+  ) {
+    const hatsEligibilitiesChain = new HatsEligibilitiesChainObject(
+      event.params.instance.toHexString()
+    );
+
+    const hatsEligibilitiesContract =
+      HatsEligibilitiesChainV_0_1_0Contract.bind(event.params.instance);
+
+    const hatId = hatsEligibilitiesContract.hatId();
+    const numRulesets = hatsEligibilitiesContract.NUM_CONJUNCTION_CLAUSES();
+    const rulesetsLengths =
+      hatsEligibilitiesContract.CONJUNCTION_CLAUSE_LENGTHS();
+    const modules = hatsEligibilitiesContract.MODULES();
+
+    const moduleAddresses = modules.map<string>((module) =>
+      module.toHexString()
+    );
+
+    let modulesIndex = 0;
+    for (let i = 0; i < numRulesets.toI32(); i++) {
+      const ruleset = new EligibilitiesRulesetObject(
+        hatsEligibilitiesChain.id + "-" + i.toString()
+      );
+      ruleset.eligibilitiesChain = hatsEligibilitiesChain.id;
+
+      const rulesetLength = rulesetsLengths[i].toI32();
+      const rulesetModules = moduleAddresses.slice(
+        modulesIndex,
+        modulesIndex + rulesetLength
+      );
+      ruleset.modules = rulesetModules;
+      ruleset.save();
+      modulesIndex += rulesetLength;
+    }
+
+    hatsEligibilitiesChain.hatId = hatIdToHex(hatId);
+    hatsEligibilitiesChain.version = "0.1.0";
+    hatsEligibilitiesChain.moduleAddresses = moduleAddresses;
+    hatsEligibilitiesChain.numRulesets = numRulesets;
+    hatsEligibilitiesChain.save();
+  } else if (
+    implemenatationAddress == HATS_ELIGIBILITIES_CHAIN_V_0_2_0_IMPLEMENTATION
+  ) {
+    const hatsEligibilitiesChain = new HatsEligibilitiesChainObject(
+      event.params.instance.toHexString()
+    );
+
+    const hatsEligibilitiesContract =
+      HatsEligibilitiesChainV_0_2_0Contract.bind(event.params.instance);
+
+    const hatId = hatsEligibilitiesContract.hatId();
+    const numRulesets = hatsEligibilitiesContract.NUM_CONJUNCTION_CLAUSES();
+    const rulesetsLengths =
+      hatsEligibilitiesContract.CONJUNCTION_CLAUSE_LENGTHS();
+    const modules = hatsEligibilitiesContract.MODULES();
+
+    const moduleAddresses = modules.map<string>((module) =>
+      module.toHexString()
+    );
+
+    let modulesIndex = 0;
+    for (let i = 0; i < numRulesets.toI32(); i++) {
+      const ruleset = new EligibilitiesRulesetObject(
+        hatsEligibilitiesChain.id + "-" + i.toString()
+      );
+      ruleset.eligibilitiesChain = hatsEligibilitiesChain.id;
+
+      const rulesetLength = rulesetsLengths[i].toI32();
+      const rulesetModules = moduleAddresses.slice(
+        modulesIndex,
+        modulesIndex + rulesetLength
+      );
+      ruleset.modules = rulesetModules;
+      ruleset.save();
+      modulesIndex += rulesetLength;
+    }
+
+    hatsEligibilitiesChain.hatId = hatIdToHex(hatId);
+    hatsEligibilitiesChain.version = "0.2.0";
+    hatsEligibilitiesChain.moduleAddresses = moduleAddresses;
+    hatsEligibilitiesChain.numRulesets = numRulesets;
+    hatsEligibilitiesChain.save();
   }
 }
 
