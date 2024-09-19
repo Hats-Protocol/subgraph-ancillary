@@ -23,6 +23,7 @@ import {
   CoLinksEligibility as CoLinksEligibilityObject,
   HatsEligibilitiesChain as HatsEligibilitiesChainObject,
   EligibilitiesRuleset as EligibilitiesRulesetObject,
+  HatControlledModule as HatControlledModuleObject,
 } from "../generated/schema";
 import {
   JokeRaceEligibilityV_0_2_0 as JokeRaceEligibilityV_0_2_0Template,
@@ -48,6 +49,7 @@ import {
   HatWearingEligibility as HatWearingEligibilityTemplate,
   GitcoinPassportEligibility as GitcoinPassportEligibilityTemplate,
   CoLinksEligibility as CoLinksEligibilityTemplate,
+  HatControlledModuleV_0_1_0 as HatControlledModuleV_0_1_0Template,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
@@ -75,6 +77,7 @@ import {
   COLINKS_ELIGIBILITY_IMPLEMENTATION,
   HATS_ELIGIBILITIES_CHAIN_V_0_1_0_IMPLEMENTATION,
   HATS_ELIGIBILITIES_CHAIN_V_0_2_0_IMPLEMENTATION,
+  HAT_CONTROLLED_MODULE_V_0_1_0_IMPLEMENTATION,
 } from "./constants";
 import { HatsStakingShaman as HatsStakingShamanContract } from "../generated/templates/HatsStakingShaman/HatsStakingShaman";
 import { HatsFarcasterDelegator as HatsFarcasterDelegatorContract } from "../generated/templates/HatsFarcasterDelegator/HatsFarcasterDelegator";
@@ -97,6 +100,7 @@ import { AllowListEligibilityV_0_3_0 as AllowlistEligibilityV_0_3_0Contract } fr
 import { JokeRaceEligibilityV_0_3_0 as JokeRaceEligibilityV_0_3_0Contract } from "../generated/templates/JokeRaceEligibilityV_0_3_0/JokeRaceEligibilityV_0_3_0";
 import { HatsEligibilitiesChainV_0_1_0 as HatsEligibilitiesChainV_0_1_0Contract } from "../generated/templates/HatsEligibilitiesChainV_0_1_0/HatsEligibilitiesChainV_0_1_0";
 import { HatsEligibilitiesChainV_0_2_0 as HatsEligibilitiesChainV_0_2_0Contract } from "../generated/templates/HatsEligibilitiesChainV_0_2_0/HatsEligibilitiesChainV_0_2_0";
+import { HatControlledModuleV_0_1_0 as HatControlledModuleV_0_1_0Contract } from "../generated/templates/HatControlledModuleV_0_1_0/HatControlledModuleV_0_1_0";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -923,6 +927,24 @@ export function handleModuleDeployed(
     hatsEligibilitiesChain.moduleAddresses = moduleAddresses;
     hatsEligibilitiesChain.numRulesets = numRulesets;
     hatsEligibilitiesChain.save();
+  } else if (
+    implemenatationAddress == HAT_CONTROLLED_MODULE_V_0_1_0_IMPLEMENTATION
+  ) {
+    HatControlledModuleV_0_1_0Template.create(event.params.instance);
+    const hatControlledModule = new HatControlledModuleObject(
+      event.params.instance.toHexString()
+    );
+    const hatControlledModuleContract = HatControlledModuleV_0_1_0Contract.bind(
+      event.params.instance
+    );
+
+    const hatId = hatControlledModuleContract.hatId();
+    const controllerHatId = hatControlledModuleContract.CONTROLLER_HAT();
+
+    hatControlledModule.hatId = hatIdToHex(hatId);
+    hatControlledModule.controllerHatId = hatIdToHex(controllerHatId);
+    hatControlledModule.version = "0.1.0";
+    hatControlledModule.save();
   }
 }
 
