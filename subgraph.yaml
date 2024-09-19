@@ -103,6 +103,7 @@ dataSources:
         - HatWearingEligibility
         - CoLinksEligibility
         - GitcoinPassportEligibility
+        - HatControlledModule
       abis:
         - name: HatsModuleFactoryV0_6_0
           file: ./abis/HatsModuleFactoryV0_6_0.json
@@ -146,6 +147,8 @@ dataSources:
           file: ./abis/HatsEligibilitiesChainV_0_1_0.json
         - name: HatsEligibilitiesChainV_0_2_0
           file: ./abis/HatsEligibilitiesChainV_0_2_0.json
+        - name: HatControlledModuleV_0_1_0
+          file: ./abis/HatControlledModuleV_0_1_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -179,6 +182,7 @@ dataSources:
         - HatWearingEligibility
         - CoLinksEligibility
         - GitcoinPassportEligibility
+        - HatControlledModule
       abis:
         - name: HatsModuleFactoryV0_7_0
           file: ./abis/HatsModuleFactoryV0_7_0.json
@@ -224,6 +228,8 @@ dataSources:
           file: ./abis/HatsEligibilitiesChainV_0_1_0.json
         - name: HatsEligibilitiesChainV_0_2_0
           file: ./abis/HatsEligibilitiesChainV_0_2_0.json
+        - name: HatControlledModuleV_0_1_0
+          file: ./abis/HatControlledModuleV_0_1_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
@@ -827,3 +833,23 @@ templates:
       abis:
         - name: HatsEligibilitiesChainV_0_2_0
           file: ./abis/HatsEligibilitiesChainV_0_2_0.json
+  - name: HatControlledModuleV_0_1_0
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: HatControlledModuleV_0_1_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/hatControlledModuleV_0_1_0.ts
+      entities:
+        - HatControlledModule
+      abis:
+        - name: HatControlledModuleV_0_1_0
+          file: ./abis/HatControlledModuleV_0_1_0.json
+      eventHandlers:
+        - event: WearerStatusSet(address,uint256,bool,bool)
+          handler: handleWearerStatusSet
+        - event: HatStatusSet(uint256,bool)
+          handler: handleHatStatusSet

@@ -634,6 +634,69 @@ type CoLinksEligibility implements HatsModule @entity {
   threshold: BigInt!
 }
 
+" Hat Controlled Module "
+type HatControlledModule implements HatsModule @entity {
+  id: ID!
+  version: String
+  hatId: String!
+  controllerHatId: String!
+  wearersStatusData: [HatControlledModuleWearerStatus!]!
+    @derivedFrom(field: "hatControlledModule")
+  hatsStatusData: [HatControlledModuleHatStatus!]!
+    @derivedFrom(field: "hatControlledModule")
+  events: [HatControlledModuleEvent!]!
+    @derivedFrom(field: "hatControlledModuleInstance")
+}
+
+type HatControlledModuleWearerStatus @entity {
+  id: ID!
+  hatControlledModule: HatControlledModule!
+  hatId: String!
+  wearer: String!
+  eligible: Boolean!
+  standing: Boolean!
+}
+
+type HatControlledModuleHatStatus @entity {
+  id: ID!
+  hatControlledModule: HatControlledModule!
+  hatId: String!
+  active: Boolean!
+}
+
+interface HatControlledModuleEvent implements HatsModuleEvent {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatControlledModuleInstance: HatControlledModule!
+}
+
+type HatControlled_WearerStatusSet implements HatControlledModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatControlledModuleInstance: HatControlledModule!
+  wearer: String!
+  hatId: String!
+  eligible: Boolean!
+  standing: Boolean!
+}
+
+type HatControlled_HatStatusSet implements HatControlledModuleEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatControlledModuleInstance: HatControlledModule!
+  hatId: String!
+  active: Boolean!
+}
+
 " Chains "
 type HatsEligibilitiesChain implements HatsModule @entity {
   id: ID!
