@@ -24,6 +24,7 @@ import {
   HatsEligibilitiesChain as HatsEligibilitiesChainObject,
   EligibilitiesRuleset as EligibilitiesRulesetObject,
   HatControlledModule as HatControlledModuleObject,
+  PublicLockV14Eligibility as PublicLockV14EligibilityObject,
 } from "../generated/schema";
 import {
   JokeRaceEligibilityV_0_2_0 as JokeRaceEligibilityV_0_2_0Template,
@@ -50,6 +51,7 @@ import {
   GitcoinPassportEligibility as GitcoinPassportEligibilityTemplate,
   CoLinksEligibility as CoLinksEligibilityTemplate,
   HatControlledModuleV_0_1_0 as HatControlledModuleV_0_1_0Template,
+  PublicLockV14EligibilityV_0_1_2 as PublicLockV14EligibilityV_0_1_2Template,
 } from "../generated/templates";
 import {
   JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
@@ -78,6 +80,7 @@ import {
   HATS_ELIGIBILITIES_CHAIN_V_0_1_0_IMPLEMENTATION,
   HATS_ELIGIBILITIES_CHAIN_V_0_2_0_IMPLEMENTATION,
   HAT_CONTROLLED_MODULE_V_0_1_0_IMPLEMENTATION,
+  PUBLIC_LOCK_V14_ELIGIBILITY_V_0_1_2_IMPLEMENTATION,
 } from "./constants";
 import { HatsStakingShaman as HatsStakingShamanContract } from "../generated/templates/HatsStakingShaman/HatsStakingShaman";
 import { HatsFarcasterDelegator as HatsFarcasterDelegatorContract } from "../generated/templates/HatsFarcasterDelegator/HatsFarcasterDelegator";
@@ -101,6 +104,7 @@ import { JokeRaceEligibilityV_0_3_0 as JokeRaceEligibilityV_0_3_0Contract } from
 import { HatsEligibilitiesChainV_0_1_0 as HatsEligibilitiesChainV_0_1_0Contract } from "../generated/templates/HatsEligibilitiesChainV_0_1_0/HatsEligibilitiesChainV_0_1_0";
 import { HatsEligibilitiesChainV_0_2_0 as HatsEligibilitiesChainV_0_2_0Contract } from "../generated/templates/HatsEligibilitiesChainV_0_2_0/HatsEligibilitiesChainV_0_2_0";
 import { HatControlledModuleV_0_1_0 as HatControlledModuleV_0_1_0Contract } from "../generated/templates/HatControlledModuleV_0_1_0/HatControlledModuleV_0_1_0";
+import { PublicLockV14EligibilityV_0_1_2 as PublicLockV14EligibilityV_0_1_2Contract } from "../generated/templates/PublicLockV14EligibilityV_0_1_2/PublicLockV14EligibilityV_0_1_2";
 import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 
 export function handleModuleDeployed(
@@ -945,6 +949,28 @@ export function handleModuleDeployed(
     hatControlledModule.controllerHatId = hatIdToHex(controllerHatId);
     hatControlledModule.version = "0.1.0";
     hatControlledModule.save();
+  } else if (
+    implemenatationAddress == PUBLIC_LOCK_V14_ELIGIBILITY_V_0_1_2_IMPLEMENTATION
+  ) {
+    PublicLockV14EligibilityV_0_1_2Template.create(event.params.instance);
+    const publicLockModule = new PublicLockV14EligibilityObject(
+      event.params.instance.toHexString()
+    );
+    const publicLockModuleContract =
+      PublicLockV14EligibilityV_0_1_2Contract.bind(event.params.instance);
+
+    const hatId = publicLockModuleContract.hatId();
+    const lock = publicLockModuleContract.lock();
+    const referrer = publicLockModuleContract.REFERRER();
+    const referrerFeePercentage =
+      publicLockModuleContract.referrerFeePercentage();
+
+    publicLockModule.hatId = hatIdToHex(hatId);
+    publicLockModule.lock = lock.toHexString();
+    publicLockModule.referrer = referrer.toHexString();
+    publicLockModule.referrerFeePercentage = referrerFeePercentage;
+    publicLockModule.version = "0.1.2";
+    publicLockModule.save();
   }
 }
 
