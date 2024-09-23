@@ -697,6 +697,16 @@ type HatControlled_HatStatusSet implements HatControlledModuleEvent @entity {
   active: Boolean!
 }
 
+" Public Lock V14 Eligibility "
+type PublicLockV14Eligibility implements HatsModule @entity {
+  id: ID!
+  version: String
+  hatId: String!
+  lock: String!
+  referrer: String!
+  referrerFeePercentage: BigInt!
+}
+
 " Chains "
 type HatsEligibilitiesChain implements HatsModule @entity {
   id: ID!

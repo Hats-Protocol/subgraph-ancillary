@@ -104,6 +104,7 @@ dataSources:
         - CoLinksEligibility
         - GitcoinPassportEligibility
         - HatControlledModule
+        - PublicLockV14Eligibility
       abis:
         - name: HatsModuleFactoryV0_6_0
           file: ./abis/HatsModuleFactoryV0_6_0.json
@@ -149,6 +150,8 @@ dataSources:
           file: ./abis/HatsEligibilitiesChainV_0_2_0.json
         - name: HatControlledModuleV_0_1_0
           file: ./abis/HatControlledModuleV_0_1_0.json
+        - name: PublicLockV14EligibilityV_0_1_2
+          file: ./abis/PublicLockV14EligibilityV_0_1_2.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
@@ -183,6 +186,7 @@ dataSources:
         - CoLinksEligibility
         - GitcoinPassportEligibility
         - HatControlledModule
+        - PublicLockV14Eligibility
       abis:
         - name: HatsModuleFactoryV0_7_0
           file: ./abis/HatsModuleFactoryV0_7_0.json
@@ -230,6 +234,8 @@ dataSources:
           file: ./abis/HatsEligibilitiesChainV_0_2_0.json
         - name: HatControlledModuleV_0_1_0
           file: ./abis/HatControlledModuleV_0_1_0.json
+        - name: PublicLockV14EligibilityV_0_1_2
+          file: ./abis/PublicLockV14EligibilityV_0_1_2.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
@@ -853,3 +859,18 @@ templates:
           handler: handleWearerStatusSet
         - event: HatStatusSet(uint256,bool)
           handler: handleHatStatusSet
+  - name: PublicLockV14EligibilityV_0_1_2
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: PublicLockV14EligibilityV_0_1_2
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/modules/publicLockV14EligibilityV_0_1_2.ts
+      entities:
+        - PublicLockV14Eligibility
+      abis:
+        - name: PublicLockV14EligibilityV_0_1_2
+          file: ./abis/PublicLockV14EligibilityV_0_1_2.json
