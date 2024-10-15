@@ -48,6 +48,7 @@ export function handleAccountAdded(event: AccountAdded): void {
     createEventID(event, "AccountAdded")
   );
   allowlistAccountAdded.module = allowListEligibility.id;
+  allowlistAccountAdded.transactionID = event.transaction.hash;
   allowlistAccountAdded.allowlistEligibilityInstance = allowListEligibility.id;
   allowlistAccountAdded.blockNumber = event.block.number.toI32();
   allowlistAccountAdded.timestamp = event.block.timestamp;
