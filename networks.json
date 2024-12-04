@@ -19,6 +19,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 18429101
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 21320819
     }
   },
   "matic": {
@@ -41,6 +45,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 49144500
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 65026178
     }
   },
   "gnosis": {
@@ -63,6 +71,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 30979644
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 37333806
     }
   },
   "arbitrum-one": {
@@ -85,6 +97,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 186184530
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 280853534
     }
   },
   "optimism": {
@@ -107,6 +123,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 111329307
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 128808362
     }
   },
   "sepolia": {
@@ -129,6 +149,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 5199209
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 7201757
     }
   },
   "base": {
@@ -151,6 +175,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 5733915
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 23213104
     }
   },
   "celo": {
@@ -173,6 +201,10 @@
     "ERC6551Registry": {
       "address": "0x000000006551c19487814612e58FE06813775758",
       "startBlock": 24480241
+    },
+    "ModuleProxyFactory": {
+      "address": "0x000000000000aDdB49795b0f9bA5BC298cDda236",
+      "startBlock": 29108507
     }
   }
 }

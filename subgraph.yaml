@@ -240,6 +240,28 @@ dataSources:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
           handler: handleModuleDeployed
       file: ./src/hatsModuleFactoryV0_7_0.ts
+  - kind: ethereum
+    name: ModuleProxyFactory
+    network: sepolia
+    source:
+      abi: ModuleProxyFactory
+      address: "0x000000000000aDdB49795b0f9bA5BC298cDda236"
+      startBlock: 7201757
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - HatsSignerGate2
+      abis:
+        - name: ModuleProxyFactory
+          file: ./abis/ModuleProxyFactory.json
+        - name: HatsSignerGateV2
+          file: ./abis/HatsSignerGateV2.json
+      eventHandlers:
+        - event: ModuleProxyCreation(indexed address,indexed address)
+          handler: handleModuleProxyCreation
+      file: ./src/moduleProxyFactory.ts
 templates:
   - name: HatsSignerGate
     kind: ethereum/contract
@@ -283,6 +305,46 @@ templates:
           handler: handleMinThresholdSet
         - event: SignerHatsAdded(uint256[])
           handler: handleSignerHatsAdded
+  - name: HatsSignerGateV2
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: HatsSignerGateV2
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/hatsSignerGateV2.ts
+      entities:
+        - HatsSignerGateV2
+      abis:
+        - name: HatsSignerGateV2
+          file: ./abis/HatsSignerGateV2.json
+      eventHandlers:
+        - event: ThresholdConfigSet((uint8,uint120,uint120))
+          handler: handleThresholdConfigSet
+        - event: SignerHatsAdded(uint256[])
+          handler: handleSignerHatsAdded
+        - event: OwnerHatSet(uint256)
+          handler: handleOwnerHatSet
+        - event: HSGLocked()
+          handler: handleHSGLocked
+        - event: ClaimableForSet(bool)
+          handler: handleClaimableForSet
+        - event: Detached()
+          handler: handleDetached
+        - event: Migrated(address)
+          handler: handleMigrated
+        - event: DelegatecallTargetEnabled(address,bool)
+          handler: handleDelegatecallTargetEnabled
+        - event: Registered(uint256,address)
+          handler: handleRegistered
+        - event: ChangedGuard(address)
+          handler: handleChangedGuard
+        - event: EnabledModule(address)
+          handler: handleEnabledModule
+        - event: DisabledModule(address)
+          handler: handleDisabledModule
   - name: HatsAccount1ofN
     kind: ethereum/contract
     network: sepolia

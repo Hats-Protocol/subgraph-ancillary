@@ -8,6 +8,11 @@ enum HatsAccountOperationType {
   DelegateCall
 }
 
+enum HatsSignerGateV2ThresholdType {
+  ABSOLUTE
+  PROPORTIONAL
+}
+
 type HatAuthority @entity {
   id: ID!
   "pre computed hats account address with a salt value of 1, null only if the hat was not created yet"
@@ -15,6 +20,8 @@ type HatAuthority @entity {
   hatsAccount1ofN: [HatsAccount1ofN!]! @derivedFrom(field: "accountOfHat")
   hsgOwner: [HatsSignerGate!]! @derivedFrom(field: "ownerHat")
   hsgSigner: [HatsSignerGate!]! @derivedFrom(field: "signerHats")
+  hsgV2Owner: [HatsSignerGateV2!]! @derivedFrom(field: "ownerHat")
+  hsgV2Signer: [HatsSignerGateV2!]! @derivedFrom(field: "signerHats")
   jokeraceAdmin: [JokeRaceEligibility!]! @derivedFrom(field: "adminHat")
   allowListOwner: [AllowListEligibility!]! @derivedFrom(field: "ownerHat")
   allowListArbitrator: [AllowListEligibility!]!
@@ -40,7 +47,7 @@ type HatAuthority @entity {
     @derivedFrom(field: "caster")
 }
 
-" *** Gates *** "
+"Hats Signer Gate"
 type HatsSignerGate @entity {
   id: ID!
   type: HatsSignerGateType!
@@ -52,6 +59,151 @@ type HatsSignerGate @entity {
   maxSigners: BigInt!
 }
 
+"HSG v2"
+type HatsSignerGateV2 @entity {
+  id: ID!
+  ownerHat: HatAuthority!
+  signerHats: [HatAuthority!]!
+  safe: String!
+  locked: Boolean!
+  claimableFor: Boolean!
+  implementation: String!
+  enabledDelegatecallTargets: [String!]!
+  thresholdType: HatsSignerGateV2ThresholdType!
+  minThreshold: BigInt!
+  targetThreshold: BigInt!
+  guard: String!
+  modules: [String!]!
+  events: [HatsSignerGateV2Event!]! @derivedFrom(field: "hsg")
+}
+
+interface HatsSignerGateV2Event {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+}
+
+type HatsSignerGateV2_OwnerHatSetEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  ownerHat: String!
+}
+
+type HatsSignerGateV2_SignerHatsAddedEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  newSignerHats: [String!]!
+}
+
+type HatsSignerGateV2_ThresholdConfigSetEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  thresholdType: HatsSignerGateV2ThresholdType!
+  minThreshold: BigInt!
+  targetThreshold: BigInt!
+}
+
+type HatsSignerGateV2_HSGLockedEvent implements HatsSignerGateV2Event @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+}
+
+type HatsSignerGateV2_ClaimableForSetEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  claimableFor: Boolean!
+}
+
+type HatsSignerGateV2_DetachedEvent implements HatsSignerGateV2Event @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+}
+
+type HatsSignerGateV2_MigratedEvent implements HatsSignerGateV2Event @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  newHsg: String!
+}
+
+type HatsSignerGateV2_DelegatecallTargetEnabledEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  target: String!
+  enabled: Boolean!
+}
+
+type HatsSignerGateV2_RegisteredEvent implements HatsSignerGateV2Event @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  signer: String!
+}
+
+type HatsSignerGateV2_ChangedGuardEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  guard: String!
+}
+
+type HatsSignerGateV2_EnabledModuleEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  module: String!
+}
+
+type HatsSignerGateV2_DisabledModuleEvent implements HatsSignerGateV2Event
+  @entity {
+  id: ID!
+  hsg: HatsSignerGateV2!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  module: String!
+}
+
+"Hats Account 1ofN"
 type HatsAccount1ofN @entity {
   id: ID!
   accountOfHat: HatAuthority!
@@ -80,6 +232,7 @@ type HatsStakingShaman @entity {
   stakes: [ShamanStake!]! @derivedFrom(field: "stakingShaman")
 }
 
+"Shaman Stake"
 type ShamanStake @entity {
   id: ID!
   stakingShaman: HatsStakingShaman!
@@ -89,6 +242,7 @@ type ShamanStake @entity {
   canUnstakeAfter: BigInt!
 }
 
+"Farcaster Delegator"
 type HatsFarcasterDelegator @entity {
   id: ID!
   caster: HatAuthority!

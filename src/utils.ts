@@ -1,4 +1,4 @@
-import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts";
+import { BigInt, Address, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { Hats } from "../generated/Hats/Hats";
 
 export function hatIdToHex(hatId: BigInt): string {
@@ -75,4 +75,12 @@ export function getLinkedTreeAdmin(topHat: string): string {
   const topHatDomain = hatsConstact.getTopHatDomain(topHatBigInt);
   const linkedTreeAdmin = hatsConstact.linkedTreeAdmins(topHatDomain);
   return hatIdToHex(linkedTreeAdmin);
+}
+
+export function createEventID(event: ethereum.Event, name: string): string {
+  return name
+    .concat("-")
+    .concat(event.block.number.toString())
+    .concat("-")
+    .concat(event.logIndex.toString());
 }
