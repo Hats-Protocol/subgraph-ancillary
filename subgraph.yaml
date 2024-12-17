@@ -138,6 +138,8 @@ dataSources:
           file: ./abis/AllowlistEligibilityV_0_1_0.json
         - name: AllowListEligibilityV_0_2_0
           file: ./abis/AllowlistEligibilityV_0_2_0.json
+        - name: AllowListEligibilityV_0_3_0
+          file: ./abis/AllowlistEligibilityV_0_3_0.json
         - name: JokeRaceEligibilityV_0_3_0
           file: ./abis/JokeRaceEligibilityV_0_3_0.json
         - name: JokeRaceEligibilityV_0_2_0
