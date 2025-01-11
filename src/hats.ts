@@ -89,7 +89,7 @@ export function handleWearerStandingChanged(
     eligibilityAddress.toHexString()
   );
 
-  if (agreementEligibility != null) {
+  if (agreementEligibility != null && agreementEligibility.version != "0.4.0") {
     updateStandingInAgreement(
       agreementEligibility,
       eligibilityAddress,
@@ -108,7 +108,10 @@ export function handleWearerStandingChanged(
       const module = modules[i];
       const agreementEligibility = AgreementEligibility.load(module);
 
-      if (agreementEligibility != null) {
+      if (
+        agreementEligibility != null &&
+        agreementEligibility.version != "0.4.0"
+      ) {
         updateStandingInAgreement(
           agreementEligibility,
           Address.fromString(module),

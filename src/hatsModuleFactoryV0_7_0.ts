@@ -42,6 +42,7 @@ import {
   AgreementEligibilityV_0_1_0 as AgreementEligibilityV_0_1_0Template,
   AgreementEligibilityV_0_2_0 as AgreementEligibilityV_0_2_0Template,
   AgreementEligibilityV_0_3_0 as AgreementEligibilityV_0_3_0Template,
+  AgreementEligibilityV_0_4_0 as AgreementEligibilityV_0_4_0Template,
   HatsStakingShaman as HatsStakingShamanTemplate,
   HatsFarcasterDelegator as HatsFarcasterDelegatorTemplate,
   Erc20Eligibility as Erc20EligibilityTemplate,
@@ -69,6 +70,7 @@ import {
   AGREEMENT_ELIGIBILITY_V_0_1_0_IMPLEMENTATION,
   AGREEMENT_ELIGIBILITY_V_0_2_0_IMPLEMENTATION,
   AGREEMENT_ELIGIBILITY_V_0_3_0_IMPLEMENTATION,
+  AGREEMENT_ELIGIBILITY_V_0_4_0_IMPLEMENTATION,
   HATS_STAKING_SHAMAN_IMPLEMENTATION,
   HATS_FARCASTER_DELEGATOR_IMPLEMENTATION,
   ERC20_ELIGIBILITY_IMPLEMENTATION,
@@ -97,6 +99,7 @@ import { CoLinksEligibility as CoLinksEligibilityContract } from "../generated/t
 import { AgreementEligibilityV_0_1_0 as AgreementEligibilityV_0_1_0Contract } from "../generated/templates/AgreementEligibilityV_0_1_0/AgreementEligibilityV_0_1_0";
 import { AgreementEligibilityV_0_2_0 as AgreementEligibilityV_0_2_0Contract } from "../generated/templates/AgreementEligibilityV_0_2_0/AgreementEligibilityV_0_2_0";
 import { AgreementEligibilityV_0_3_0 as AgreementEligibilityV_0_3_0Contract } from "../generated/templates/AgreementEligibilityV_0_3_0/AgreementEligibilityV_0_3_0";
+import { AgreementEligibilityV_0_4_0 as AgreementEligibilityV_0_4_0Contract } from "../generated/templates/AgreementEligibilityV_0_4_0/AgreementEligibilityV_0_4_0";
 import { AllowListEligibilityV_0_1_0 as AllowlistEligibilityV_0_1_0Contract } from "../generated/templates/AllowListEligibilityV_0_1_0/AllowListEligibilityV_0_1_0";
 import { AllowListEligibilityV_0_2_0 as AllowlistEligibilityV_0_2_0Contract } from "../generated/templates/AllowListEligibilityV_0_2_0/AllowListEligibilityV_0_2_0";
 import { AllowListEligibilityV_0_3_0 as AllowlistEligibilityV_0_3_0Contract } from "../generated/templates/AllowListEligibilityV_0_3_0/AllowListEligibilityV_0_3_0";
@@ -673,6 +676,53 @@ export function handleModuleDeployed(
     agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
     agreementEligibility.badStandings = [];
     agreementEligibility.version = "0.3.0";
+
+    agreementEligibility.save();
+    ownerHatAuthority.save();
+    arbitratorHatAuthority.save();
+    agreementObject.save();
+  } else if (
+    implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_4_0_IMPLEMENTATION
+  ) {
+    AgreementEligibilityV_0_4_0Template.create(event.params.instance);
+    const agreementEligibility = new AgreementEligibilityObject(
+      event.params.instance.toHexString()
+    );
+
+    const agreementEligibilityContract =
+      AgreementEligibilityV_0_4_0Contract.bind(event.params.instance);
+
+    const agreement = agreementEligibilityContract.currentAgreement();
+
+    const agreementObject = new Agreement("1" + "-" + agreementEligibility.id);
+    agreementObject.agreementEligibility = agreementEligibility.id;
+    agreementObject.agreement = agreement;
+    agreementObject.signers = [];
+    agreementObject.graceEndTime = BigInt.fromI32(0);
+
+    const ownerHat = agreementEligibilityContract.ownerHat();
+    // check if hat exists, create new object if not
+    let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
+    if (ownerHatAuthority == null) {
+      ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
+    }
+
+    const arbitratorHat = agreementEligibilityContract.arbitratorHat();
+    // check if hat exists, create new object if not
+    let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
+    if (arbitratorHatAuthority == null) {
+      arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat));
+    }
+
+    const hatId = hatIdToHex(event.params.hatId);
+
+    agreementEligibility.hatId = hatId;
+    agreementEligibility.ownerHat = hatIdToHex(ownerHat);
+    agreementEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
+    agreementEligibility.currentAgreement = agreementObject.id;
+    agreementEligibility.currentAgreementNumber = BigInt.fromI32(1);
+    agreementEligibility.badStandings = [];
+    agreementEligibility.version = "0.4.0";
 
     agreementEligibility.save();
     ownerHatAuthority.save();
