@@ -735,6 +735,46 @@ type Agreement_ArbitratorHatSetEvent implements AgreementEvent @entity {
   newArbitratorHat: String!
 }
 
+type Agreement_RevokedSingleEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AgreementEligibility!
+  wearer: String!
+}
+
+type Agreement_RevokedMultipleEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AgreementEligibility!
+  wearers: [String!]!
+}
+
+type Agreement_ForgivenSingleEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AgreementEligibility!
+  wearer: String!
+}
+
+type Agreement_ForgivenMultipleEvent implements AgreementEvent @entity {
+  id: ID!
+  module: HatsModule!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  agreementEligibilityInstance: AgreementEligibility!
+  wearers: [String!]!
+}
+
 " Erc20 Eligibility "
 type Erc20Eligibility implements HatsModule @entity {
   id: ID!
