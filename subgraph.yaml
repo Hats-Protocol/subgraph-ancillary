@@ -1,14 +1,17 @@
 specVersion: 0.0.5
 schema:
   file: ./schema.graphql
+features:
+  - fullTextSearch
+  - nonFatalErrors
 dataSources:
   - kind: ethereum
     name: Hats
-    network: sepolia
+    network: mainnet
     source:
       abi: Hats
       address: "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137"
-      startBlock: 4654775
+      startBlock: 17671864
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,11 +36,11 @@ dataSources:
       file: ./src/hats.ts
   - kind: ethereum
     name: HatsSignerGateFactory
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsSignerGateFactory
-      address: "0x5CB8a5B063B7E94cF39E8A8813A777f49B8DD050"
-      startBlock: 4929153
+      address: "0x0F22eFC6EA47b1EFF42D1A2a6E69440929400F86"
+      startBlock: 18372178
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -55,11 +58,11 @@ dataSources:
       file: ./src/hatsSignerGateFactory.ts
   - kind: ethereum
     name: ERC6551Registry
-    network: sepolia
+    network: mainnet
     source:
       abi: ERC6551Registry
       address: "0x000000006551c19487814612e58FE06813775758"
-      startBlock: 5199209
+      startBlock: 18429101
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -76,11 +79,11 @@ dataSources:
       file: ./src/erc6551Registry.ts
   - kind: ethereum
     name: HatsModuleFactoryV0_6_0
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsModuleFactoryV0_6_0
       address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
-      startBlock: 4655267
+      startBlock: 18265591
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -162,11 +165,11 @@ dataSources:
       file: ./src/hatsModuleFactoryV0_6_0.ts
   - kind: ethereum
     name: HatsModuleFactoryV0_7_0
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsModuleFactoryV0_7_0
       address: "0x0a3f85fa597B6a967271286aA0724811acDF5CD9"
-      startBlock: 5516083
+      startBlock: 19467227
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -248,11 +251,11 @@ dataSources:
       file: ./src/hatsModuleFactoryV0_7_0.ts
   - kind: ethereum
     name: ModuleProxyFactory
-    network: sepolia
+    network: mainnet
     source:
       abi: ModuleProxyFactory
       address: "0x000000000000aDdB49795b0f9bA5BC298cDda236"
-      startBlock: 7201757
+      startBlock: 21320819
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -271,7 +274,7 @@ dataSources:
 templates:
   - name: HatsSignerGate
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsSignerGate
     mapping:
@@ -291,7 +294,7 @@ templates:
           handler: handleMinThresholdSet
   - name: MultiHatsSignerGate
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: MultiHatsSignerGate
     mapping:
@@ -313,7 +316,7 @@ templates:
           handler: handleSignerHatsAdded
   - name: HatsSignerGateV2
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsSignerGateV2
     mapping:
@@ -353,7 +356,7 @@ templates:
           handler: handleDisabledModule
   - name: HatsAccount1ofN
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsAccount1ofN
     mapping:
@@ -371,7 +374,7 @@ templates:
           handler: handleTxExecuted
   - name: JokeRaceEligibilityV_0_3_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: JokeRaceEligibilityV_0_3_0
     mapping:
@@ -396,7 +399,7 @@ templates:
           handler: handleTermStarted
   - name: JokeRaceEligibilityV_0_2_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: JokeRaceEligibilityV_0_2_0
     mapping:
@@ -415,7 +418,7 @@ templates:
           handler: handleNewTerm
   - name: JokeRaceEligibilityV_0_1_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: JokeRaceEligibilityV_0_1_0
     mapping:
@@ -434,7 +437,7 @@ templates:
           handler: handleNewTerm
   - name: JokeRaceContest
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: JokeRaceContest
     mapping:
@@ -449,7 +452,7 @@ templates:
           file: ./abis/JokeRaceContest.json
   - name: AllowListEligibilityV_0_1_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: AllowListEligibilityV_0_1_0
     mapping:
@@ -478,7 +481,7 @@ templates:
           handler: handleAccountsStandingChanged
   - name: AllowListEligibilityV_0_2_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: AllowListEligibilityV_0_2_0
     mapping:
@@ -511,7 +514,7 @@ templates:
           handler: handleArbitratorHatSet
   - name: AllowListEligibilityV_0_3_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: AllowListEligibilityV_0_3_0
     mapping:
@@ -544,7 +547,7 @@ templates:
           handler: handleArbitratorHatSet
   - name: HatsElectionEligibilityV_0_1_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsElectionEligibilityV_0_1_0
     mapping:
@@ -566,7 +569,7 @@ templates:
           handler: handleNewTermStarted
   - name: HatsElectionEligibilityV_0_2_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsElectionEligibilityV_0_2_0
     mapping:
@@ -590,7 +593,7 @@ templates:
           handler: handleRecalled
   - name: PassthroughModule
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: PassthroughModule
     mapping:
@@ -605,7 +608,7 @@ templates:
           file: ./abis/PassthroughModule.json
   - name: StakingEligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: StakingEligibility
     mapping:
@@ -638,7 +641,7 @@ templates:
           handler: handleForgiven
   - name: SeasonToggle
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: SeasonToggle
     mapping:
@@ -653,7 +656,7 @@ templates:
           file: ./abis/SeasonToggle.json
   - name: CharacterSheetsLevelEligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: CharacterSheetsLevelEligibility
     mapping:
@@ -668,7 +671,7 @@ templates:
           file: ./abis/CharacterSheetsLevelEligibility.json
   - name: AgreementEligibilityV_0_1_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: AgreementEligibilityV_0_1_0
     mapping:
@@ -691,7 +694,7 @@ templates:
           handler: handleAgreementEligibility_AgreementSet
   - name: AgreementEligibilityV_0_2_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: AgreementEligibilityV_0_2_0
     mapping:
@@ -718,7 +721,7 @@ templates:
           handler: handleAgreementEligibility_ArbitratorHatSet
   - name: AgreementEligibilityV_0_3_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: AgreementEligibilityV_0_3_0
     mapping:
@@ -745,7 +748,7 @@ templates:
           handler: handleAgreementEligibility_ArbitratorHatSet
   - name: AgreementEligibilityV_0_4_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: AgreementEligibilityV_0_4_0
     mapping:
@@ -780,7 +783,7 @@ templates:
           handler: handleBatchedAgreementEligibility_Forgiven
   - name: HatsStakingShaman
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsStakingShaman
     mapping:
@@ -809,7 +812,7 @@ templates:
           handler: handleJudgeSet
   - name: HatsFarcasterDelegator
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsFarcasterDelegator
     mapping:
@@ -824,7 +827,7 @@ templates:
           file: ./abis/HatsFarcasterDelegator.json
   - name: Erc20Eligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: Erc20Eligibility
     mapping:
@@ -839,7 +842,7 @@ templates:
           file: ./abis/Erc20Eligibility.json
   - name: Erc721Eligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: Erc721Eligibility
     mapping:
@@ -854,7 +857,7 @@ templates:
           file: ./abis/Erc721Eligibility.json
   - name: Erc1155Eligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: Erc1155Eligibility
     mapping:
@@ -869,7 +872,7 @@ templates:
           file: ./abis/Erc1155Eligibility.json
   - name: HatWearingEligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatWearingEligibility
     mapping:
@@ -884,7 +887,7 @@ templates:
           file: ./abis/HatWearingEligibility.json
   - name: GitcoinPassportEligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: GitcoinPassportEligibility
     mapping:
@@ -899,7 +902,7 @@ templates:
           file: ./abis/GitcoinPassportEligibility.json
   - name: CoLinksEligibility
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: CoLinksEligibility
     mapping:
@@ -914,7 +917,7 @@ templates:
           file: ./abis/CoLinksEligibility.json
   - name: HatsEligibilitiesChainV_0_1_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsEligibilitiesChainV_0_1_0
     mapping:
@@ -929,7 +932,7 @@ templates:
           file: ./abis/HatsEligibilitiesChainV_0_1_0.json
   - name: HatsEligibilitiesChainV_0_2_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatsEligibilitiesChainV_0_2_0
     mapping:
@@ -944,7 +947,7 @@ templates:
           file: ./abis/HatsEligibilitiesChainV_0_2_0.json
   - name: HatControlledModuleV_0_1_0
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: HatControlledModuleV_0_1_0
     mapping:
@@ -964,7 +967,7 @@ templates:
           handler: handleHatStatusSet
   - name: PublicLockV14EligibilityV_0_1_2
     kind: ethereum/contract
-    network: sepolia
+    network: mainnet
     source:
       abi: PublicLockV14EligibilityV_0_1_2
     mapping:

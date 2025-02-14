@@ -4,7 +4,7 @@ import {
   JokeRaceEligibility as JokeRaceEligibilityObject,
   AllowListEligibility as AllowListEligibilityObject,
   JokeRaceEligibilityTerm,
-  HatsElectionEligibility as HatsElectionEligbilityObject,
+  HatsElectionEligibility as HatsElectionEligibilityObject,
   PassthroughModule as PassthroughModuleObject,
   StakingEligibility as StakingEligibilityObject,
   SeasonToggle as SeasonToggleObject,
@@ -113,9 +113,9 @@ import { hatIdToHex, getLinkedTreeAdmin } from "./utils";
 export function handleModuleDeployed(
   event: HatsModuleFactory_ModuleDeployed
 ): void {
-  const implemenatationAddress = event.params.implementation.toHexString();
+  const implementationAddress = event.params.implementation.toHexString();
 
-  if (implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_3_0_IMPLEMENTATION) {
+  if (implementationAddress == JOKERACE_ELIGIBILITY_V_0_3_0_IMPLEMENTATION) {
     JokeRaceEligibilityV_0_3_0Template.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
       event.params.instance.toHexString()
@@ -162,7 +162,7 @@ export function handleModuleDeployed(
     nextTerm.save();
     jokeRaceEligibility.save();
   } else if (
-    implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
+    implementationAddress == JOKERACE_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
   ) {
     JokeRaceEligibilityV_0_2_0Template.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
@@ -210,7 +210,7 @@ export function handleModuleDeployed(
     jokeRaceEligibility.version = "0.2.0";
     jokeRaceEligibility.save();
   } else if (
-    implemenatationAddress == JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
+    implementationAddress == JOKERACE_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
   ) {
     JokeRaceEligibilityV_0_1_0Template.create(event.params.instance);
     const jokeRaceEligibility = new JokeRaceEligibilityObject(
@@ -258,7 +258,7 @@ export function handleModuleDeployed(
     jokeRaceEligibility.version = "0.1.0";
     jokeRaceEligibility.save();
   } else if (
-    implemenatationAddress == ALLOWLIST_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
+    implementationAddress == ALLOWLIST_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
   ) {
     AllowListEligibilityV_0_1_0Template.create(event.params.instance);
     const allowListEligibility = new AllowListEligibilityObject(
@@ -290,7 +290,7 @@ export function handleModuleDeployed(
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
   } else if (
-    implemenatationAddress == ALLOWLIST_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
+    implementationAddress == ALLOWLIST_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
   ) {
     AllowListEligibilityV_0_2_0Template.create(event.params.instance);
     const allowListEligibility = new AllowListEligibilityObject(
@@ -322,42 +322,60 @@ export function handleModuleDeployed(
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
   } else if (
-    implemenatationAddress == ALLOWLIST_ELIGIBILITY_V_0_3_0_IMPLEMENTATION
+    implementationAddress == ALLOWLIST_ELIGIBILITY_V_0_3_0_IMPLEMENTATION
   ) {
     AllowListEligibilityV_0_3_0Template.create(event.params.instance);
     const allowListEligibility = new AllowListEligibilityObject(
       event.params.instance.toHexString()
     );
+    log.debug('allowListEligibility {}', [event.params.instance.toHexString()]);
 
     const allowListEligibilityContract =
       AllowlistEligibilityV_0_3_0Contract.bind(event.params.instance);
+    log.debug('allowListEligibilityContract {}', [
+      `${!!allowListEligibilityContract}`,
+    ]);
 
-    const ownerHat = allowListEligibilityContract.ownerHat();
-    // check if hat exists, create new object if not
-    let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat));
-    if (ownerHatAuthority == null) {
-      ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat));
+    const ownerHat = allowListEligibilityContract.try_ownerHat();
+    if (ownerHat.reverted && ownerHat) {
+      log.debug('ownerHat reverted', [ownerHat.reverted.toString()]);
+      allowListEligibility.ownerHat = hatIdToHex(BigInt.fromI32(0));
+    } else {
+      log.debug('ownerHat {}', [ownerHat.value.toString()]);
+
+      // check if hat exists, create new object if not
+      let ownerHatAuthority = HatAuthority.load(hatIdToHex(ownerHat.value));
+      if (ownerHatAuthority == null) {
+        ownerHatAuthority = new HatAuthority(hatIdToHex(ownerHat.value));
+      }
+      allowListEligibility.ownerHat = hatIdToHex(ownerHat.value);
+      ownerHatAuthority.save();
     }
 
-    const arbitratorHat = allowListEligibilityContract.arbitratorHat();
-    // check if hat exists, create new object if not
-    let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat));
-    if (arbitratorHatAuthority == null) {
-      arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat));
+    const arbitratorHat = allowListEligibilityContract.try_arbitratorHat();
+    if (arbitratorHat.reverted && arbitratorHat) {
+      log.debug('arbitratorHat reverted', [arbitratorHat.reverted.toString()]);
+      allowListEligibility.arbitratorHat = hatIdToHex(BigInt.fromI32(0));
+    } else {
+      log.debug('arbitratorHat {}', [arbitratorHat.value.toString()]);
+
+      // check if hat exists, create new object if not
+      let arbitratorHatAuthority = HatAuthority.load(hatIdToHex(arbitratorHat.value));
+      if (arbitratorHatAuthority == null) {
+        arbitratorHatAuthority = new HatAuthority(hatIdToHex(arbitratorHat.value));
+      }
+      allowListEligibility.arbitratorHat = hatIdToHex(arbitratorHat.value);
+      arbitratorHatAuthority.save();
     }
 
     allowListEligibility.hatId = hatIdToHex(event.params.hatId);
-    allowListEligibility.ownerHat = hatIdToHex(ownerHat);
-    allowListEligibility.arbitratorHat = hatIdToHex(arbitratorHat);
     allowListEligibility.version = "0.3.0";
     allowListEligibility.save();
-    ownerHatAuthority.save();
-    arbitratorHatAuthority.save();
   } else if (
-    implemenatationAddress == HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
+    implementationAddress == HATS_ELECTION_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
   ) {
     HatsElectionEligibilityV_0_1_0Template.create(event.params.instance);
-    const hatsElectionEligibility = new HatsElectionEligbilityObject(
+    const hatsElectionEligibility = new HatsElectionEligibilityObject(
       event.params.instance.toHexString()
     );
 
@@ -400,10 +418,10 @@ export function handleModuleDeployed(
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
   } else if (
-    implemenatationAddress == HATS_ELECTION_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
+    implementationAddress == HATS_ELECTION_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
   ) {
     HatsElectionEligibilityV_0_2_0Template.create(event.params.instance);
-    const hatsElectionEligibility = new HatsElectionEligbilityObject(
+    const hatsElectionEligibility = new HatsElectionEligibilityObject(
       event.params.instance.toHexString()
     );
 
@@ -446,7 +464,7 @@ export function handleModuleDeployed(
     hatsElectionEligibility.version = "0.2.0";
     hatsElectionEligibility.save();
     ballotBoxHatAuthority.save();
-  } else if (implemenatationAddress == PASSTHROUGH_MODULE_IMPLEMENTATION) {
+  } else if (implementationAddress == PASSTHROUGH_MODULE_IMPLEMENTATION) {
     PassthroughModuleTemplate.create(event.params.instance);
     const passthroughModule = new PassthroughModuleObject(
       event.params.instance.toHexString()
@@ -471,7 +489,7 @@ export function handleModuleDeployed(
     passthroughModule.version = "0.1.0";
     passthroughModule.save();
     passthroughHatAuthority.save();
-  } else if (implemenatationAddress == STAKING_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implementationAddress == STAKING_ELIGIBILITY_IMPLEMENTATION) {
     StakingEligibilityTemplate.create(event.params.instance);
     const stakingEligibility = new StakingEligibilityObject(
       event.params.instance.toHexString()
@@ -482,7 +500,7 @@ export function handleModuleDeployed(
 
     const token = stakingEligibilityContract.TOKEN();
     const minStake = stakingEligibilityContract.minStake();
-    const cooldownBuffer = stakingEligibilityContract.cooldownPeriod();
+    const coolDownBuffer = stakingEligibilityContract.cooldownPeriod();
     const judgeHat = stakingEligibilityContract.judgeHat();
     // check if hat exists, create new object if not
     let judgeHatAuthority = HatAuthority.load(hatIdToHex(judgeHat));
@@ -505,14 +523,14 @@ export function handleModuleDeployed(
     stakingEligibility.judgeHat = hatIdToHex(judgeHat);
     stakingEligibility.recipientHat = hatIdToHex(recipientHat);
     stakingEligibility.minStake = minStake;
-    stakingEligibility.cooldownPeriod = cooldownBuffer;
+    stakingEligibility.cooldownPeriod = coolDownBuffer;
     stakingEligibility.totalSlashedStakes = BigInt.fromI32(0);
     stakingEligibility.token = token.toHexString();
     stakingEligibility.version = "0.1.0";
     stakingEligibility.save();
     judgeHatAuthority.save();
     recipientHatAuthority.save();
-  } else if (implemenatationAddress == SEASON_TOGGLE_IMPLEMENTATION) {
+  } else if (implementationAddress == SEASON_TOGGLE_IMPLEMENTATION) {
     SeasonToggleTemplate.create(event.params.instance);
     const seasonToggle = new SeasonToggleObject(
       event.params.instance.toHexString()
@@ -526,7 +544,7 @@ export function handleModuleDeployed(
     seasonToggle.version = "0.1.0";
     seasonToggle.save();
   } else if (
-    implemenatationAddress == CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION
+    implementationAddress == CHARACTER_SHEETS_LEVEL_ELIGIBILITY_IMPLEMENTATION
   ) {
     CharacterSheetsLevelEligibilityTemplate.create(event.params.instance);
     const characterSheetsLevelEligibility =
@@ -542,7 +560,7 @@ export function handleModuleDeployed(
     characterSheetsLevelEligibility.version = "0.1.0";
     characterSheetsLevelEligibility.save();
   } else if (
-    implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
+    implementationAddress == AGREEMENT_ELIGIBILITY_V_0_1_0_IMPLEMENTATION
   ) {
     AgreementEligibilityV_0_1_0Template.create(event.params.instance);
     const agreementEligibility = new AgreementEligibilityObject(
@@ -588,7 +606,7 @@ export function handleModuleDeployed(
     arbitratorHatAuthority.save();
     agreementObject.save();
   } else if (
-    implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
+    implementationAddress == AGREEMENT_ELIGIBILITY_V_0_2_0_IMPLEMENTATION
   ) {
     AgreementEligibilityV_0_2_0Template.create(event.params.instance);
     const agreementEligibility = new AgreementEligibilityObject(
@@ -635,7 +653,7 @@ export function handleModuleDeployed(
     arbitratorHatAuthority.save();
     agreementObject.save();
   } else if (
-    implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_3_0_IMPLEMENTATION
+    implementationAddress == AGREEMENT_ELIGIBILITY_V_0_3_0_IMPLEMENTATION
   ) {
     AgreementEligibilityV_0_3_0Template.create(event.params.instance);
     const agreementEligibility = new AgreementEligibilityObject(
@@ -682,7 +700,7 @@ export function handleModuleDeployed(
     arbitratorHatAuthority.save();
     agreementObject.save();
   } else if (
-    implemenatationAddress == AGREEMENT_ELIGIBILITY_V_0_4_0_IMPLEMENTATION
+    implementationAddress == AGREEMENT_ELIGIBILITY_V_0_4_0_IMPLEMENTATION
   ) {
     AgreementEligibilityV_0_4_0Template.create(event.params.instance);
     const agreementEligibility = new AgreementEligibilityObject(
@@ -728,7 +746,7 @@ export function handleModuleDeployed(
     ownerHatAuthority.save();
     arbitratorHatAuthority.save();
     agreementObject.save();
-  } else if (implemenatationAddress == HATS_STAKING_SHAMAN_IMPLEMENTATION) {
+  } else if (implementationAddress == HATS_STAKING_SHAMAN_IMPLEMENTATION) {
     HatsStakingShamanTemplate.create(event.params.instance);
     const hatsStakingShaman = new HatsStakingShamanObject(
       event.params.instance.toHexString()
@@ -761,7 +779,7 @@ export function handleModuleDeployed(
     hatsStakingShaman.sharesToken = sharesToken.toHexString();
     hatsStakingShaman.save();
   } else if (
-    implemenatationAddress == HATS_FARCASTER_DELEGATOR_IMPLEMENTATION
+    implementationAddress == HATS_FARCASTER_DELEGATOR_IMPLEMENTATION
   ) {
     HatsFarcasterDelegatorTemplate.create(event.params.instance);
     const hatsFarcasterDelegator = new HatsFarcasterDelegatorObject(
@@ -789,7 +807,7 @@ export function handleModuleDeployed(
     hatsFarcasterDelegator.caster = hatIdToHex(casterHat);
     hatsFarcasterDelegator.owner = hatIdToHex(ownerHat);
     hatsFarcasterDelegator.save();
-  } else if (implemenatationAddress == ERC20_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implementationAddress == ERC20_ELIGIBILITY_IMPLEMENTATION) {
     Erc20EligibilityTemplate.create(event.params.instance);
     const erc20Eligibility = new Erc20EligibilityObject(
       event.params.instance.toHexString()
@@ -807,7 +825,7 @@ export function handleModuleDeployed(
     erc20Eligibility.hatId = hatIdToHex(hatId);
     erc20Eligibility.version = "0.1.0";
     erc20Eligibility.save();
-  } else if (implemenatationAddress == ERC721_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implementationAddress == ERC721_ELIGIBILITY_IMPLEMENTATION) {
     Erc721EligibilityTemplate.create(event.params.instance);
     const erc721Eligibility = new Erc721EligibilityObject(
       event.params.instance.toHexString()
@@ -825,7 +843,7 @@ export function handleModuleDeployed(
     erc721Eligibility.hatId = hatIdToHex(hatId);
     erc721Eligibility.version = "0.1.0";
     erc721Eligibility.save();
-  } else if (implemenatationAddress == ERC1155_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implementationAddress == ERC1155_ELIGIBILITY_IMPLEMENTATION) {
     Erc1155EligibilityTemplate.create(event.params.instance);
     const erc1155Eligibility = new Erc1155EligibilityObject(
       event.params.instance.toHexString()
@@ -846,7 +864,7 @@ export function handleModuleDeployed(
     erc1155Eligibility.minBalances = minBalances.slice(0, numTokens.toI32());
     erc1155Eligibility.version = "0.1.0";
     erc1155Eligibility.save();
-  } else if (implemenatationAddress == HAT_WEARING_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implementationAddress == HAT_WEARING_ELIGIBILITY_IMPLEMENTATION) {
     HatWearingEligibilityTemplate.create(event.params.instance);
     const hatWearingEligibility = new HatWearingEligibilityObject(
       event.params.instance.toHexString()
@@ -863,7 +881,7 @@ export function handleModuleDeployed(
     hatWearingEligibility.version = "0.1.0";
     hatWearingEligibility.save();
   } else if (
-    implemenatationAddress == GITCOIN_PASSPORT_ELIGIBILITY_IMPLEMENTATION
+    implementationAddress == GITCOIN_PASSPORT_ELIGIBILITY_IMPLEMENTATION
   ) {
     GitcoinPassportEligibilityTemplate.create(event.params.instance);
     const gitcoinPassportEligibility = new GitcoinPassportEligibilityObject(
@@ -881,7 +899,7 @@ export function handleModuleDeployed(
     gitcoinPassportEligibility.scoreCriterion = scoreCriterion;
     gitcoinPassportEligibility.version = "0.1.0";
     gitcoinPassportEligibility.save();
-  } else if (implemenatationAddress == COLINKS_ELIGIBILITY_IMPLEMENTATION) {
+  } else if (implementationAddress == COLINKS_ELIGIBILITY_IMPLEMENTATION) {
     CoLinksEligibilityTemplate.create(event.params.instance);
     const coLinksEligibility = new CoLinksEligibilityObject(
       event.params.instance.toHexString()
@@ -898,7 +916,7 @@ export function handleModuleDeployed(
     coLinksEligibility.version = "0.1.0";
     coLinksEligibility.save();
   } else if (
-    implemenatationAddress == HATS_ELIGIBILITIES_CHAIN_V_0_1_0_IMPLEMENTATION
+    implementationAddress == HATS_ELIGIBILITIES_CHAIN_V_0_1_0_IMPLEMENTATION
   ) {
     const hatsEligibilitiesChain = new HatsEligibilitiesChainObject(
       event.params.instance.toHexString()
@@ -940,7 +958,7 @@ export function handleModuleDeployed(
     hatsEligibilitiesChain.numRulesets = numRulesets;
     hatsEligibilitiesChain.save();
   } else if (
-    implemenatationAddress == HATS_ELIGIBILITIES_CHAIN_V_0_2_0_IMPLEMENTATION
+    implementationAddress == HATS_ELIGIBILITIES_CHAIN_V_0_2_0_IMPLEMENTATION
   ) {
     const hatsEligibilitiesChain = new HatsEligibilitiesChainObject(
       event.params.instance.toHexString()
@@ -982,7 +1000,7 @@ export function handleModuleDeployed(
     hatsEligibilitiesChain.numRulesets = numRulesets;
     hatsEligibilitiesChain.save();
   } else if (
-    implemenatationAddress == HAT_CONTROLLED_MODULE_V_0_1_0_IMPLEMENTATION
+    implementationAddress == HAT_CONTROLLED_MODULE_V_0_1_0_IMPLEMENTATION
   ) {
     HatControlledModuleV_0_1_0Template.create(event.params.instance);
     const hatControlledModule = new HatControlledModuleObject(
@@ -1000,7 +1018,7 @@ export function handleModuleDeployed(
     hatControlledModule.version = "0.1.0";
     hatControlledModule.save();
   } else if (
-    implemenatationAddress == PUBLIC_LOCK_V14_ELIGIBILITY_V_0_1_2_IMPLEMENTATION
+    implementationAddress == PUBLIC_LOCK_V14_ELIGIBILITY_V_0_1_2_IMPLEMENTATION
   ) {
     PublicLockV14EligibilityV_0_1_2Template.create(event.params.instance);
     const publicLockModule = new PublicLockV14EligibilityObject(

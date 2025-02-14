@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ hats-v1-goerli-ancillary",
-    "create-local": "graph create --node http://localhost:8020/ hats-v1-goerli-ancillary",
-    "remove-local": "graph remove --node http://localhost:8020/ hats-v1-goerli-ancillary",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hats-v1-goerli-ancillary",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ hats-v1-ethereum-ancillary",
+    "create-local": "graph create --node http://localhost:8020/ hats-v1-ethereum-ancillary",
+    "remove-local": "graph remove --node http://localhost:8020/ hats-v1-ethereum-ancillary",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hats-v1-ethereum-ancillary",
     "test": "graph test",
     "prettier": "prettier --write ."
   },
