@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ hats-v1-ethereum-ancillary",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ hats-v1-base-sepolia-ancillary --network base-sepolia",
     "create-local": "graph create --node http://localhost:8020/ hats-v1-ethereum-ancillary",
     "remove-local": "graph remove --node http://localhost:8020/ hats-v1-ethereum-ancillary",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hats-v1-ethereum-ancillary",
@@ -12,8 +12,8 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.59.0",
-    "@graphprotocol/graph-ts": "0.32.0"
+    "@graphprotocol/graph-cli": "0.96.0",
+    "@graphprotocol/graph-ts": "^0.38.0"
   },
   "devDependencies": {
     "matchstick-as": "0.6.0",
